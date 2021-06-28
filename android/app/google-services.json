@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "565201281137",
+    "project_id": "kindness-40bbd",
+    "storage_bucket": "kindness-40bbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565201281137:android:5f16b27710ba0993b17bd0",
+        "android_client_info": {
+          "package_name": "com.amakeinco.kindness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565201281137-auethlb92o88og2gbki91gm66j3l389n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxHh14eMGtzNkbd-lSh8rbKE0-PPJGcqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565201281137-auethlb92o88og2gbki91gm66j3l389n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

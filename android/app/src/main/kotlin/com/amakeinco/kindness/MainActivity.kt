@@ -1,4 +1,4 @@
-package com.example.kindness
+package com.amakeinco.kindness
 
 import io.flutter.embedding.android.FlutterActivity
 
