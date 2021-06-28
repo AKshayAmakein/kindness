@@ -49,7 +49,7 @@ class AuthController extends GetxController {
 
     if (_firebaseUser == null) {
       print('Send to signin');
-      Get.offAll(IntroductionScreen());
+      Get.offAll(IntroductionOnScreen());
     } else {
       Get.offAll(HomeScreenMain());
     }
