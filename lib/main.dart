@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/app_routes.dart';
 import 'package:kindness/controllers/auth_controller.dart';
+import 'package:kindness/screens/profile_setup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +21,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
-      initialRoute: "/",
-      getPages: AppRoutes.routes,
+      //initialRoute: "/",
+      //getPages: AppRoutes.routes,
+      home: ProfileSetup(),
     );
   }
 }

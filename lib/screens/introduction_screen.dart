@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:kindness/screens/profile_setup.dart';
 
 class IntroductionOnScreen extends StatefulWidget {
   @override
@@ -71,6 +72,12 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                             child: Text(
                               ds["desc"],
                             ),
+                          ),
+                          TextButton(
+                            child:Text('Profile'),
+                            onPressed:(){
+                              Get.to(ProfileSetup());
+                            }
                           )
                         ],
                       );
