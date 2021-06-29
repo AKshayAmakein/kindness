@@ -16,6 +16,7 @@ class AuthController extends GetxController {
   TextEditingController countryController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController ConfirmPasswordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Rxn<User> firebaseUser = Rxn<User>();
