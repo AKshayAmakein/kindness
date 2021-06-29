@@ -83,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     obscureText: true,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.passwordController.text = value!,
+                        authController.ConfirmPasswordController.text = value!,
                     maxLines: 1,
                   ),
                   ElevatedButton(
@@ -93,7 +93,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          authController.signInWithEmailAndPassword(context);
+                          if(authController.passwordController.text.trim()==authController.ConfirmPasswordController.text.trim()){
+                            authController.registerWithEmailAndPassword(context);
+                          }else{
+                            Get.snackbar("password did not matches", "",
+                                snackPosition: SnackPosition.BOTTOM,
+                                duration: Duration(seconds: 10),
+                                backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+                                colorText: Get.theme.snackBarTheme.actionTextColor);
+                          }
+
                         }
                       }),
                   Row(

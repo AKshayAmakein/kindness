@@ -90,7 +90,7 @@ class AuthController extends GetxController {
       hideLoadingIndicator();
     } catch (error) {
       hideLoadingIndicator();
-      Get.snackbar('auth.signInErrorTitle'.tr, 'auth.signInError'.tr,
+      Get.snackbar('Failed to login!', "$error",
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 7),
           backgroundColor: Get.theme.snackBarTheme.backgroundColor,
@@ -110,23 +110,23 @@ class AuthController extends GetxController {
         print('uID: ' + result.user!.uid.toString());
         print('email: ' + result.user!.email.toString());
 
-        //create the new user object
-        UserModel _newUser = UserModel(
-            uid: result.user!.uid,
-            email: result.user!.email!,
-            name: nameController.text,
-            birthday: birthdayController.text,
-            state: stateController.text,
-            country: countryController.text);
-        //create the user in firestore
-        _createUserFirestore(_newUser, result.user!);
+        // //create the new user object
+        // UserModel _newUser = UserModel(
+        //     uid: result.user!.uid,
+        //     email: result.user!.email!,
+        //     name: nameController.text,
+        //     birthday: birthdayController.text,
+        //     state: stateController.text,
+        //     country: countryController.text);
+        // //create the user in firestore
+        // _createUserFirestore(_newUser, result.user!);
         emailController.clear();
         passwordController.clear();
         hideLoadingIndicator();
       });
     } on FirebaseAuthException catch (error) {
       hideLoadingIndicator();
-      Get.snackbar('auth.signUpErrorTitle'.tr, error.message!,
+      Get.snackbar('failed !'.tr, error.message!,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
           backgroundColor: Get.theme.snackBarTheme.backgroundColor,
