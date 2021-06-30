@@ -36,7 +36,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                       //layout: SwiperLayout.STACK,
                       pagination: SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
-                              color: Colors.grey, activeColor: kprimary)),
+                              color: Colors.grey, activeColor: kPrimary)),
 
                       // //control: new SwiperControl(),
                       itemCount: snapshot.data!.size,

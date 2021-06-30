@@ -4,27 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:file_picker/file_picker.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-//import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/model/states.dart';
-import 'package:kindness/model/user_model.dart';
+import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 
 
-TextEditingController nameController = TextEditingController();
-
-var radioValue;
-File? photo;
-bool loading = false;
-late String uid;
-late String userphoneNo;
-DateTime? birthday;
-String? state;
-
-AuthController authController = Get.find();
 
 class ProfileSetup extends StatelessWidget {
   @override
@@ -45,7 +35,20 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
+File? photo;
+
+
 class _ProfileState extends State<Profile> {
+
+  TextEditingController nameController = TextEditingController();
+
+  var radioValue;
+  bool loading = false;
+  late String uid;
+  DateTime? birthday;
+  String? state;
+  String photourl='defaultImageUrl';
+  AuthController authController = Get.find();
   double screenHeight=Get.height;
   double screenWidth=Get.width;
 
@@ -58,9 +61,7 @@ class _ProfileState extends State<Profile> {
   inputData() async {
     User user = await authController.getUser;
     uid = user.uid;
-    userphoneNo = user.phoneNumber!;
     print("uid:$uid");
-    print("phoneNumber:$userphoneNo");
   }
 
   @override
@@ -71,13 +72,14 @@ class _ProfileState extends State<Profile> {
             )
         : Container(
           child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
+            child: ConstrainedBox(
+               constraints: BoxConstraints(
               minHeight: screenHeight, minWidth: screenWidth),
-          child: Column(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                height: screenHeight / 25,
+                height: screenHeight / 30,
               ),
               Avatar(),
               MyTextField(
@@ -88,7 +90,8 @@ class _ProfileState extends State<Profile> {
               ),
               GenderRadio(context),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15, top: 10),
@@ -96,16 +99,17 @@ class _ProfileState extends State<Profile> {
                       alignment: AlignmentDirectional.topStart,
                       child: Text(
                         'Date of Birth',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
                   ),
                   TextButton(onPressed: (){PickDate(context);},
-                      child: (birthday.isNull)?Text('DD-MM-YYYY'):Text('${birthday!.year}-${birthday!.month}-${birthday!.day}')),
+                      child: (birthday.isNull)?Text('DD-MM-YYYY',style: Theme.of(context).textTheme.headline3!.copyWith(color:kPrimary),):Text('${birthday!.year}-${birthday!.month}-${birthday!.day}',style: Theme.of(context).textTheme.headline3,)),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15, top: 10),
@@ -113,18 +117,28 @@ class _ProfileState extends State<Profile> {
                       alignment: AlignmentDirectional.topStart,
                       child: Text(
                         'Where are you from?',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
                   ),
                   TextButton(onPressed: (){PickPlace(context);},
-                      child: (state.isNull)?Text('Select Place'):Text(state!)),
+                      child: (state.isNull)?Text('Select Place',style: Theme.of(context).textTheme.headline3!.copyWith(color: kPrimary),):Text(state!,style: Theme.of(context).textTheme.headline3,)),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(onPressed: (){submitDetails();},
-                    child:Text('Submit Details')
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: kPrimary,
+                    minimumSize: Size(
+                      screenWidth*0.7,
+                      screenHeight * 0.065,
+                    )),
+                    onPressed: (){submitDetails();},
+                    child:Text(
+                      'Submit Details',
+                      style: Theme.of(context).textTheme.headline3!.copyWith(color: kLight),
+                    )
                 ),
               )
             ],
@@ -139,11 +153,12 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          child: Text('Gender', style: Theme.of(context).textTheme.subtitle1),
+          child: Text('Gender', style: Theme.of(context).textTheme.headline3),
         ),
         Row(
           children: [
             Radio(
+              activeColor: kPrimary,
               value: 'M',
               onChanged: (val) {
                 radioValue = val;
@@ -156,9 +171,10 @@ class _ProfileState extends State<Profile> {
             Text(
               'Male',
               style:
-              Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+              Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
             ),
             Radio(
+              activeColor: kPrimary,
               value: 'F',
               groupValue: radioValue,
               onChanged: (val) {
@@ -171,9 +187,10 @@ class _ProfileState extends State<Profile> {
             Text(
               'Female',
               style:
-              Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+              Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
             ),
             Radio(
+              activeColor: kPrimary,
               value: 'O',
               groupValue: radioValue,
               onChanged: (val) {
@@ -186,7 +203,7 @@ class _ProfileState extends State<Profile> {
             Text(
               'Other',
               style:
-              Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+              Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
             )
           ],
         ),
@@ -208,26 +225,27 @@ class _ProfileState extends State<Profile> {
       return;
     }
     if (photo != null) {
-      //UploadTask photopath = uploadPhoto();
+      UploadTask photopath = uploadPhoto();
       setState(() {
         loading = true;
       });
 
-      // final snapshot = await photopath.whenComplete(() {});
-      // photourl = await snapshot.ref.getDownloadURL();
+      final snapshot = await photopath.whenComplete(() {});
+       photourl = await snapshot.ref.getDownloadURL();
     }
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setString("profileUrl", photourl);
     // prefs.setString("uid", uid);
     // prefs.setString("username", name.text);
-    firebase.collection('users').doc().set({
-      //'photourl': photourl,
+    firebase.collection('users').doc(uid).set({
+      'photourl': photourl,
       'name': nameController.text,
       'gender': radioValue.toString(),
       'dob': birthday,
       'state': state,
-      //'uid': uid
+      'uid': uid
     }).then((value) {
+
       Get.snackbar(
         "Profile Details Submitted!!",
         "",
@@ -240,21 +258,22 @@ class _ProfileState extends State<Profile> {
       loading = false;
     });
 
+    Get.to(HomeScreenMain());
   }
 
-  // uploadPhoto() {
-  //   DateTime time = DateTime.now();
-  //   String filename = 'files/userImages/${uid + time.toString()}';
-  //   try {
-  //     final ref = FirebaseStorage.instance.ref(filename);
-  //
-  //     UploadTask task = ref.putFile(photo!);
-  //
-  //     return task;
-  //   } catch (e) {
-  //     print(e);
-  //   }
- // }
+  uploadPhoto() {
+    DateTime time = DateTime.now();
+    String filename = 'files/userImages/${uid + time.toString()}';
+    try {
+      final ref = FirebaseStorage.instance.ref(filename);
+
+      UploadTask task = ref.putFile(photo!);
+
+      return task;
+    } catch (e) {
+      print(e);
+    }
+ }
 
   void PickDate(context){
 
@@ -337,8 +356,8 @@ class MyTextField extends StatelessWidget {
       child: Container(
         width: Width,
         decoration: BoxDecoration(
-            //color: textFieldColor,
-            //border: Border.all(color: buttonBorder, width: 1),
+            color: kLight,
+            border: Border.all(width: 1,color: kDark),
             borderRadius: BorderRadius.circular(10)),
         child: TextField(
           controller: controller,
@@ -346,7 +365,7 @@ class MyTextField extends StatelessWidget {
           decoration: InputDecoration(
             border: InputBorder.none,
             labelText: title,
-            labelStyle: Theme.of(context).textTheme.subtitle1,
+            labelStyle: Theme.of(context).textTheme.headline3,
             contentPadding:
             EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           ),

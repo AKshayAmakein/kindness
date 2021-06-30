@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/news_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
+  final AuthController authController = AuthController.to;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -54,7 +56,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: kprimary,
+                  color: kPrimary,
                 ),
               ),
             ),
@@ -91,9 +93,14 @@ class CustomDrawer extends StatelessWidget {
               title: Text('Help Us'),
               leading: Icon(Icons.help_outline_outlined),
             ),
-            ListTile(
-              title: Text('Logout'),
-              leading: Icon(Icons.logout_outlined),
+            InkWell(
+              onTap: (){
+                authController.signOut();
+              },
+              child: ListTile(
+                title: Text('Logout'),
+                leading: Icon(Icons.logout_outlined),
+              ),
             ),
           ],
         ),

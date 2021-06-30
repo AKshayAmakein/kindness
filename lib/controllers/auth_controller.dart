@@ -7,6 +7,7 @@ import 'package:kindness/components/loading.dart';
 import 'package:kindness/model/user_model.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/introduction_screen.dart';
+import 'package:kindness/screens/profile_setup.dart';
 
 class AuthController extends GetxController {
   static AuthController to = Get.find();
@@ -51,9 +52,10 @@ class AuthController extends GetxController {
     if (_firebaseUser == null) {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
-    } else {
-      Get.offAll(HomeScreenMain());
     }
+    // else {
+    //   Get.offAll(HomeScreenMain());
+    // }
   }
 
   // Firebase user one-time fetch
@@ -84,7 +86,9 @@ class AuthController extends GetxController {
     try {
       await _auth.signInWithEmailAndPassword(
           email: emailController.text.trim(),
-          password: passwordController.text.trim());
+          password: passwordController.text.trim()).then((value){
+            Get.to(HomeScreenMain());
+      });
       emailController.clear();
       passwordController.clear();
       hideLoadingIndicator();
@@ -107,6 +111,7 @@ class AuthController extends GetxController {
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((result) async {
+            Get.to(ProfileSetup());
         print('uID: ' + result.user!.uid.toString());
         print('email: ' + result.user!.email.toString());
 
@@ -116,7 +121,7 @@ class AuthController extends GetxController {
         //     email: result.user!.email!,
         //     name: nameController.text,
         //     birthday: birthdayController.text,
-        //     state: stateController.text,
+        //     state: stateC;ontroller.text,
         //     country: countryController.text);
         // //create the user in firestore
         // _createUserFirestore(_newUser, result.user!);

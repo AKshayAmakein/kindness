@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/app_routes.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/constants/themes.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 
 void main() async {
@@ -19,10 +20,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Kindness',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: kprimary,
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: Colors.white),
+      theme: myTheme,
       initialRoute: "/",
       getPages: AppRoutes.routes,
     );

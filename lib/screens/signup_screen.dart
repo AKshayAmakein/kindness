@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             !_obscureText
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: kprimary,
+                            color: kPrimary,
                           ),
                         )),
                     validator: Validator().password,
