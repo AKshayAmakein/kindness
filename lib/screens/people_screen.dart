@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:kindness/components/custome_drawer.dart';
-import 'package:kindness/components/news_tiles.dart';
+import 'package:kindness/components/people_tile.dart';
 
-class NewsScreen extends StatelessWidget {
+class PeopleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('News'),
+          title: Text('Kindness People'),
           bottom: TabBar(
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: [
               Tab(
-                text: "Popular",
+                text: "People",
               ),
               Tab(
-                text: "Health",
+                text: "Friends",
               ),
               Tab(
-                text: "Religion",
+                text: "Followers",
               ),
               Tab(
-                text: "Science",
+                text: "Following",
               ),
             ],
           ),
@@ -32,18 +32,10 @@ class NewsScreen extends StatelessWidget {
         drawer: CustomDrawer(),
         body: TabBarView(
           children: [
-            NewsTiles(
-              category: "popular",
-            ),
-            NewsTiles(
-              category: "health",
-            ),
-            NewsTiles(
-              category: "religion",
-            ),
-            NewsTiles(
-              category: "science",
-            ),
+            PeopleTitle(),
+            Text("dbhs"),
+            Text("dbhs"),
+            Text("dbhs"),
           ],
         ),
       ),

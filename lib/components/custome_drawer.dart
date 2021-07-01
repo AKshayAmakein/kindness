@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/news_screen.dart';
+import 'package:kindness/screens/people_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
@@ -67,7 +68,12 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-                title: Text('People'), leading: Icon(Icons.groups_outlined)),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Get.to(PeopleScreen());
+                },
+                title: Text('People'),
+                leading: Icon(Icons.groups_outlined)),
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
