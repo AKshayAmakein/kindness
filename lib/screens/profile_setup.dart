@@ -78,10 +78,10 @@ class _ProfileState extends State<Profile> {
             child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                height: screenHeight / 30,
-              ),
-              Avatar(),
+              // SizedBox(
+              //   height: screenHeight / 30,
+              // ),
+              //Avatar(),
               MyTextField(
                 title: 'Full Name',
                 keyBoardType: TextInputType.name,
@@ -90,7 +90,7 @@ class _ProfileState extends State<Profile> {
               ),
               GenderRadio(context),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
@@ -108,7 +108,7 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
@@ -238,7 +238,7 @@ class _ProfileState extends State<Profile> {
     // prefs.setString("uid", uid);
     // prefs.setString("username", name.text);
     firebase.collection('users').doc(uid).set({
-      'photourl': photourl,
+      //'photourl': photourl,
       'name': nameController.text,
       'gender': radioValue.toString(),
       'dob': birthday,
@@ -313,6 +313,7 @@ class _ProfileState extends State<Profile> {
            itemCount: States.length,
            itemBuilder: (context,index){
              return InkWell(
+               splashColor: kSecondary,
                onTap: (){
                  state=States[index];
                  print(state);

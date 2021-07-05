@@ -53,9 +53,9 @@ class AuthController extends GetxController {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
     }
-    // else {
-    //   Get.offAll(HomeScreenMain());
-    // }
+    else {
+      Get.offAll(HomeScreenMain());
+    }
   }
 
   // Firebase user one-time fetch
