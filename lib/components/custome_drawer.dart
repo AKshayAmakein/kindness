@@ -1,13 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
+import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/people_screen.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
+  @override
+  _CustomDrawerState createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
   final AuthController authController = AuthController.to;
+  late String uid;
+  String name = "";
+  String state = "";
+
+  getUserData() async {
+    uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((value) {
+      setState(() {
+        name = value.get("name");
+        state = value.get("state");
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -29,7 +57,8 @@ class CustomDrawer extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 30,
-                            child: Text('A'),
+                            child: Text(
+                                name.toString().substring(0, 1).toUpperCase()),
                           ),
                           IconButton(
                               onPressed: () {},
@@ -42,14 +71,14 @@ class CustomDrawer extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          'Full Name',
+                          name,
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          'state, country',
+                          state,
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       )
@@ -72,6 +101,13 @@ class CustomDrawer extends StatelessWidget {
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
+                  Get.to(CreateGoalScreen());
+                },
+                title: Text('Create Goal'),
+                leading: Icon(Icons.outlined_flag_outlined)),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pop();
                   Get.to(PeopleScreen());
                 },
                 title: Text('People'),
@@ -82,7 +118,7 @@ class CustomDrawer extends StatelessWidget {
                   Get.to(NewsScreen());
                 },
                 title: Text('News'),
-                leading: Icon(Icons.groups_outlined)),
+                leading: Icon(Icons.article_outlined)),
             ListTile(
                 title: Text('Points'),
                 leading: Icon(Icons.military_tech_outlined)),
@@ -100,7 +136,7 @@ class CustomDrawer extends StatelessWidget {
               leading: Icon(Icons.help_outline_outlined),
             ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 authController.signOut();
               },
               child: ListTile(

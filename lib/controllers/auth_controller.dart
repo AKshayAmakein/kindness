@@ -18,6 +18,8 @@ class AuthController extends GetxController {
   TextEditingController stateController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController ConfirmPasswordController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Rxn<User> firebaseUser = Rxn<User>();
@@ -39,6 +41,9 @@ class AuthController extends GetxController {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    ConfirmPasswordController.dispose();
+    titleController.dispose();
+    descController.dispose();
     super.onClose();
   }
 
@@ -52,10 +57,9 @@ class AuthController extends GetxController {
     if (_firebaseUser == null) {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
+    } else {
+      Get.offAll(HomeScreenMain());
     }
-    // else {
-    //   Get.offAll(HomeScreenMain());
-    // }
   }
 
   // Firebase user one-time fetch
@@ -84,10 +88,12 @@ class AuthController extends GetxController {
   signInWithEmailAndPassword(BuildContext context) async {
     showLoadingIndicator();
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim()).then((value){
-            Get.to(HomeScreenMain());
+      await _auth
+          .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim())
+          .then((value) {
+        Get.to(HomeScreenMain());
       });
       emailController.clear();
       passwordController.clear();
@@ -111,7 +117,7 @@ class AuthController extends GetxController {
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((result) async {
-            Get.to(ProfileSetup());
+        Get.to(ProfileSetup());
         print('uID: ' + result.user!.uid.toString());
         print('email: ' + result.user!.email.toString());
 
@@ -247,6 +253,34 @@ class AuthController extends GetxController {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
+    ConfirmPasswordController.clear();
+    titleController.clear();
+    descController.clear();
     return _auth.signOut();
+  }
+
+  createGoal(String uid, String name, String state, String gender,
+      String category, bool status) {
+    try {
+      _db.collection("goals").doc(uid).set({
+        "title": titleController.text,
+        "desc": descController.text,
+        "createdBy": name,
+        "goalCategory": category,
+        "goalStatus": status
+      }).then((value) {
+        Get.snackbar('failed to submit!', "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 10),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+      });
+    } catch (e) {
+      Get.snackbar('failed to submit!', "$e",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }
   }
 }

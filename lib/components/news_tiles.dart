@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 
 class NewsTiles extends StatelessWidget {
@@ -20,7 +21,7 @@ class NewsTiles extends StatelessWidget {
             if (snapshot.hasError) {
               return new Text("fetch error");
             } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Spinner());
             } else
               return ListView.builder(
                   itemCount: snapshot.data!.size,
