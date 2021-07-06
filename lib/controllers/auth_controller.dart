@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +11,7 @@ import 'package:kindness/model/user_model.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/introduction_screen.dart';
 import 'package:kindness/screens/profile_setup.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
   static AuthController to = Get.find();
@@ -25,7 +29,7 @@ class AuthController extends GetxController {
   Rxn<User> firebaseUser = Rxn<User>();
   Rxn<UserModel> firestoreUser = Rxn<UserModel>();
   final RxBool admin = false.obs;
-
+  var uuid = Uuid();
   @override
   void onReady() async {
     //run every time auth state changes
@@ -259,17 +263,39 @@ class AuthController extends GetxController {
     return _auth.signOut();
   }
 
-  createGoal(String uid, String name, String state, String gender,
-      String category, bool status) {
+  createGoal(String uid, String category, bool status, DateTime startDate,
+      DateTime endDate, File file) async {
+    uploadPhoto() {
+      DateTime time = DateTime.now();
+      String filename = 'files/userMedia/${uid + time.toString()}';
+      try {
+        final ref = FirebaseStorage.instance.ref(filename);
+
+        UploadTask task = ref.putFile(file);
+
+        return task;
+      } catch (e) {
+        print(e);
+      }
+    }
+
     try {
-      _db.collection("goals").doc(uid).set({
+      UploadTask? photopath = uploadPhoto();
+      final snapshot = await photopath!.whenComplete(() {});
+      var mediaUrl = await snapshot.ref.getDownloadURL();
+
+      _db.collection("goals").doc(uuid.v4()).set({
+        "mediaUrl": mediaUrl,
+        "uid": uid,
         "title": titleController.text,
         "desc": descController.text,
-        "createdBy": name,
         "goalCategory": category,
-        "goalStatus": status
+        "goalStatus": status,
+        "startDate": startDate,
+        "endDate": endDate,
+        "time": DateTime.now()
       }).then((value) {
-        Get.snackbar('failed to submit!', "",
+        Get.snackbar('Goal created!', "",
             snackPosition: SnackPosition.BOTTOM,
             duration: Duration(seconds: 10),
             backgroundColor: Get.theme.snackBarTheme.backgroundColor,
