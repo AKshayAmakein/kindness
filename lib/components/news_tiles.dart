@@ -4,10 +4,53 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
+import 'package:video_player/video_player.dart';
 
-class NewsTiles extends StatelessWidget {
+class NewsTiles extends StatefulWidget {
   final String category;
   NewsTiles({required this.category});
+
+  @override
+  _NewsTilesState createState() => _NewsTilesState();
+}
+
+class _NewsTilesState extends State<NewsTiles> {
+  late VideoPlayerController _controller;
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("news")
+        .where("category", isEqualTo: widget.category)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        String videoUrl = doc["videoUrl"];
+        _controller = VideoPlayerController.network(videoUrl)
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
+      });
+    });
+  }
+
+  Widget handleVideoOrImage(String img) {
+    if (img.isEmpty) {
+      return _controller.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            )
+          : Container();
+    } else {
+      return CachedNetworkImage(
+        imageUrl: img,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +58,7 @@ class NewsTiles extends StatelessWidget {
       child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("news")
-              .where("category", isEqualTo: category)
+              .where("category", isEqualTo: widget.category)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -44,10 +87,7 @@ class NewsTiles extends StatelessWidget {
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
-                              child: CachedNetworkImage(
-                                imageUrl: ds["img"],
-                                fit: BoxFit.cover,
-                              )),
+                              child: handleVideoOrImage(ds['img'])),
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 4, left: 4, right: 4),
