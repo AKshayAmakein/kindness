@@ -8,6 +8,7 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/people_screen.dart';
+import 'package:kindness/screens/profile_update_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -61,7 +62,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 name.toString().substring(0, 1).toUpperCase()),
                           ),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                               Get.to(ProfileUpdateScreen(uid: uid,state: state,name: name,));
+                              },
                               icon: Icon(
                                 Icons.edit_outlined,
                                 color: Colors.white,
