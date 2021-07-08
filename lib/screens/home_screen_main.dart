@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 
 
@@ -40,7 +39,6 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
       appBar: AppBar(
         title: Text('My act'),
       ),
-      drawer: CustomDrawer(),
     );
   }
 }
