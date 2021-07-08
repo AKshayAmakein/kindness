@@ -90,3 +90,11 @@ void ScratchCard(BuildContext context,ConfettiController controller){
       }
   );
 }
+
+Widget UserImage(String username,double radius) {
+  return CircleAvatar(
+    radius: radius,
+    child: Text(
+        username.toString().substring(0, 1).toUpperCase()),
+  );
+}

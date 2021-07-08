@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,7 +10,9 @@ import 'package:kindness/components/loading.dart';
 import 'package:kindness/model/user_model.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/introduction_screen.dart';
+import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/profile_setup.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
   static AuthController to = Get.find();
@@ -18,12 +23,14 @@ class AuthController extends GetxController {
   TextEditingController stateController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController ConfirmPasswordController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Rxn<User> firebaseUser = Rxn<User>();
   Rxn<UserModel> firestoreUser = Rxn<UserModel>();
   final RxBool admin = false.obs;
-
+  var uuid = Uuid();
   @override
   void onReady() async {
     //run every time auth state changes
@@ -39,6 +46,9 @@ class AuthController extends GetxController {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    ConfirmPasswordController.dispose();
+    titleController.dispose();
+    descController.dispose();
     super.onClose();
   }
 
@@ -52,8 +62,7 @@ class AuthController extends GetxController {
     if (_firebaseUser == null) {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
-    }
-    else {
+    } else {
       Get.offAll(HomeScreenMain());
     }
   }
@@ -84,10 +93,12 @@ class AuthController extends GetxController {
   signInWithEmailAndPassword(BuildContext context) async {
     showLoadingIndicator();
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim()).then((value){
-            Get.to(HomeScreenMain());
+      await _auth
+          .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim())
+          .then((value) {
+        Get.to(HomeScreenMain());
       });
       emailController.clear();
       passwordController.clear();
@@ -111,7 +122,7 @@ class AuthController extends GetxController {
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((result) async {
-            Get.to(ProfileSetup());
+        Get.to(ProfileSetup());
         print('uID: ' + result.user!.uid.toString());
         print('email: ' + result.user!.email.toString());
 
@@ -247,6 +258,83 @@ class AuthController extends GetxController {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
+    ConfirmPasswordController.clear();
+    titleController.clear();
+    descController.clear();
     return _auth.signOut();
+  }
+
+  createGoal(String uid, String category, bool status, DateTime startDate,
+      DateTime endDate, File file, String name, String state) async {
+    uploadPhoto() {
+      DateTime time = DateTime.now();
+      String filename = 'files/userMedia/${uid + time.toString()}';
+      try {
+        final ref = FirebaseStorage.instance.ref(filename);
+
+        UploadTask task = ref.putFile(file);
+
+        return task;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    try {
+      UploadTask? photopath = uploadPhoto();
+      final snapshot = await photopath!.whenComplete(() {});
+      var mediaUrl = await snapshot.ref.getDownloadURL();
+
+      _db.collection("goals").doc(uuid.v4()).set({
+        "mediaUrl": mediaUrl,
+        "uid": uid,
+        "title": titleController.text,
+        "desc": descController.text,
+        "goalCategory": category,
+        "goalStatus": status,
+        "startDate": startDate,
+        "endDate": endDate,
+        "time": DateTime.now(),
+        "userName": name,
+        "userState": state
+      }).then((value) {
+        Get.snackbar('Goal created!', "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 10),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+      });
+    } catch (e) {
+      Get.snackbar('failed to submit!', "$e",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }
+  }
+
+  updateProfile(name, state, uid, password) async {
+    try {
+      await _auth.currentUser!.updatePassword(password).then((value) {
+        _db
+            .collection("users")
+            .doc(uid)
+            .update({"name": name, "state": state}).then((value) {
+          Get.snackbar('Profile update!', "",
+              snackPosition: SnackPosition.BOTTOM,
+              duration: Duration(seconds: 10),
+              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+              colorText: Get.theme.snackBarTheme.actionTextColor);
+          Get.to(LoginScreen());
+        });
+      });
+    } catch (e) {
+      print(e);
+      Get.snackbar('failed to update!', "$e",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }
   }
 }

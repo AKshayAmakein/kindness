@@ -5,6 +5,7 @@ import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/login_screen.dart';
+import 'package:kindness/widgets/custom_widgets.dart';
 
 class IntroductionOnScreen extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
             if (snapshot.hasError) {
               return new Text("fetch error");
             } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Spinner());
             } else {
               return Column(
                 children: [
