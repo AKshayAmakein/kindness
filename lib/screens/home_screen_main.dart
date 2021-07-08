@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 
 late AudioPlayer advancedPlayer;
@@ -32,13 +31,12 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScratchCard(context, confetti!);
+          ScratchCard(context, confetti!); 
         },
       ),
       appBar: AppBar(
         title: Text('My act'),
       ),
-      drawer: CustomDrawer(),
     );
   }
 }

@@ -35,6 +35,18 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   DateTime? endDate;
   bool isLoading = false;
   late String uid;
+  String name = "";
+  String state = "";
+
+  getUserData() async {
+    uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((value) {
+      setState(() {
+        name = value.get("name");
+        state = value.get("state");
+      });
+    });
+  }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
@@ -79,11 +91,12 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
 
   getUid() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
-  }
+   }
 
   @override
   void initState() {
     getUid();
+    getUserData();
     super.initState();
   }
 
@@ -353,11 +366,14 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                               minimumSize: Size(Get.width,
                                                   Get.height * 0.05)),
                                           onPressed: () {
+                                            print(name);
                                             if (uid.isEmpty ||
                                                 selectedValue == "" ||
                                                 status6 == false ||
                                                 startDate.isNull ||
                                                 endDate.isNull ||
+                                                name =="" ||
+                                                state == "" ||
                                                 _pickedImage.isNull) {
                                               Get.snackbar("Not Complete",
                                                   "All fields are required",
@@ -368,19 +384,20 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            _controller
-                                                .createGoal(
-                                                    uid,
-                                                    selectedValue,
-                                                    status6,
-                                                    startDate!,
-                                                    endDate!,
-                                                    _pickedImage!)
+                                            _controller.createGoal(
+                                                uid,
+                                                selectedValue,
+                                                status6,
+                                                startDate!,
+                                                endDate!,
+                                                _pickedImage!,
+                                                name,
+                                                state)
                                                 .then((value) {
                                               setState(() {
                                                 isLoading = false;
                                               });
-                                              Get.offAll(AllGoalScreen());
+                                              Get.to(AllGoalScreen());
                                             });
                                           },
                                           child: Text('Create'))
