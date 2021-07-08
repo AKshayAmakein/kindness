@@ -64,7 +64,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           IconButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                               Get.to(ProfileUpdateScreen(uid: uid,state: state,name: name,));
+                                Get.to(ProfileUpdateScreen(
+                                  uid: uid,
+
+
+                                ));
                               },
                               icon: Icon(
                                 Icons.edit_outlined,

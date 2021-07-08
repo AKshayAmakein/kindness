@@ -310,10 +310,25 @@ class AuthController extends GetxController {
           colorText: Get.theme.snackBarTheme.actionTextColor);
     }
   }
+updatePassword(password)async{
+    try{
 
-  updateProfile(name, state, uid, password) async {
-    try {
       await _auth.currentUser!.updatePassword(password).then((value) {
+
+          Get.snackbar('Password changed!', "",
+              snackPosition: SnackPosition.BOTTOM,
+              duration: Duration(seconds: 10),
+              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+              colorText: Get.theme.snackBarTheme.actionTextColor);
+          Get.to(LoginScreen());
+      });
+    } catch(e){
+      print(e);
+    }
+}
+  updateProfile(name, state, uid) async {
+    try {
+
         _db
             .collection("users")
             .doc(uid)
@@ -323,9 +338,9 @@ class AuthController extends GetxController {
               duration: Duration(seconds: 10),
               backgroundColor: Get.theme.snackBarTheme.backgroundColor,
               colorText: Get.theme.snackBarTheme.actionTextColor);
-          Get.to(LoginScreen());
+
         });
-      });
+
     } catch (e) {
       print(e);
       Get.snackbar('failed to update!', "$e",
