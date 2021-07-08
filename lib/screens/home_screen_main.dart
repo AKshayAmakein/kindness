@@ -32,7 +32,7 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScratchCard(context, confetti!);
+          ScratchCard(context, confetti!); 
         },
       ),
       appBar: AppBar(

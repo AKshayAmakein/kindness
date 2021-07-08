@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
+import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/people_screen.dart';
+import 'package:kindness/widgets/custom_widgets.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -52,34 +54,37 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            child: Text(
-                                name.toString().substring(0, 1).toUpperCase()),
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.edit_outlined,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          name,
-                          style: TextStyle(color: Colors.white),
+                      Expanded(
+                        flex:2,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                           UserImage(name,30),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.edit_outlined,
+                                  color: Colors.white,
+                                ))
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          state,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            name,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            state,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
                       )
                     ],
@@ -91,6 +96,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             ListTile(
+              onTap: (){
+                Navigator.of(context).pop();
+                Get.to(AllGoalScreen());
+              },
               title: Text('Act of the Day'),
               leading: Image.asset(
                 "assets/images/ribbon.png",
@@ -150,3 +159,4 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 }
+

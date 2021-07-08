@@ -264,7 +264,7 @@ class AuthController extends GetxController {
   }
 
   createGoal(String uid, String category, bool status, DateTime startDate,
-      DateTime endDate, File file) async {
+      DateTime endDate, File file, String name, String state) async {
     uploadPhoto() {
       DateTime time = DateTime.now();
       String filename = 'files/userMedia/${uid + time.toString()}';
@@ -293,7 +293,9 @@ class AuthController extends GetxController {
         "goalStatus": status,
         "startDate": startDate,
         "endDate": endDate,
-        "time": DateTime.now()
+        "time": DateTime.now(),
+        "userName": name,
+        "userState": state
       }).then((value) {
         Get.snackbar('Goal created!', "",
             snackPosition: SnackPosition.BOTTOM,
