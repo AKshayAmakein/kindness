@@ -10,6 +10,7 @@ import 'package:kindness/components/loading.dart';
 import 'package:kindness/model/user_model.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/introduction_screen.dart';
+import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/profile_setup.dart';
 import 'package:uuid/uuid.dart';
 
@@ -305,6 +306,31 @@ class AuthController extends GetxController {
       });
     } catch (e) {
       Get.snackbar('failed to submit!', "$e",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }
+  }
+
+  updateProfile(name, state, uid, password) async {
+    try {
+      await _auth.currentUser!.updatePassword(password).then((value) {
+        _db
+            .collection("users")
+            .doc(uid)
+            .update({"name": name, "state": state}).then((value) {
+          Get.snackbar('Profile update!', "",
+              snackPosition: SnackPosition.BOTTOM,
+              duration: Duration(seconds: 10),
+              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+              colorText: Get.theme.snackBarTheme.actionTextColor);
+          Get.to(LoginScreen());
+        });
+      });
+    } catch (e) {
+      print(e);
+      Get.snackbar('failed to update!', "$e",
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
           backgroundColor: Get.theme.snackBarTheme.backgroundColor,
