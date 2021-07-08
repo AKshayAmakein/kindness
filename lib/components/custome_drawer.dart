@@ -1,14 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
+import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
+import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/people_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -17,23 +18,27 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthController authController = AuthController.to;
-  late String uid;
-  String name = "";
+  String uid = "";
+  String name = "namesds";
   String state = "";
 
-  getUserData() async {
-    uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance.collection("users").doc(uid).get().then((value) {
-      setState(() {
-        name = value.get("name");
-        state = value.get("state");
-      });
+  late SharedPreferences preferences;
+
+  getUserDataLocally() async {
+    preferences = await SharedPreferences.getInstance();
+    setState(() {
+      uid = preferences.getString("uid")!;
+      print(uid);
+      name = preferences.getString("name")!;
+      print(name);
+      state = preferences.getString("state")!;
+      print(state);
     });
   }
 
   @override
   void initState() {
-    getUserData();
+    getUserDataLocally();
     super.initState();
   }
 
@@ -53,41 +58,57 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            child: Text(
-                                name.toString().substring(0, 1).toUpperCase()),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Get.to(ProfileUpdateScreen(
-                                  uid: uid,
-
-
-                                ));
-                              },
-                              icon: Icon(
-                                Icons.edit_outlined,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          name,
-                          style: TextStyle(color: Colors.white),
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              child: Text(
+                                name[0],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: kSecondary.withOpacity(0.5),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Get.to(ProfileUpdateScreen(
+                                      uid: uid,
+                                    ));
+                                  },
+                                  icon: Icon(
+                                    Icons.edit_outlined,
+                                    color: Colors.white,
+                                  )),
+                            )
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          state,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3!
+                                .copyWith(color: kLight),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            state,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
                       )
                     ],
@@ -99,6 +120,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             ListTile(
+              onTap: () {
+                Navigator.of(context).pop();
+                Get.to(HomeScreenMain());
+              },
               title: Text('Act of the Day'),
               leading: Image.asset(
                 "assets/images/ribbon.png",
@@ -106,6 +131,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 height: 20,
               ),
             ),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Get.to(AllGoalScreen());
+                },
+                title: Text('All Goals'),
+                leading: Icon(Icons.sports_score_outlined)),
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
