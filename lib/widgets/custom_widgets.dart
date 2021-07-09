@@ -1,11 +1,12 @@
 import 'dart:math';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_spinkit/flutter_spinkit.dart";
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
-import 'package:kindness/screens/home_screen_main.dart';
 import 'package:scratcher/scratcher.dart';
 
 class Spinner extends StatelessWidget {
@@ -38,8 +39,22 @@ class BuildCircleAvatar extends StatelessWidget {
   }
 }
 
-void ScratchCard(
-    BuildContext context, ConfettiController controller, String coins) {
+void ScratchCard(BuildContext context, ConfettiController controller,
+    int coinValue, String uid, int initialCoins) {
+  final assetsAudioPlayer = AssetsAudioPlayer();
+
+  playAudio() async {
+    try {
+      await assetsAudioPlayer.open(
+        Audio.network(
+            "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FcoinsAudio%2Fsound1.wav?alt=media&token=a58ca047-6464-4ad3-b1f5-c8cb0cc7901d"),
+      );
+    } catch (t) {
+      //mp3
+      print(t);
+    }
+  }
+
   showDialog(
       context: context,
       builder: (_) {
@@ -63,7 +78,7 @@ void ScratchCard(
                           .headline3!
                           .copyWith(fontSize: 30, fontWeight: FontWeight.bold)),
                   Expanded(child: Image.asset('assets/images/coin2.png')),
-                  Text('$coins Coins',
+                  Text('$coinValue Coins',
                       style: Theme.of(context)
                           .textTheme
                           .headline3!
@@ -77,9 +92,16 @@ void ScratchCard(
                 ],
               )),
             ),
-            onThreshold: () async {
+            onThreshold: () {
               controller.play();
-              await audioCache.play('sounds/sound1.wav');
+              playAudio().then((value) {
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(uid)
+                    .update({"coins": coinValue + initialCoins}).then((value) {
+                  Get.snackbar("Coins added", "");
+                });
+              });
             },
           ),
         ));

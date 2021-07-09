@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class AllGoalScreen extends StatelessWidget {
   @override
@@ -27,8 +28,7 @@ class AllGoalScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 DocumentSnapshot ds = snapshot.data!.docs[index];
 
-                //DateTime Time = new DateTime.now().subtract(ds['endDate']);
-
+                Timestamp timestamp = ds['endDate'];
                 return Padding(
                   padding: const EdgeInsets.all(20),
                   child: Container(
@@ -42,9 +42,7 @@ class AllGoalScreen extends StatelessWidget {
                           width: double.infinity,
                           fit: BoxFit.fill,
                         ),
-                        Footer(
-                          ds['userName'], ds['desc'], //Time
-                        )
+                        Footer(ds['userName'], ds['desc'], timestamp)
                       ],
                     ),
                   ),
@@ -102,10 +100,8 @@ Widget Header(String name, String title, String category, bool isComplete) {
   );
 }
 
-Widget Footer(
-  String name,
-  String description, //DateTime time
-) {
+Widget Footer(String name, String description, timestamp) {
+  final now = new DateTime.now();
   return Container(
       width: double.infinity,
       height: Get.height * 0.1,
@@ -126,7 +122,12 @@ Widget Footer(
             ),
             SizedBox(width: Get.width * 0.02),
             Text(description),
-            //Text(timeago.format(time))
+            SizedBox(
+              width: 40,
+            ),
+            Text(
+              timeago.format(DateTime.parse(timestamp.toDate().toString())),
+            )
           ],
         ),
       ));

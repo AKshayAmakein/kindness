@@ -1,4 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
@@ -6,12 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-late AudioPlayer advancedPlayer;
-late AudioCache audioCache;
 
 class HomeScreenMain extends StatefulWidget {
   @override
@@ -23,10 +22,12 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   late String uid;
   late String name;
   late String state;
+  late Timer timer;
+  int coins = 0;
   late SharedPreferences _prefs;
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
-
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getCoins());
     FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -49,13 +50,20 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   void initState() {
     getUserData();
     confetti = ConfettiController(duration: Duration(seconds: 5));
-    initAudioPlayer();
+
     super.initState();
   }
 
-  initAudioPlayer() {
-    advancedPlayer = AudioPlayer();
-    audioCache = AudioCache(fixedPlayer: advancedPlayer);
+  getCoins() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) async {
+      setState(() {
+        coins = value.get("coins");
+      });
+    });
   }
 
   @override
@@ -63,6 +71,26 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Act of the day'),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: Row(
+              children: [
+                Icon(
+                  Icons.savings_outlined,
+                  color: kLight,
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  '$coins',
+                  style: TextStyle(color: kLight, fontSize: 20),
+                )
+              ],
+            ),
+          )
+        ],
       ),
       drawer: CustomDrawer(),
       body: Container(
@@ -116,7 +144,8 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            ScratchCard(context, confetti!, ds['coin1']);
+                            ScratchCard(
+                                context, confetti!, ds['coin1'], uid, coins);
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: Size(Get.width, Get.height * 0.05)),
@@ -127,7 +156,8 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            ScratchCard(context, confetti!, ds['coin2']);
+                            ScratchCard(
+                                context, confetti!, ds['coin2'], uid, coins);
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: Size(Get.width, Get.height * 0.05)),
