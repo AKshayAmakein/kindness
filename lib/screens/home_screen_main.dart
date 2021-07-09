@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/screens/points_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,7 +74,12 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
         title: Text('Act of the day'),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(PointsScreen(
+                name: name,
+                coins: coins,
+              ));
+            },
             child: Row(
               children: [
                 Icon(

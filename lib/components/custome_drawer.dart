@@ -66,7 +66,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             CircleAvatar(
                               radius: 30,
                               child: Text(
-                                name[0],
+                                name[0].toUpperCase(),
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
