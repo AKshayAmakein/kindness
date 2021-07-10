@@ -284,8 +284,8 @@ class AuthController extends GetxController {
       UploadTask? photopath = uploadPhoto();
       final snapshot = await photopath!.whenComplete(() {});
       var mediaUrl = await snapshot.ref.getDownloadURL();
-
-      _db.collection("goals").doc(uuid.v4()).set({
+      String postId=uuid.v4();
+      _db.collection("goals").doc(postId).set({
         "mediaUrl": mediaUrl,
         "uid": uid,
         "title": titleController.text,
@@ -296,7 +296,8 @@ class AuthController extends GetxController {
         "endDate": endDate,
         "time": DateTime.now(),
         "userName": name,
-        "userState": state
+        "userState": state,
+        "postId":postId
       }).then((value) {
         Get.snackbar('Goal created!', "",
             snackPosition: SnackPosition.BOTTOM,

@@ -267,7 +267,8 @@ class _ProfileState extends State<Profile> {
       'gender': radioValue.toString(),
       'dob': birthday,
       'state': state,
-      'uid': uid
+      'uid': uid,
+      'coins':0
     }).then((value) {
       Get.snackbar(
         "Profile Details Submitted!!",

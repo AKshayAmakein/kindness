@@ -98,7 +98,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline3!
-                                .copyWith(color: kLight),
+                                .copyWith(color: kLight,fontSize: 15),
                           ),
                         ),
                       ),
