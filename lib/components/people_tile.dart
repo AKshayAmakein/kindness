@@ -1,138 +1,76 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PeopleTitle extends StatefulWidget {
+  final String uid;
+  PeopleTitle({required this.uid});
   @override
   _PeopleTitleState createState() => _PeopleTitleState();
 }
 
 class _PeopleTitleState extends State<PeopleTitle> {
   AuthController authController = AuthController.to;
-  late String uid;
-  bool isFollowing = false;
-
-  late SharedPreferences sharedPreferences;
-
-  handleFollowUser(String id) {
-    FirebaseFirestore.instance
-        .collection("followers")
-        .doc(id)
-        .collection("userFollowers")
-        .doc(uid)
-        .set({});
-    // Put THAT user on YOUR following collection (update your following collection)
-    FirebaseFirestore.instance
-        .collection("following")
-        .doc(uid)
-        .collection("userFollowing")
-        .doc(id)
-        .set({});
-    sharedPreferences.setString("userId", id);
-  }
-
-  //
-  handleUnfollowUser(String id) {
-    // remove follower
-    FirebaseFirestore.instance
-        .collection("followers")
-        .doc(id)
-        .collection("userFollowers")
-        .doc(uid)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    // remove following
-    FirebaseFirestore.instance
-        .collection("following")
-        .doc(uid)
-        .collection("userFollowing")
-        .doc(id)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    sharedPreferences.clear();
-  }
-
-  Container buildButton({String? text, Function? function}) {
-    return Container(
-      padding: EdgeInsets.only(top: 2.0),
-      child: ElevatedButton(
-        onPressed: () => function,
-        child: Text(
-          text!,
-          style: TextStyle(
-            color: isFollowing ? Colors.black : Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  buildFollowANdUnfollowButton(String id) {
-    if (isFollowing) {
-      setState(() {
-        isFollowing = true;
-      });
-      return buildButton(
-        text: "Unfollow",
-        function: handleUnfollowUser(id),
-      );
-    } else if (!isFollowing) {
-      setState(() {
-        isFollowing = false;
-      });
-      return buildButton(
-        text: "Follow",
-        function: handleFollowUser(id),
-      );
-    }
-  }
-
-  checkIfFollowing(String id) async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection("followers")
-        .doc(id)
-        .collection("userFollowers")
-        .doc(uid)
-        .get();
-    setState(() {
-      isFollowing = doc.exists;
-    });
-  }
-
-  getInstances() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    final String? id = sharedPreferences.getString("userId");
-
-    Future.delayed(Duration.zero, () async {
-      checkIfFollowing(id!);
-    });
-  }
+  bool isFriends = false;
 
   @override
   void initState() {
-    getUserId();
-
-    // getInstances();
-
+    // checkIfAlreadyFriend(friendId,friendName);
     super.initState();
   }
 
-  getUserId() {
-    uid = FirebaseAuth.instance.currentUser!.uid;
+  handleAddFriends(String friendId, String friendName) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.uid)
+        .update({
+      "friends": FieldValue.arrayUnion([
+        {"friendId": friendId, "friendName": friendName}
+      ])
+    });
+  }
+
+  // Future<bool> checkIfAlreadyFriend(String friendId, String friendName) {
+  //
+  //   FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(widget.uid)
+  //       .get()
+  //       .then((value) {
+  //         List friendList=value.get('friends');
+  //         for(int i=0;)
+  //       });
+  //   return true;
+  // }
+
+  handleRemoveFriend(String friendId, String friendName) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.uid)
+        .update({
+      "friends": FieldValue.arrayRemove([
+        {"friendId": friendId, "friendName": friendName}
+      ])
+    });
+  }
+
+  handleAddFriendAndRemoveButton(String friendId, String friendName) {
+    if (isFriends) {
+      return ElevatedButton(
+          onPressed: () {
+            handleAddFriends(friendId, friendName);
+          },
+          child: Text('Unfriend'));
+    } else {
+      return ElevatedButton(
+          onPressed: () {
+            handleRemoveFriend(friendId, friendName);
+          },
+          child: Text('Add to friend'));
+    }
   }
 
   @override
@@ -140,12 +78,12 @@ class _PeopleTitleState extends State<PeopleTitle> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
-            .where('uid', isNotEqualTo: uid)
+            .where('uid', isNotEqualTo: widget.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return new Text("fetch error");
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
+          } else if (!snapshot.hasData) {
             return Center(child: Spinner());
           } else
             return ListView.builder(
@@ -170,7 +108,7 @@ class _PeopleTitleState extends State<PeopleTitle> {
                       child: ListTile(
                         title: Text(
                           ds["name"],
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headline3,
                         ),
                         leading: CircleAvatar(
                           radius: Get.width / 10,
@@ -180,6 +118,19 @@ class _PeopleTitleState extends State<PeopleTitle> {
                               .substring(0, 1)
                               .toUpperCase()),
                         ),
+                        // trailing: checkIfAlreadyFriend(ds['uid'], ds['name'])
+                        //     ? ElevatedButton(
+                        //         onPressed: () {
+                        //           handleRemoveFriend(ds['uid'], ds['name']);
+                        //         },
+                        //         child: Text("Add to friend"),
+                        //       )
+                        //     : ElevatedButton(
+                        //         onPressed: () {
+                        //           handleAddFriends(ds['uid'], ds['name']);
+                        //         },
+                        //         child: Text('unfriend'),
+                        //       )
                       ),
                     ),
                   );

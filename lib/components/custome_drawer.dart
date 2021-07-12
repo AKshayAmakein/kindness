@@ -148,7 +148,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
-                  Get.to(PeopleScreen());
+                  Get.to(PeopleScreen(
+                    uid: uid,
+                  ));
                 },
                 title: Text('People'),
                 leading: Icon(Icons.groups_outlined)),

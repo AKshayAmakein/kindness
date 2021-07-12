@@ -3,10 +3,12 @@ import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/people_tile.dart';
 
 class PeopleScreen extends StatelessWidget {
+  final String uid;
+  PeopleScreen({required this.uid});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Kindness People'),
@@ -20,21 +22,15 @@ class PeopleScreen extends StatelessWidget {
               Tab(
                 text: "Friends",
               ),
-              Tab(
-                text: "Followers",
-              ),
-              Tab(
-                text: "Following",
-              ),
             ],
           ),
         ),
         drawer: CustomDrawer(),
         body: TabBarView(
           children: [
-            PeopleTitle(),
-            Text("dbhs"),
-            Text("dbhs"),
+            PeopleTitle(
+              uid: uid,
+            ),
             Text("dbhs"),
           ],
         ),
