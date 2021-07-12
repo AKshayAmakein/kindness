@@ -9,6 +9,7 @@ import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:video_player/video_player.dart';
 
 class AllGoalScreen extends StatefulWidget {
   
@@ -62,12 +63,8 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                       children: [
                         Header(ds['userName'], ds['title'], ds['goalCategory'],
                             ds['goalStatus'],ds['uid'],ds['postId'],context),
-                        CachedNetworkImage(
-                          imageUrl: ds['mediaUrl'],
-                          height: Get.height * 0.4,
-                          width: double.infinity,
-                          fit: BoxFit.fill,
-                        ),
+                        MediaFile(ds['mediaUrl']),
+
                         Footer(ds['userName'], ds['desc'], timestamp)
                       ],
                     ),
@@ -76,6 +73,49 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
               });
         },
       )),
+    );
+  }
+
+  Widget MediaFile(String mediaUrl){
+    return (mediaUrl.contains('mp4'))
+        ?myVideoPlayer(mediaUrl)
+        :CachedNetworkImage(
+      imageUrl: mediaUrl,
+      height: Get.height * 0.4,
+      width: double.infinity,
+      fit: BoxFit.fill,
+    );
+  }
+
+  Widget myVideoPlayer(String videoUrl){
+
+    VideoPlayerController _controller = VideoPlayerController.network(videoUrl);
+    _controller.initialize();
+
+    return AspectRatio(
+      aspectRatio: _controller.value.aspectRatio,
+      child: Stack(
+        children: [
+          VideoPlayer(_controller),
+          Center(
+            child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _controller.value.isPlaying
+                        ? _controller.pause()
+                        : _controller.play();
+                  });
+                },
+                icon: Icon(
+                  _controller.value.isPlaying
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  size: 40,
+                  color: Colors.white,
+                )),
+          )
+        ],
+      ),
     );
   }
 
@@ -90,29 +130,31 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                child: UserImage(name, Get.height * 0.03),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                      title,
-                      style: TextStyle(
-                          fontFamily: 'NotoSerifJP',
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: kLight
-                      )
-                  ),
-                  Text(category),
-                ],
-              ),
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: UserImage(name, Get.height * 0.03),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        title,
+                        style: TextStyle(
+                            fontFamily: 'NotoSerifJP',
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: kLight
+                        )
+                    ),
+                    Text(category),
+                  ],
+                ),
+              ],
+            ),
           ),
           (UserUid==Uid)
               ?FlutterSwitch(

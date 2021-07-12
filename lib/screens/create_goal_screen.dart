@@ -37,6 +37,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   late String uid;
   String name = "";
   String state = "";
+  String isVideo="";
 
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
@@ -86,6 +87,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
     // await _playVideo(pickedVideoFile);
     setState(() {
       _pickedImage = File(pickedVideoFile!.path);
+      isVideo="mp4";
     });
   }
 
@@ -392,7 +394,8 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                 endDate!,
                                                 _pickedImage!,
                                                 name,
-                                                state)
+                                                state,
+                                                isVideo)
                                                 .then((value) {
                                               setState(() {
                                                 isLoading = false;

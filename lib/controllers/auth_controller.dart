@@ -265,10 +265,10 @@ class AuthController extends GetxController {
   }
 
   createGoal(String uid, String category, bool status, DateTime startDate,
-      DateTime endDate, File file, String name, String state) async {
+      DateTime endDate, File file, String name, String state,String isVideo) async {
     uploadPhoto() {
       DateTime time = DateTime.now();
-      String filename = 'files/userMedia/${uid + time.toString()}';
+      String filename = 'files/userMedia/${isVideo + uid + time.toString()}';
       try {
         final ref = FirebaseStorage.instance.ref(filename);
 
