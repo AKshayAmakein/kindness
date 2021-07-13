@@ -98,7 +98,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline3!
-                                .copyWith(color: kLight,fontSize: 15),
+                                .copyWith(color: kLight, fontSize: 15),
                           ),
                         ),
                       ),
@@ -115,7 +115,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: kPrimary,
+                  color: kSecondary,
                 ),
               ),
             ),

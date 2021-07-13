@@ -18,59 +18,64 @@ class _PeopleTitleState extends State<PeopleTitle> {
 
   @override
   void initState() {
-    // checkIfAlreadyFriend(friendId,friendName);
+    // checkIfAlreadyFriend(friendId);
     super.initState();
   }
 
-  handleAddFriends(String friendId, String friendName) async {
+  handleAddFriends(String friendId) async {
+    print('handleAdd');
     await FirebaseFirestore.instance
         .collection("users")
         .doc(widget.uid)
         .update({
-      "friends": FieldValue.arrayUnion([
-        {"friendId": friendId, "friendName": friendName}
-      ])
+      "friends": FieldValue.arrayUnion([friendId])
     });
   }
 
-  // Future<bool> checkIfAlreadyFriend(String friendId, String friendName) {
-  //
-  //   FirebaseFirestore.instance
-  //       .collection("users")
-  //       .doc(widget.uid)
-  //       .get()
-  //       .then((value) {
-  //         List friendList=value.get('friends');
-  //         for(int i=0;)
-  //       });
-  //   return true;
-  // }
+  Future<bool> checkIfAlreadyFriend(String friendId) async {
+    bool flag = false;
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.uid)
+        .get()
+        .then((value) {
+      List friendList = value.get('friends');
+      print(friendList);
+      print(friendId);
+      if (friendList.isNotEmpty &&
+          friendList.any((element) => element == friendId)) {
+        flag = true;
+      }
+    });
+    print(flag);
+    return flag;
+  }
 
-  handleRemoveFriend(String friendId, String friendName) async {
+  handleRemoveFriend(String friendId) async {
+    print('handleRemove');
     await FirebaseFirestore.instance
         .collection("users")
         .doc(widget.uid)
         .update({
-      "friends": FieldValue.arrayRemove([
-        {"friendId": friendId, "friendName": friendName}
-      ])
+      "friends": FieldValue.arrayRemove([friendId])
     });
   }
 
-  handleAddFriendAndRemoveButton(String friendId, String friendName) {
-    if (isFriends) {
-      return ElevatedButton(
-          onPressed: () {
-            handleAddFriends(friendId, friendName);
-          },
-          child: Text('Unfriend'));
-    } else {
-      return ElevatedButton(
-          onPressed: () {
-            handleRemoveFriend(friendId, friendName);
-          },
-          child: Text('Add to friend'));
-    }
+  Widget handleAddFriendAndRemoveButton(String friendId, String friendName) {
+    checkIfAlreadyFriend(friendId).then((value) {
+      if (value == false) {
+        return ElevatedButton(
+            onPressed: () {
+              handleRemoveFriend(friendId);
+            },
+            child: Text('Unfriend'));
+      }
+    });
+    return ElevatedButton(
+        onPressed: () {
+          handleAddFriends(friendId);
+        },
+        child: Text('Add to friend'));
   }
 
   @override
@@ -106,32 +111,20 @@ class _PeopleTitleState extends State<PeopleTitle> {
                           ],
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        title: Text(
-                          ds["name"],
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                        leading: CircleAvatar(
-                          radius: Get.width / 10,
-                          backgroundColor: kSecondary,
-                          child: Text(ds["name"]
-                              .toString()
-                              .substring(0, 1)
-                              .toUpperCase()),
-                        ),
-                        // trailing: checkIfAlreadyFriend(ds['uid'], ds['name'])
-                        //     ? ElevatedButton(
-                        //         onPressed: () {
-                        //           handleRemoveFriend(ds['uid'], ds['name']);
-                        //         },
-                        //         child: Text("Add to friend"),
-                        //       )
-                        //     : ElevatedButton(
-                        //         onPressed: () {
-                        //           handleAddFriends(ds['uid'], ds['name']);
-                        //         },
-                        //         child: Text('unfriend'),
-                        //       )
-                      ),
+                          title: Text(
+                            ds["name"],
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                          leading: CircleAvatar(
+                            radius: Get.width / 10,
+                            backgroundColor: kSecondary,
+                            child: Text(ds["name"]
+                                .toString()
+                                .substring(0, 1)
+                                .toUpperCase()),
+                          ),
+                          trailing: handleAddFriendAndRemoveButton(
+                              ds['uid'], ds['name'])),
                     ),
                   );
                 });

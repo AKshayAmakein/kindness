@@ -18,15 +18,9 @@ final myTheme = ThemeData(
             fontFamily: 'NotoSerifJP',
             fontSize: 14,
             fontWeight: FontWeight.w400,
-          color: kLight
-        )
-
-    ),
-  appBarTheme: AppBarTheme(
-    backgroundColor: kPrimary,
-    titleTextStyle: TextStyle(
-      fontFamily: 'NotoSerifJP',
-      fontSize: 18,
-      fontWeight: FontWeight.w400),
-  )
-);
+            color: kLight)),
+    appBarTheme: AppBarTheme(
+      backgroundColor: kPrimary,
+      titleTextStyle: TextStyle(
+          fontFamily: 'NotoSerifJP', fontSize: 18, fontWeight: FontWeight.w400),
+    ));

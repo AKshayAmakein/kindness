@@ -37,7 +37,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   late String uid;
   String name = "";
   String state = "";
-  String isVideo="";
+  bool isVideo = false;
 
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
@@ -75,7 +75,8 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
 
   void _pickImageCamera() async {
     final pickedImageFile = await picker.getImage(
-        source: ImageSource.camera, imageQuality: 50, maxWidth: 150);
+      source: ImageSource.camera,
+    );
 
     setState(() {
       _pickedImage = File(pickedImageFile!.path);
@@ -87,13 +88,13 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
     // await _playVideo(pickedVideoFile);
     setState(() {
       _pickedImage = File(pickedVideoFile!.path);
-      isVideo="mp4";
+      isVideo = true;
     });
   }
 
   getUid() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
-   }
+  }
 
   @override
   void initState() {
@@ -235,6 +236,14 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                   size: Get.height * 0.04,
                                                 )),
                                           ),
+                                          (_pickedImage == null)
+                                              ? Container(
+                                                  width: 20,
+                                                )
+                                              : Icon(
+                                                  Icons.done,
+                                                  color: Colors.green,
+                                                ),
                                           Container(
                                             decoration: BoxDecoration(
                                               color: Colors.white,
@@ -268,72 +277,108 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                           SizedBox(
                                             height: Get.height * 0.02,
                                           ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                            ),
-                                            child: IconButton(
-                                              onPressed: () {
-                                                showModalBottomSheet(
-                                                    context: context,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.vertical(
-                                                        top:
-                                                            Radius.circular(20),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              (startDate == null)
+                                                  ? Container()
+                                                  : Container(
+                                                      child: Text(
+                                                        '${startDate!.year}-${startDate!.month}-${startDate!.day}',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
-                                                    clipBehavior: Clip
-                                                        .antiAliasWithSaveLayer,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Expanded(
-                                                            child: Container(
-                                                              child:
-                                                                  SfDateRangePicker(
-                                                                backgroundColor:
-                                                                    kLight,
-                                                                onSelectionChanged:
-                                                                    _onSelectionChanged,
-                                                                selectionMode:
-                                                                    DateRangePickerSelectionMode
-                                                                        .range,
-                                                                initialSelectedRange: PickerDateRange(
-                                                                    DateTime.now().subtract(
-                                                                        const Duration(
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                ),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    showModalBottomSheet(
+                                                        context: context,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                    20),
+                                                          ),
+                                                        ),
+                                                        clipBehavior: Clip
+                                                            .antiAliasWithSaveLayer,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                    Container(
+                                                                  child:
+                                                                      SfDateRangePicker(
+                                                                    backgroundColor:
+                                                                        kLight,
+                                                                    onSelectionChanged:
+                                                                        _onSelectionChanged,
+                                                                    selectionMode:
+                                                                        DateRangePickerSelectionMode
+                                                                            .range,
+                                                                    initialSelectedRange: PickerDateRange(
+                                                                        DateTime.now().subtract(const Duration(
                                                                             days:
                                                                                 4)),
-                                                                    DateTime.now().add(
-                                                                        const Duration(
+                                                                        DateTime.now().add(const Duration(
                                                                             days:
                                                                                 3))),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Get.back();
-                                                            },
-                                                            child: Text('Ok'),
-                                                          )
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                              icon: Icon(
-                                                Icons.date_range_outlined,
-                                                color: kPrimary,
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                },
+                                                                child:
+                                                                    Text('Ok'),
+                                                              )
+                                                            ],
+                                                          );
+                                                        });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.date_range_outlined,
+                                                    color: kPrimary,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              (endDate == null)
+                                                  ? Container()
+                                                  : Container(
+                                                      child: Text(
+                                                        '${endDate!.year}-${endDate!.month}-${endDate!.day}',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                            ],
                                           )
                                         ],
                                       ),
@@ -374,7 +419,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                 status6 == false ||
                                                 startDate.isNull ||
                                                 endDate.isNull ||
-                                                name =="" ||
+                                                name == "" ||
                                                 state == "" ||
                                                 _pickedImage.isNull) {
                                               Get.snackbar("Not Complete",
@@ -386,16 +431,17 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            _controller.createGoal(
-                                                uid,
-                                                selectedValue,
-                                                status6,
-                                                startDate!,
-                                                endDate!,
-                                                _pickedImage!,
-                                                name,
-                                                state,
-                                                isVideo)
+                                            _controller
+                                                .createGoal(
+                                                    uid,
+                                                    selectedValue,
+                                                    status6,
+                                                    startDate!,
+                                                    endDate!,
+                                                    _pickedImage!,
+                                                    name,
+                                                    state,
+                                                    isVideo)
                                                 .then((value) {
                                               setState(() {
                                                 isLoading = false;

@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/app_routes.dart';
-import 'package:kindness/constants/colors.dart';
 import 'package:kindness/constants/themes.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 

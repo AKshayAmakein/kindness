@@ -12,29 +12,44 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:video_player/video_player.dart';
 
 class AllGoalScreen extends StatefulWidget {
-  
   @override
   _AllGoalScreenState createState() => _AllGoalScreenState();
 }
 
-
 class _AllGoalScreenState extends State<AllGoalScreen> {
+  String UserUid = "";
+  bool switchValue = false;
+  late VideoPlayerController _controller;
+  Future<void>? _initializeVideoPlayerFuture;
+  getVideos() async {
+    await FirebaseFirestore.instance
+        .collection("goals")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        String videoUrl = doc["videoUrl"];
 
-  String UserUid="";
-  bool switchValue=false;
-  
+        _controller = VideoPlayerController.network(videoUrl);
+        _initializeVideoPlayerFuture = _controller.initialize().then((value) {
+          setState(() {});
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
     getUserUid();
+    getVideos();
     super.initState();
   }
-  
-  getUserUid()async {
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-    UserUid=prefs.getString("uid")!;
+
+  getUserUid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserUid = prefs.getString("uid")!;
     print(UserUid);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,9 +77,8 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                     child: Column(
                       children: [
                         Header(ds['userName'], ds['title'], ds['goalCategory'],
-                            ds['goalStatus'],ds['uid'],ds['postId'],context),
-                        MediaFile(ds['mediaUrl']),
-
+                            ds['goalStatus'], ds['uid'], ds['postId'], context),
+                        MediaFile(ds['imgUrl'], ds['videoUrl']),
                         Footer(ds['userName'], ds['desc'], timestamp)
                       ],
                     ),
@@ -76,50 +90,59 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
     );
   }
 
-  Widget MediaFile(String mediaUrl){
-    return (mediaUrl.contains('mp4'))
-        ?myVideoPlayer(mediaUrl)
-        :CachedNetworkImage(
-      imageUrl: mediaUrl,
-      height: Get.height * 0.4,
-      width: double.infinity,
-      fit: BoxFit.fill,
-    );
+  Widget MediaFile(String imgUrl, String videoUrl) {
+    return (imgUrl.isEmpty)
+        ? myVideoPlayer(videoUrl)
+        : CachedNetworkImage(
+            imageUrl: imgUrl,
+            height: Get.height * 0.4,
+            width: double.infinity,
+            fit: BoxFit.fill,
+          );
   }
 
-  Widget myVideoPlayer(String videoUrl){
-
-    VideoPlayerController _controller = VideoPlayerController.network(videoUrl);
-    _controller.initialize();
-
-    return AspectRatio(
-      aspectRatio: _controller.value.aspectRatio,
-      child: Stack(
-        children: [
-          VideoPlayer(_controller),
-          Center(
-            child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _controller.value.isPlaying
-                        ? _controller.pause()
-                        : _controller.play();
-                  });
-                },
-                icon: Icon(
-                  _controller.value.isPlaying
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                  size: 40,
-                  color: Colors.white,
-                )),
-          )
-        ],
+  Widget myVideoPlayer(String videoUrl) {
+    return Container(
+      height: Get.height * 0.4,
+      width: double.infinity,
+      child: FutureBuilder(
+        future: _initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: Stack(
+                children: [
+                  VideoPlayer(_controller),
+                  Center(
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _controller.value.isPlaying
+                                ? _controller.pause()
+                                : _controller.play();
+                          });
+                        },
+                        icon: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                          size: 40,
+                          color: Colors.white,
+                        )),
+                  )
+                ],
+              ),
+            );
+          } else
+            return Spinner();
+        },
       ),
     );
   }
 
-  Widget Header(String name, String title, String category, bool isComplete,String Uid,String postId,BuildContext context) {
+  Widget Header(String name, String title, String category, bool isComplete,
+      String Uid, String postId, BuildContext context) {
     return Container(
       width: double.infinity,
       height: Get.height * 0.1,
@@ -134,45 +157,43 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: UserImage(name, Get.height * 0.03),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                        title,
+                    Text(title,
                         style: TextStyle(
                             fontFamily: 'NotoSerifJP',
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: kLight
-                        )
-                    ),
+                            color: kLight)),
                     Text(category),
                   ],
                 ),
               ],
             ),
           ),
-          (UserUid==Uid)
-              ?FlutterSwitch(
-              activeText: "Completed",
-              inactiveText: "In progress",
-              valueFontSize: 10.0,
-              width: 110,
-              value: !isComplete,
-              borderRadius: 30.0,
-              showOnOff: true,
-              onToggle: (val) {
-                print(!val);
-                FirebaseFirestore.instance.collection('goals').doc(postId).update({
-                  'goalStatus':!val
-                });
-              }
-          )
-              :Progress_notUser(isComplete)
+          (UserUid == Uid)
+              ? FlutterSwitch(
+                  activeText: "Completed",
+                  inactiveText: "In progress",
+                  valueFontSize: 10.0,
+                  width: 110,
+                  value: !isComplete,
+                  borderRadius: 30.0,
+                  showOnOff: true,
+                  onToggle: (val) {
+                    print(!val);
+                    FirebaseFirestore.instance
+                        .collection('goals')
+                        .doc(postId)
+                        .update({'goalStatus': !val});
+                  })
+              : Progress_notUser(isComplete)
         ],
       ),
     );
@@ -189,41 +210,33 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                 bottomRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20))),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 28,horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                  name,
+              Text(name,
                   style: TextStyle(
                       fontFamily: 'NotoSerifJP',
-                      fontSize: Get.height*0.025,
+                      fontSize: Get.height * 0.025,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black
-                  )
-
-              ),
+                      color: Colors.black)),
               SizedBox(width: Get.width * 0.02),
               Expanded(
-                child: ReadMoreText(
-                    description,
+                child: ReadMoreText(description,
                     trimLines: 2,
                     trimMode: TrimMode.Line,
                     trimCollapsedText: '...Read more',
                     trimExpandedText: ' Less',
                     style: TextStyle(
                       fontFamily: 'NotoSerifJP',
-                      fontSize: Get.height*0.025,
-
-                    )
-
-                ),
+                      fontSize: Get.height * 0.025,
+                    )),
               ),
-
               Align(
                 alignment: AlignmentDirectional.bottomEnd,
                 child: Text(
-                  timeago.format(DateTime.parse(timestamp.toDate().toString()),allowFromNow: true),
+                  timeago.format(DateTime.parse(timestamp.toDate().toString()),
+                      allowFromNow: true),
                 ),
               )
             ],
@@ -231,18 +244,17 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
         ));
   }
 
-  Widget Progress_notUser(bool isComplete){
+  Widget Progress_notUser(bool isComplete) {
     return isComplete
         ? Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        'In-Progress',
-      ),
-    )
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'In-Progress',
+            ),
+          )
         : Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text('Completed'),
-    );
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Completed'),
+          );
   }
 }
-
