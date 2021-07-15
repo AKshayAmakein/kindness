@@ -54,7 +54,7 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Goals'),
+        title: Text('Goals'),
       ),
       backgroundColor: kLight,
       drawer: CustomDrawer(),

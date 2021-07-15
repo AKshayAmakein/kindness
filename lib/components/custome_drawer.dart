@@ -6,8 +6,8 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
-import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
+import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -124,7 +124,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.of(context).pop();
                 Get.to(HomeScreenMain());
               },
-              title: Text('Act of the Day'),
+              title: Text('Kindness Act of the Day'),
               leading: Image.asset(
                 "assets/images/ribbon.png",
                 color: Colors.grey,
@@ -133,17 +133,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             ListTile(
                 onTap: () {
+                  //Navigator.of(context).pop();
+                  Get.to(AllGoalScreen());
+                },
+                title: Text('Explore Kindness'),
+                leading: Icon(Icons.travel_explore_outlined)),
+            ListTile(
+                onTap: () {
                   Navigator.of(context).pop();
                   Get.to(AllGoalScreen());
                 },
-                title: Text('All Goals'),
+                title: Text('Goals'),
                 leading: Icon(Icons.sports_score_outlined)),
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
                   Get.to(CreateGoalScreen());
                 },
-                title: Text('Create Goal'),
+                title: Text('Create Your Goal'),
                 leading: Icon(Icons.outlined_flag_outlined)),
             ListTile(
                 onTap: () {
@@ -153,18 +160,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     name: name,
                   ));
                 },
-                title: Text('People'),
+                title: Text('My Connections'),
                 leading: Icon(Icons.groups_outlined)),
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
                   Get.to(NewsScreen());
                 },
-                title: Text('News'),
+                title: Text('Kindness Updates'),
                 leading: Icon(Icons.article_outlined)),
             ListTile(
-                title: Text('Points'),
+                title: Text('Your Kindness Score'),
                 leading: Icon(Icons.military_tech_outlined)),
+            ListTile(
+                title: Text('Kindness Performer'),
+                leading: Icon(Icons.emoji_events_outlined)),
             Divider(),
             ListTile(
               title: Text('Settings'),
