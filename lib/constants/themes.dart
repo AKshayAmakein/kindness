@@ -3,17 +3,19 @@ import 'package:kindness/constants/colors.dart';
 
 final myTheme = ThemeData(
     primaryColor: kPrimary,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: kLight,
     fontFamily: 'NotoSerifJP',
     textTheme: TextTheme(
-        headline1: TextStyle(
+        headline6: TextStyle(
             fontFamily: 'NotoSerifJP',
-            fontSize: 18,
-            fontWeight: FontWeight.bold),
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: kPrimary),
         headline3: TextStyle(
             fontFamily: 'NotoSerifJP',
             fontSize: 18,
-            fontWeight: FontWeight.w400),
+            color: kPrimary,
+            fontWeight: FontWeight.w800),
         headline4: TextStyle(
             fontFamily: 'NotoSerifJP',
             fontSize: 14,
@@ -23,4 +25,14 @@ final myTheme = ThemeData(
       backgroundColor: kPrimary,
       titleTextStyle: TextStyle(
           fontFamily: 'NotoSerifJP', fontSize: 18, fontWeight: FontWeight.w400),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          kPrimary,
+        ), //button color
+        foregroundColor: MaterialStateProperty.all<Color>(
+          kLight,
+        ), //text (and icon)
+      ),
     ));

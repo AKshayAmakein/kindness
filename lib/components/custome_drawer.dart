@@ -7,7 +7,7 @@ import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/news_screen.dart';
-import 'package:kindness/screens/people_screen.dart';
+import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,7 +72,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                color: kSecondary.withOpacity(0.5),
+                                color: kPrimary.withOpacity(0.5),
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
@@ -148,8 +148,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
-                  Get.to(PeopleScreen(
+                  Get.to(MyConnectionScreen(
                     uid: uid,
+                    name: name,
                   ));
                 },
                 title: Text('People'),

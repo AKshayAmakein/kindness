@@ -25,7 +25,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return new Text("fetch error");
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
+            } else if (!snapshot.hasData) {
               return Center(child: Spinner());
             } else {
               return Column(
@@ -66,8 +66,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                                   vertical: 8, horizontal: 8),
                               child: Text(
                                 ds["title"],
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style: Theme.of(context).textTheme.headline6,
                               ),
                             ),
                             Padding(
@@ -76,8 +75,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                               child: Text(
                                 ds["desc"],
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                style: Theme.of(context).textTheme.headline3,
                               ),
                             )
                           ],

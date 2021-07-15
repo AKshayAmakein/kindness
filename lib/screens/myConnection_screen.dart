@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/people_tile.dart';
+import 'package:kindness/components/strings.dart';
+import 'package:kindness/screens/friends_tile.dart';
+import 'package:share/share.dart';
 
-class PeopleScreen extends StatelessWidget {
+class MyConnectionScreen extends StatelessWidget {
   final String uid;
-  PeopleScreen({required this.uid});
+  final String name;
+  MyConnectionScreen({required this.uid, required this.name});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Kindness People'),
+          title: Text('My Connections'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  _share();
+                },
+                icon: Icon(Icons.share))
+          ],
           bottom: TabBar(
             indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
@@ -31,10 +42,20 @@ class PeopleScreen extends StatelessWidget {
             PeopleTitle(
               uid: uid,
             ),
-            Text("dbhs"),
+            FriendsTile(
+              uid: uid,
+            )
           ],
         ),
       ),
+    );
+  }
+
+  void _share() async {
+    await Share.share(
+      "$name has invited you to join $appName",
+      subject:
+          "$name has invited you to join https://play.google.com/store/apps/details?id=com.amakeinco.kindness",
     );
   }
 }

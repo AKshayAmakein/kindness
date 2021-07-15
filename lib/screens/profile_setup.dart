@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,8 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/model/states.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+
+File? photo;
 
 class ProfileSetup extends StatelessWidget {
   @override
@@ -33,7 +36,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   TextEditingController nameController = TextEditingController();
-  File? photo;
+
   var radioValue;
   bool loading = false;
   late String uid;
@@ -68,10 +71,10 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // SizedBox(
-                    //   height: screenHeight / 30,
-                    // ),
-                    //Avatar(),
+                    SizedBox(
+                      height: screenHeight / 30,
+                    ),
+                    Avatar(),
                     MyTextField(
                       title: 'Full Name',
                       keyBoardType: TextInputType.name,
@@ -268,7 +271,7 @@ class _ProfileState extends State<Profile> {
       'dob': birthday,
       'state': state,
       'uid': uid,
-      'coins':0
+      'coins': 0
     }).then((value) {
       Get.snackbar(
         "Profile Details Submitted!!",
@@ -389,35 +392,35 @@ class MyTextField extends StatelessWidget {
     );
   }
 }
-//
-// class Avatar extends StatefulWidget {
-//   const Avatar({
-//     Key? key,
-//   }) : super(key: key);
-//
-//   @override
-//   _AvatarState createState() => _AvatarState();
-// }
-//
-// class _AvatarState extends State<Avatar> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//         child: InkWell(
-//             onTap: () async {
-//               FilePickerResult? result = await FilePicker.platform.pickFiles();
-//
-//               if (result != null) {
-//                 setState(() {
-//                   File file = File(result.files.single.path!);
-//                   photo = file;
-//                 });
-//               }
-//             },
-//             child: (photo == null)
-//                 ? BuildCircleAvatar(
-//                     image: AssetImage('assets/images/profile.png'),
-//                   )
-//                 : BuildCircleAvatar(image: FileImage(photo!))));
-//   }
-// }
+
+class Avatar extends StatefulWidget {
+  const Avatar({
+    Key? key,
+  }) : super(key: key);
+  @override
+  _AvatarState createState() => _AvatarState();
+}
+
+class _AvatarState extends State<Avatar> {
+  ProfileSetup profile = ProfileSetup();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: InkWell(
+            onTap: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+              if (result != null) {
+                setState(() {
+                  File file = File(result.files.single.path!);
+                  photo = file;
+                });
+              }
+            },
+            child: (photo == null)
+                ? BuildCircleAvatar(
+                    image: AssetImage('assets/images/profile.png'),
+                  )
+                : BuildCircleAvatar(image: FileImage(photo!))));
+  }
+}

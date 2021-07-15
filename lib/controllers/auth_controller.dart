@@ -122,23 +122,13 @@ class AuthController extends GetxController {
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((result) async {
-        Get.to(ProfileSetup());
-        print('uID: ' + result.user!.uid.toString());
-        print('email: ' + result.user!.email.toString());
-
-        // //create the new user object
-        // UserModel _newUser = UserModel(
-        //     uid: result.user!.uid,
-        //     email: result.user!.email!,
-        //     name: nameController.text,
-        //     birthday: birthdayController.text,
-        //     state: stateC;ontroller.text,
-        //     country: countryController.text);
-        // //create the user in firestore
-        // _createUserFirestore(_newUser, result.user!);
+        if (result.user != null) {
+          Get.to(ProfileSetup());
+          print('uID: ' + result.user!.uid.toString());
+          print('email: ' + result.user!.email.toString());
+        }
         emailController.clear();
         passwordController.clear();
-        hideLoadingIndicator();
       });
     } on FirebaseAuthException catch (error) {
       hideLoadingIndicator();
@@ -264,8 +254,16 @@ class AuthController extends GetxController {
     return _auth.signOut();
   }
 
-  createGoal(String uid, String category, bool status, DateTime startDate,
-      DateTime endDate, File file, String name, String state,bool isVideo) async {
+  createGoal(
+      String uid,
+      String category,
+      bool status,
+      DateTime startDate,
+      DateTime endDate,
+      File file,
+      String name,
+      String state,
+      bool isVideo) async {
     uploadPhoto() {
       DateTime time = DateTime.now();
       String filename = 'files/userMedia/${uid + time.toString()}';
@@ -279,23 +277,23 @@ class AuthController extends GetxController {
         print(e);
       }
     }
-    String imgUrl="";
-    String videoUrl="";
+
+    String imgUrl = "";
+    String videoUrl = "";
 
     try {
       UploadTask? photopath = uploadPhoto();
       final snapshot = await photopath!.whenComplete(() {});
       var mediaUrl = await snapshot.ref.getDownloadURL();
-      if(isVideo){
-        videoUrl= mediaUrl;
+      if (isVideo) {
+        videoUrl = mediaUrl;
+      } else {
+        imgUrl = mediaUrl;
       }
-      else{
-        imgUrl=mediaUrl;
-      }
-      String postId=uuid.v4();
+      String postId = uuid.v4();
       _db.collection("goals").doc(postId).set({
-        "imgUrl":imgUrl,
-        "videoUrl":videoUrl,
+        "imgUrl": imgUrl,
+        "videoUrl": videoUrl,
         "uid": uid,
         "title": titleController.text,
         "desc": descController.text,
@@ -306,7 +304,7 @@ class AuthController extends GetxController {
         "time": DateTime.now(),
         "userName": name,
         "userState": state,
-        "postId":postId
+        "postId": postId
       }).then((value) {
         Get.snackbar('Goal created!', "",
             snackPosition: SnackPosition.BOTTOM,
@@ -322,37 +320,34 @@ class AuthController extends GetxController {
           colorText: Get.theme.snackBarTheme.actionTextColor);
     }
   }
-updatePassword(password)async{
-    try{
 
+  updatePassword(password) async {
+    try {
       await _auth.currentUser!.updatePassword(password).then((value) {
-
-          Get.snackbar('Password changed!', "",
-              snackPosition: SnackPosition.BOTTOM,
-              duration: Duration(seconds: 10),
-              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-              colorText: Get.theme.snackBarTheme.actionTextColor);
-          Get.to(LoginScreen());
+        Get.snackbar('Password changed!', "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 10),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+        Get.to(LoginScreen());
       });
-    } catch(e){
+    } catch (e) {
       print(e);
     }
-}
+  }
+
   updateProfile(name, state, uid) async {
     try {
-
-        _db
-            .collection("users")
-            .doc(uid)
-            .update({"name": name, "state": state}).then((value) {
-          Get.snackbar('Profile update!', "",
-              snackPosition: SnackPosition.BOTTOM,
-              duration: Duration(seconds: 10),
-              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-              colorText: Get.theme.snackBarTheme.actionTextColor);
-
-        });
-
+      _db
+          .collection("users")
+          .doc(uid)
+          .update({"name": name, "state": state}).then((value) {
+        Get.snackbar('Profile update!', "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 10),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+      });
     } catch (e) {
       print(e);
       Get.snackbar('failed to update!', "$e",

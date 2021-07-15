@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,10 +17,13 @@ class PeopleTitle extends StatefulWidget {
 class _PeopleTitleState extends State<PeopleTitle> {
   AuthController authController = AuthController.to;
   bool isFriends = false;
-
+  List friendList = [];
+  late Timer timer;
   @override
   void initState() {
-    // checkIfAlreadyFriend(friendId);
+    timer =
+        Timer.periodic(Duration(seconds: 1), (Timer t) => getUserFriendList());
+
     super.initState();
   }
 
@@ -29,26 +34,24 @@ class _PeopleTitleState extends State<PeopleTitle> {
         .doc(widget.uid)
         .update({
       "friends": FieldValue.arrayUnion([friendId])
+    }).then((value) {
+      FirebaseFirestore.instance.collection("users").doc(friendId).update({
+        "friends": FieldValue.arrayUnion([widget.uid])
+      });
     });
   }
 
-  Future<bool> checkIfAlreadyFriend(String friendId) async {
-    bool flag = false;
+  getUserFriendList() async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(widget.uid)
         .get()
         .then((value) {
-      List friendList = value.get('friends');
-      print(friendList);
-      print(friendId);
-      if (friendList.isNotEmpty &&
-          friendList.any((element) => element == friendId)) {
-        flag = true;
-      }
+      setState(() {
+        friendList = value.get('friends');
+        print(friendList);
+      });
     });
-    print(flag);
-    return flag;
   }
 
   handleRemoveFriend(String friendId) async {
@@ -58,24 +61,33 @@ class _PeopleTitleState extends State<PeopleTitle> {
         .doc(widget.uid)
         .update({
       "friends": FieldValue.arrayRemove([friendId])
+    }).then((value) {
+      FirebaseFirestore.instance.collection("users").doc(friendId).update({
+        "friends": FieldValue.arrayRemove([widget.uid])
+      });
     });
   }
 
   Widget handleAddFriendAndRemoveButton(String friendId, String friendName) {
-    checkIfAlreadyFriend(friendId).then((value) {
-      if (value == false) {
-        return ElevatedButton(
-            onPressed: () {
-              handleRemoveFriend(friendId);
-            },
-            child: Text('Unfriend'));
-      }
-    });
-    return ElevatedButton(
-        onPressed: () {
-          handleAddFriends(friendId);
-        },
-        child: Text('Add to friend'));
+    if (friendList.any((element) => element == friendId)) {
+      return ElevatedButton(
+          onPressed: () {
+            handleRemoveFriend(friendId);
+          },
+          child: Text('Unfriend'));
+    } else {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: kLight,
+          ),
+          onPressed: () {
+            handleAddFriends(friendId);
+          },
+          child: Text(
+            'Add to friend',
+            style: TextStyle(color: kPrimary),
+          ));
+    }
   }
 
   @override
@@ -94,8 +106,8 @@ class _PeopleTitleState extends State<PeopleTitle> {
             return ListView.builder(
                 itemCount: snapshot.data!.size,
                 itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data!.docs[index];
-                  // sharedPreferences.setString("userId",ds['uid']);
+                  DocumentSnapshot ds = snapshot.data!.docs[
+                      index]; // sharedPreferences.setString("userId",ds['uid']);
                   return Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Container(
