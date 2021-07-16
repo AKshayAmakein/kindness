@@ -53,6 +53,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.2.44
   timeago: ^3.1.0
   share: ^2.0.4
+  youtube_player_flutter: ^8.0.0
+  http: ^0.13.3
 
 
 dev_dependencies:
