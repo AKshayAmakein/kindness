@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
   late String uid;
   DateTime? birthday;
   String? state;
-  String photourl = 'defaultImageUrl';
+  String photourl = '';
   AuthController authController = Get.find();
   double screenHeight = Get.height;
   double screenWidth = Get.width;
@@ -265,13 +265,14 @@ class _ProfileState extends State<Profile> {
     // prefs.setString("uid", uid);
     // prefs.setString("username", name.text);
     firebase.collection('users').doc(uid).set({
-      //'photourl': photourl,
+      'photourl': photourl,
       'name': nameController.text,
       'gender': radioValue.toString(),
       'dob': birthday,
       'state': state,
       'uid': uid,
-      'coins': 0
+      'coins': 0,
+      'friends': [],
     }).then((value) {
       Get.snackbar(
         "Profile Details Submitted!!",

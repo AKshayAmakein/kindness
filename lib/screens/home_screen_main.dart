@@ -23,6 +23,7 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   late String uid;
   late String name;
   late String state;
+  late String profileUrl;
   late Timer timer;
   int coins = 0;
   late SharedPreferences _prefs;
@@ -38,11 +39,13 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
       setState(() {
         name = value.get("name");
         state = value.get("state");
+        profileUrl = value.get("photourl");
         _prefs.setString("uid", uid).then((value) {
           print(_prefs.get("uid"));
         });
         _prefs.setString("name", name);
         _prefs.setString("state", state);
+        _prefs.setString("profileUrl",profileUrl);
       });
     });
   }

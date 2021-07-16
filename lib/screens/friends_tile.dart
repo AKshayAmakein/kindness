@@ -76,7 +76,7 @@ class _FriendsTileState extends State<FriendsTile> {
       setState(() {
         name = value.get("name");
         print(name);
-        return name;
+        //return name;
       });
     });
     return name;
