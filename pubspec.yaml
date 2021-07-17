@@ -55,6 +55,8 @@ dependencies:
   share: ^2.0.4
   youtube_player_flutter: ^8.0.0
   http: ^0.13.3
+  clay_containers: ^0.3.2
+  wc_flutter_share: ^0.4.0
 
 
 dev_dependencies:
