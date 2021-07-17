@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
+import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -20,8 +22,10 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthController authController = AuthController.to;
   String uid = "";
-  String name = "namesds";
+  String name = "name";
   String state = "";
+  String profileUrl="";
+  double screenWidth=Get.width;
 
   late SharedPreferences preferences;
 
@@ -34,6 +38,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       print(name);
       state = preferences.getString("state")!;
       print(state);
+      profileUrl= preferences.getString("profileUrl")!;
     });
   }
 
@@ -64,13 +69,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CircleAvatar(
-                              radius: 30,
-                              child: Text(
-                                name[0].toUpperCase(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
+                            DrawerImage(),
+
                             Container(
                               decoration: BoxDecoration(
                                 color: kPrimary.withOpacity(0.5),
@@ -202,5 +202,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
         ),
       ),
     );
+  }
+
+  DrawerImage(){
+    return (profileUrl=="")
+        ? UserImage(name,30)
+        :  CircleAvatar(
+            radius: 30,
+            child: CachedNetworkImage(imageUrl: profileUrl),
+          );
   }
 }
