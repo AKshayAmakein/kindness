@@ -77,9 +77,10 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                     child: Column(
                       children: [
                         Header(ds['userName'], ds['title'], ds['goalCategory'],
-                            ds['goalStatus'], ds['uid'], ds['postId'], context),
+                            context),
                         MediaFile(ds['imgUrl'], ds['videoUrl']),
-                        Footer(ds['userName'], ds['desc'], timestamp)
+                        Footer(ds['userName'], ds['desc'], ds['goalStatus'],
+                            ds['uid'], ds['postId'], timestamp)
                       ],
                     ),
                   ),
@@ -91,6 +92,7 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
   }
 
   Widget MediaFile(String imgUrl, String videoUrl) {
+
     return (imgUrl.isEmpty)
         ? myVideoPlayer(videoUrl)
         : CachedNetworkImage(
@@ -141,8 +143,8 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
     );
   }
 
-  Widget Header(String name, String title, String category, bool isComplete,
-      String Uid, String postId, BuildContext context) {
+  Widget Header(
+      String name, String title, String category, BuildContext context) {
     return Container(
       width: double.infinity,
       height: Get.height * 0.1,
@@ -177,29 +179,13 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
               ],
             ),
           ),
-          (UserUid == Uid)
-              ? FlutterSwitch(
-                  activeText: "Completed",
-                  inactiveText: "In progress",
-                  valueFontSize: 10.0,
-                  width: 110,
-                  value: !isComplete,
-                  borderRadius: 30.0,
-                  showOnOff: true,
-                  onToggle: (val) {
-                    print(!val);
-                    FirebaseFirestore.instance
-                        .collection('goals')
-                        .doc(postId)
-                        .update({'goalStatus': !val});
-                  })
-              : Progress_notUser(isComplete)
         ],
       ),
     );
   }
 
-  Widget Footer(String name, String description, timestamp) {
+  Widget Footer(String name, String description, bool isComplete, String Uid,
+      String postId, timestamp) {
     final now = new DateTime.now();
     return Container(
         width: double.infinity,
@@ -211,34 +197,56 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                 bottomLeft: Radius.circular(20))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              Text(name,
-                  style: TextStyle(
-                      fontFamily: 'NotoSerifJP',
-                      fontSize: Get.height * 0.025,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
-              SizedBox(width: Get.width * 0.02),
-              Expanded(
-                child: ReadMoreText(description,
-                    trimLines: 2,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: '...Read more',
-                    trimExpandedText: ' Less',
-                    style: TextStyle(
-                      fontFamily: 'NotoSerifJP',
-                      fontSize: Get.height * 0.025,
-                    )),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: TextStyle(
+                          fontFamily: 'NotoSerifJP',
+                          fontSize: Get.height * 0.025,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  SizedBox(width: Get.width * 0.02),
+                  Expanded(
+                    child: ReadMoreText(description,
+                        trimLines: 2,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: '...Read more',
+                        trimExpandedText: ' Less',
+                        style: TextStyle(
+                          fontFamily: 'NotoSerifJP',
+                          fontSize: Get.height * 0.025,
+                        )),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    child: Text(
+                      timeago.format(
+                          DateTime.parse(timestamp.toDate().toString()),
+                          allowFromNow: true),
+                    ),
+                  )
+                ],
               ),
-              Align(
-                alignment: AlignmentDirectional.bottomEnd,
-                child: Text(
-                  timeago.format(DateTime.parse(timestamp.toDate().toString()),
-                      allowFromNow: true),
-                ),
-              )
+              (UserUid == Uid)
+                  ? FlutterSwitch(
+                      activeText: "Completed",
+                      inactiveText: "In progress",
+                      valueFontSize: 10.0,
+                      width: 110,
+                      value: !isComplete,
+                      borderRadius: 30.0,
+                      showOnOff: true,
+                      onToggle: (val) {
+                        print(!val);
+                        FirebaseFirestore.instance
+                            .collection('goals')
+                            .doc(postId)
+                            .update({'goalStatus': !val});
+                      })
+                  : Progress_notUser(isComplete)
             ],
           ),
         ));

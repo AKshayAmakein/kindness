@@ -21,7 +21,8 @@ class _PeopleTitleState extends State<PeopleTitle> {
   late Timer timer;
   @override
   void initState() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getUserFriendList());
+    timer =
+        Timer.periodic(Duration(seconds: 1), (Timer t) => getUserFriendList());
 
     super.initState();
   }
@@ -31,7 +32,6 @@ class _PeopleTitleState extends State<PeopleTitle> {
     super.dispose();
     timer.cancel();
   }
-
 
   handleAddFriends(String friendId) async {
     print('handleAdd');

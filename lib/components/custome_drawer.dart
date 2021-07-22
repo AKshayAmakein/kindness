@@ -9,6 +9,7 @@ import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
+import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -24,8 +25,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String uid = "";
   String name = "name";
   String state = "";
-  String profileUrl="";
-  double screenWidth=Get.width;
+  String profileUrl = "";
+  double screenWidth = Get.width;
 
   late SharedPreferences preferences;
 
@@ -38,7 +39,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       print(name);
       state = preferences.getString("state")!;
       print(state);
-      profileUrl= preferences.getString("profileUrl")!;
+      profileUrl = preferences.getString("profileUrl")!;
     });
   }
 
@@ -70,7 +71,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             DrawerImage(),
-
                             Container(
                               decoration: BoxDecoration(
                                 color: kPrimary.withOpacity(0.5),
@@ -166,6 +166,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
+                  Get.to(MyActsScreen(uid: uid));
+                },
+                title: Text('My Kindness Acts'),
+                leading: Icon(Icons.volunteer_activism_outlined)),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pop();
                   Get.to(NewsScreen());
                 },
                 title: Text('Kindness Updates'),
@@ -204,12 +211,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  DrawerImage(){
-    return (profileUrl=="")
-        ? UserImage(name,30)
-        :  CircleAvatar(
+  DrawerImage() {
+    return (profileUrl == "")
+        ? UserImage(name, 30)
+        : CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(profileUrl),
             radius: 30,
-            child: CachedNetworkImage(imageUrl: profileUrl),
           );
   }
 }

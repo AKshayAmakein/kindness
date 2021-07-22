@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kindness/components/channel_title.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/components/kindness_tile.dart';
+import 'package:kindness/components/quotes_tiles.dart';
 
 class ExploreKindness extends StatefulWidget {
   @override
@@ -35,8 +37,8 @@ class _ExploreKindnessState extends State<ExploreKindness> {
         body: TabBarView(
           children: [
             ChannelTile(),
-            Text('shf'),
-            Text('dfhn'),
+            QuotesTile(),
+            KindnessTile(),
           ],
         ),
       ),

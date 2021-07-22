@@ -25,6 +25,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AuthController _controller = AuthController.to;
   bool status6 = false;
+  bool recurring = false;
   File? _pickedImage;
   final picker = ImagePicker();
   String _selectedDate = '';
@@ -129,25 +130,11 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                         itemCount: snapshot.data!.size,
                         itemBuilder: (context, index) {
                           DocumentSnapshot ds = snapshot.data!.docs[index];
+                          List catag = ds['catagories'];
+                          List<String> catagories =
+                              new List<String>.from(catag);
                           return Column(
                             children: [
-                              DropdownSearch<String>(
-                                mode: Mode.MENU,
-                                showSelectedItem: true,
-                                items: [
-                                  ds["help"],
-                                  ds["nature"],
-                                  ds["rescue"],
-                                ],
-                                label: "Select category",
-                                hint: "",
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValue = value!;
-                                    print(selectedValue);
-                                  });
-                                },
-                              ),
                               Form(
                                   key: _formKey,
                                   child: Column(
@@ -166,7 +153,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                               _controller.titleController,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
-                                            labelText: "Title",
+                                            labelText: "Name of Your Goal",
                                             labelStyle: Theme.of(context)
                                                 .textTheme
                                                 .headline3,
@@ -180,6 +167,22 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                       SizedBox(
                                         height: Get.height * 0.02,
                                       ),
+                                      DropdownSearch<String>(
+                                        mode: Mode.MENU,
+                                        showSelectedItem: true,
+                                        items: catagories,
+                                        label: "Select category",
+                                        hint: "",
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedValue = value!;
+                                            print(selectedValue);
+                                          });
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: Get.height * 0.02,
+                                      ),
                                       Container(
                                         decoration: BoxDecoration(
                                             color: Colors.white,
@@ -189,10 +192,13 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                         child: TextFormField(
                                           controller:
                                               _controller.descController,
-                                          maxLength: 100,
+                                          maxLength: 300,
+                                          maxLines: 100,
+                                          minLines: 5,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
-                                            labelText: "Description",
+                                            labelText:
+                                                "Tell More about Your Goal",
                                             labelStyle: Theme.of(context)
                                                 .textTheme
                                                 .headline3,

@@ -39,8 +39,13 @@ class BuildCircleAvatar extends StatelessWidget {
   }
 }
 
-void ScratchCard(BuildContext context, ConfettiController controller,
-    int coinValue, String uid, int initialCoins) {
+void ScratchCard(
+  BuildContext context,
+  ConfettiController controller,
+  int coinValue,
+  String uid,
+  int initialCoins,
+) {
   final assetsAudioPlayer = AssetsAudioPlayer();
 
   playAudio() async {
@@ -100,6 +105,12 @@ void ScratchCard(BuildContext context, ConfettiController controller,
                     .doc(uid)
                     .update({"coins": coinValue + initialCoins}).then((value) {
                   Get.snackbar("Coins added", "");
+                  FirebaseFirestore.instance
+                      .collection("act_of_the_day")
+                      .doc("OZNx9SE0lKrmNMXQagNq")
+                      .update({
+                    "actCompletedBy": FieldValue.arrayUnion([uid])
+                  });
                 });
               });
             },
@@ -111,6 +122,9 @@ void ScratchCard(BuildContext context, ConfettiController controller,
 Widget UserImage(String username, double radius) {
   return CircleAvatar(
     radius: radius,
-    child: Text(username.toString().substring(0, 1).toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold),),
+    child: Text(
+      username.toString().substring(0, 1).toUpperCase(),
+      style: TextStyle(fontWeight: FontWeight.bold),
+    ),
   );
 }
