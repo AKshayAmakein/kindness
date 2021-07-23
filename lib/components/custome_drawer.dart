@@ -7,6 +7,7 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
+import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
@@ -142,7 +143,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
-                  Get.to(AllGoalScreen());
+                  Get.to(GoalsScreen());
                 },
                 title: Text('Goals'),
                 leading: Icon(Icons.sports_score_outlined)),

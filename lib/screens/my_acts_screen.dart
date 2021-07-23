@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/screens/single_act_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -40,39 +41,48 @@ class _MyActsScreenState extends State<MyActsScreen> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data!.docs[index];
 
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: CachedNetworkImage(
-                                imageUrl: ds['cmtImg'],
-                                height: Get.height * 0.08,
-                              )),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                ds['actTitle'],
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Text(
-                                ds['cmt'],
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            ],
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(SingleActScreen(
+                            image: ds['cmtImg'],
+                            time: ds['time'],
+                            title: ds['actTitle'],
+                            comment: ds['cmt']));
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: CachedNetworkImage(
+                                  imageUrl: ds['cmtImg'],
+                                  height: Get.height * 0.08,
+                                )),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(timeago.format(
-                            DateTime.parse(ds['time'].toDate().toString()),
-                          )),
-                        ),
-                      ],
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(
+                                  ds['actTitle'],
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  ds['cmt'],
+                                  style: TextStyle(color: Colors.black54),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(timeago.format(
+                              DateTime.parse(ds['time'].toDate().toString()),
+                            )),
+                          ),
+                        ],
+                      ),
                     );
                     //   ListTile(
                     //   title: Text(ds['actTitle']),
