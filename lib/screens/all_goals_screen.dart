@@ -1,15 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/NewsVideoPlayerAndImg.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:video_player/video_player.dart';
 
 class AllGoalScreen extends StatefulWidget {
   @override
@@ -19,28 +18,10 @@ class AllGoalScreen extends StatefulWidget {
 class _AllGoalScreenState extends State<AllGoalScreen> {
   String UserUid = "";
   bool switchValue = false;
-  late VideoPlayerController _controller;
-  Future<void>? _initializeVideoPlayerFuture;
-  getVideos() async {
-    await FirebaseFirestore.instance
-        .collection("goals")
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        String videoUrl = doc["videoUrl"];
-
-        _controller = VideoPlayerController.network(videoUrl);
-        _initializeVideoPlayerFuture = _controller.initialize().then((value) {
-          setState(() {});
-        });
-      });
-    });
-  }
 
   @override
   void initState() {
     getUserUid();
-    getVideos();
     super.initState();
   }
 
@@ -92,55 +73,17 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
   }
 
   Widget MediaFile(String imgUrl, String videoUrl) {
-
-    return (imgUrl.isEmpty)
-        ? myVideoPlayer(videoUrl)
-        : CachedNetworkImage(
-            imageUrl: imgUrl,
-            height: Get.height * 0.4,
-            width: double.infinity,
-            fit: BoxFit.fill,
-          );
+    return myVideoPlayer(videoUrl, imgUrl);
   }
 
-  Widget myVideoPlayer(String videoUrl) {
+  Widget myVideoPlayer(String videoUrl, String imgUrl) {
     return Container(
-      height: Get.height * 0.4,
-      width: double.infinity,
-      child: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: Stack(
-                children: [
-                  VideoPlayer(_controller),
-                  Center(
-                    child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                        },
-                        icon: Icon(
-                          _controller.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                          size: 40,
-                          color: Colors.white,
-                        )),
-                  )
-                ],
-              ),
-            );
-          } else
-            return Spinner();
-        },
-      ),
-    );
+        height: Get.height * 0.4,
+        width: double.infinity,
+        child: NewsVideoPlayerAndImg(
+          videoUrl: videoUrl,
+          img: imgUrl,
+        ));
   }
 
   Widget Header(
