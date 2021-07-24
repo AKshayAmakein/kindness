@@ -12,6 +12,7 @@ import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/introduction_screen.dart';
 import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/profile_setup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
@@ -266,14 +267,16 @@ class AuthController extends GetxController {
   }
 
   // Sign out
-  Future<void> signOut() {
+  Future<void> signOut() async {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
     ConfirmPasswordController.clear();
     titleController.clear();
     descController.clear();
-    return _auth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    return await _auth.signOut();
   }
 
   createGoal(

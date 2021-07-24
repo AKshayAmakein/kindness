@@ -54,7 +54,10 @@ class _NewsTilesState extends State<NewsTiles> {
                                 clipBehavior: Clip.antiAlias,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10)),
-                                child: NewsVideoPlayerAndImg(videoUrl: ds["mediaUrl"],img: ds["imgUrl"],)),
+                                child: NewsVideoPlayerAndImg(
+                                  videoUrl: ds["mediaUrl"]["videoUrl"],
+                                  img: ds['mediaUrl']["imgUrl"],
+                                )),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 4, left: 4, right: 4),
