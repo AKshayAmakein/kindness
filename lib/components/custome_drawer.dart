@@ -1,13 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
-import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/goals_screen.dart';
+import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
@@ -184,6 +183,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ListTile(
                 title: Text('Kindness Performer'),
                 leading: Icon(Icons.emoji_events_outlined)),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Get.to(HelpAndSupportScreen(
+                    uid: uid,
+                    profileUrl: profileUrl,
+                    name: name,
+                  ));
+                },
+                title: Text('Help and Support'),
+                leading: Image.asset(
+                  "assets/images/handshake.png",
+                  color: Colors.grey,
+                  height: 20,
+                )),
             Divider(),
             ListTile(
               title: Text('Settings'),
@@ -211,5 +225,4 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
-
 }
