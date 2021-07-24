@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -127,4 +128,13 @@ Widget UserImage(String username, double radius) {
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
   );
+}
+
+UserProfileImage(String profileUrl, String name) {
+  return (profileUrl == "")
+      ? UserImage(name, 30)
+      : CircleAvatar(
+          backgroundImage: CachedNetworkImageProvider(profileUrl),
+          radius: 30,
+        );
 }

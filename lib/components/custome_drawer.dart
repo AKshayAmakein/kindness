@@ -71,7 +71,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            DrawerImage(),
+                            UserProfileImage(profileUrl, name),
                             Container(
                               decoration: BoxDecoration(
                                 color: kPrimary.withOpacity(0.5),
@@ -212,12 +212,4 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  DrawerImage() {
-    return (profileUrl == "")
-        ? UserImage(name, 30)
-        : CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(profileUrl),
-            radius: 30,
-          );
-  }
 }

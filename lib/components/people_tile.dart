@@ -133,14 +133,7 @@ class _PeopleTitleState extends State<PeopleTitle> {
                             ds["name"],
                             style: Theme.of(context).textTheme.headline3,
                           ),
-                          leading: CircleAvatar(
-                            radius: Get.width / 10,
-                            backgroundColor: kSecondary,
-                            child: Text(ds["name"]
-                                .toString()
-                                .substring(0, 1)
-                                .toUpperCase()),
-                          ),
+                          leading: UserProfileImage(ds['photourl'], ds['name']),
                           trailing: handleAddFriendAndRemoveButton(
                               ds['uid'], ds['name'])),
                     ),

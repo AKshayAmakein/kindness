@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class FriendsTile extends StatefulWidget {
 class _FriendsTileState extends State<FriendsTile> {
   late String name;
   late int coins;
+  late String photourl;
+
   @override
   void initState() {
     super.initState();
@@ -30,8 +33,9 @@ class _FriendsTileState extends State<FriendsTile> {
         .then((value) {
       name = value.get("name");
       coins = value.get('coins');
+      photourl = value.get('photourl');
     });
-    return {'name': name, 'coins': coins.toString()};
+    return {'name': name, 'coins': coins.toString(), 'photourl': photourl};
   }
 
   @override
@@ -78,14 +82,9 @@ class _FriendsTileState extends State<FriendsTile> {
                                   snapshot.data!['name']!,
                                   style: Theme.of(context).textTheme.headline3,
                                 ),
-                                leading: CircleAvatar(
-                                  radius: Get.width / 10,
-                                  backgroundColor: kSecondary,
-                                  child: Text(snapshot.data!['name']!
-                                      .toString()
-                                      .substring(0, 1)
-                                      .toUpperCase()),
-                                ),
+                                leading: UserProfileImage(
+                                    snapshot.data!['photourl']!,
+                                    snapshot.data!['name']!),
                                 trailing: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,

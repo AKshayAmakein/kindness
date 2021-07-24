@@ -1,10 +1,23 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/constants/colors.dart';
+import 'package:kindness/widgets/custom_widgets.dart';
 
 class PointsScreen extends StatelessWidget {
   final String name;
   final int coins;
-  PointsScreen({required this.name, required this.coins});
+  final String photourl;
+  final String uid;
+
+  PointsScreen(
+      {required this.name,
+      required this.coins,
+      required this.photourl,
+      required this.uid});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,19 +49,91 @@ class PointsScreen extends StatelessWidget {
                 )
               ],
             ),
-            CircleAvatar(
-              radius: 30,
-              child: Text(
-                name[0].toUpperCase(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            UserProfileImage(photourl, name),
+            Text('$coins',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
             Text(
               "Coins",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text('$coins',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    'Our LeaderBoard ',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Icon(Icons.emoji_events_outlined)
+                ],
+              ),
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: Get.height / 2),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("users")
+                      //.where('uid', isNotEqualTo: uid)
+                      .orderBy('coins', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return new Text("fetch error");
+                    } else if (!snapshot.hasData) {
+                      return Center(child: Spinner());
+                    } else
+                      return ListView.builder(
+                          itemCount: snapshot.data!.size,
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot ds = snapshot.data!.docs[
+                                index]; // sharedPreferences.setString("userId",ds['uid']);
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                padding: EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: kDark,
+                                          blurRadius: 12,
+                                          spreadRadius: -4,
+                                          offset: Offset(0.0, 12)),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: ListTile(
+                                    title: Text(
+                                      ds["name"],
+                                      style:
+                                          Theme.of(context).textTheme.headline3,
+                                    ),
+                                    subtitle: Text(
+                                      '${index + 1} Position',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green),
+                                    ),
+                                    leading: UserProfileImage(
+                                        ds['photourl'], ds['name']),
+                                    trailing: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.primaries[Random()
+                                              .nextInt(
+                                                  Colors.primaries.length)],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            ds['coins']!.toString(),
+                                            style: TextStyle(color: kLight),
+                                          ),
+                                        ))),
+                              ),
+                            );
+                          });
+                  }),
+            )
           ],
         ),
       ),

@@ -127,6 +127,8 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
               Get.to(PointsScreen(
                 name: name,
                 coins: coins,
+                photourl: profileUrl,
+                uid: uid,
               ));
             },
             child: Row(
