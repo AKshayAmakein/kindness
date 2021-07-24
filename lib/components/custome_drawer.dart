@@ -57,7 +57,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: Column(
           children: [
             Container(
-              height: Get.height * 0.25,
+              height: Get.height * 0.30,
               width: double.infinity,
               child: DrawerHeader(
                 child: Padding(

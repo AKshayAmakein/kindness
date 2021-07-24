@@ -23,9 +23,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
               .collection("carouselSliderData")
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return new Text("fetch error");
-            } else if (!snapshot.hasData) {
+            if (!snapshot.hasData) {
               return Center(child: Spinner());
             } else {
               return Column(

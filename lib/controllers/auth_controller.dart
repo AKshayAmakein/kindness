@@ -62,9 +62,33 @@ class AuthController extends GetxController {
     if (_firebaseUser == null) {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
-    } else {
+    } else if (checkifUser()) {
+      print('Checking if user?');
       Get.offAll(HomeScreenMain());
+    } else {
+      Get.offAll(ProfileSetup());
     }
+  }
+
+  bool checkifUser() {
+    print("checking if user 123");
+    bool result = false;
+
+    getUser.then((value) {
+      String uid = value.uid;
+      print("uid1234 : $uid");
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .get()
+          .then((value) {
+        print("network uid : ${value.get('uid')}");
+        if (value.get('uid') == uid) {
+          result = true;
+        }
+      });
+    });
+    return result;
   }
 
   // Firebase user one-time fetch
