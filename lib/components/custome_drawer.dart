@@ -7,6 +7,7 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/all_goals_screen.dart';
 import 'package:kindness/screens/create_goal_screen.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
+import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/screens/home_screen_main.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
@@ -181,8 +182,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: Text('Your Kindness Score'),
                 leading: Icon(Icons.military_tech_outlined)),
             ListTile(
-                title: Text('Kindness Performer'),
-                leading: Icon(Icons.emoji_events_outlined)),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Get.to(HelpAndSupportScreen(uid: uid, profileUrl: profileUrl, name:name,));
+                },
+                title: Text('Help and Support'),
+                leading: Image.asset(
+                  "assets/images/handshake.png",
+                  color: Colors.grey,
+                  height: 20,
+                )),
             Divider(),
             ListTile(
               title: Text('Settings'),
@@ -196,14 +205,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
               title: Text('Help Us'),
               leading: Icon(Icons.help_outline_outlined),
             ),
-            InkWell(
+            ListTile(
+              title: Text('Logout'),
               onTap: () {
                 authController.signOut();
               },
-              child: ListTile(
-                title: Text('Logout'),
-                leading: Icon(Icons.logout_outlined),
-              ),
+              leading: Icon(Icons.logout_outlined),
             ),
           ],
         ),
