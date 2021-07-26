@@ -181,9 +181,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: Text('Your Kindness Score'),
                 leading: Icon(Icons.military_tech_outlined)),
             ListTile(
-                title: Text('Kindness Performer'),
-                leading: Icon(Icons.emoji_events_outlined)),
-            ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
                   Get.to(HelpAndSupportScreen(

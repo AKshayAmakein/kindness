@@ -65,10 +65,10 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                           borderRadius: BorderRadius.circular(10)),
                       child: TextField(
                         controller: _requirementController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          labelText: "Your Requirement",
+                          labelText: "Your Money Requirement",
                           labelStyle: Theme.of(context).textTheme.headline3,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
@@ -406,6 +406,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
     setState(() {
       loading = true;
     });
+    var requirements = int.parse(_requirementController.text);
     FirebaseFirestore.instance
         .collection("help_and_support")
         .doc(widget.uid)
@@ -414,12 +415,13 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
       "username": widget.name,
       "uid": widget.uid,
       "profileUrl": widget.profileUrl,
-      "requirements": _requirementController.text,
+      "requirements": requirements,
       "location": _locationController.text,
       "address": _addressController.text,
       "phoneNumber": "+91" + _mobileNumberController.text,
       "time_when_needed": reqTime,
       "description": _discController.text,
+      "requirement_fulfilled": 0
       // "optional_images":
     }).then((value) {
       Get.snackbar("Submitted", "", snackPosition: SnackPosition.BOTTOM);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/screens/help_someone_screen.dart';
 import 'package:kindness/screens/request_help_screen.dart';
 
 class HelpAndSupportScreen extends StatelessWidget {
@@ -52,13 +53,20 @@ class HelpAndSupportScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.bottomRight,
                     child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: Colors.white,
-                          size: Get.height * 0.04,
+                        onPressed: () {
+                          Get.to(HelpSomeOneScreen(
+                            uid: uid,
+                          ));
+                        },
+                        icon: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Color(0xffa5c0f8)),
+                          child: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Colors.white,
+                            size: Get.height * 0.04,
+                          ),
                         )),
                   )
                 ],
@@ -97,7 +105,6 @@ class HelpAndSupportScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.bottomRight,
                     child: IconButton(
                         onPressed: () {
                           Get.to(RequestHelpScreen(
@@ -106,10 +113,15 @@ class HelpAndSupportScreen extends StatelessWidget {
                             name: name,
                           ));
                         },
-                        icon: Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: Colors.white,
-                          size: Get.height * 0.04,
+                        icon: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.orange.withOpacity(0.6)),
+                          child: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Colors.white,
+                            size: Get.height * 0.04,
+                          ),
                         )),
                   )
                 ],

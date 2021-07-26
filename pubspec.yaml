@@ -57,6 +57,7 @@ dependencies:
   http: ^0.13.3
   clay_containers: ^0.3.2
   wc_flutter_share: ^0.4.0
+  percent_indicator: ^3.0.1
 
 
 dev_dependencies:
