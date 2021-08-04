@@ -4,6 +4,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_spinkit/flutter_spinkit.dart";
 import 'package:get/get.dart';
@@ -131,10 +132,52 @@ Widget UserImage(String username, double radius) {
 }
 
 UserProfileImage(String profileUrl, String name) {
-  return (profileUrl == "")
-      ? UserImage(name, 30)
-      : CircleAvatar(
-          backgroundImage: CachedNetworkImageProvider(profileUrl),
-          radius: 30,
-        );
+  if ((profileUrl == "")) {
+    return UserImage(name, 24);
+  } else {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 1.5)),
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            backgroundImage: CachedNetworkImageProvider(
+              profileUrl,
+            ),
+            radius: 24,
+          ),
+        ),
+        Positioned(
+          right: -4,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffF0F0F0),
+                ),
+                height: 26,
+                width: 26,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          right: -9,
+          top: -6,
+          child: Stack(
+            children: [
+              Image.asset(
+                "assets/images/pencil.png",
+                height: 28,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
