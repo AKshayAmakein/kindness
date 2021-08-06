@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 
 final myTheme = ThemeData(
@@ -23,8 +24,10 @@ final myTheme = ThemeData(
             color: kLight)),
     appBarTheme: AppBarTheme(
       backgroundColor: kPrimary,
-      titleTextStyle: TextStyle(
-          fontFamily: 'NotoSerifJP', fontSize: 18, fontWeight: FontWeight.w400),
+      titleTextStyle: headlineTextStyle.copyWith(
+        color: Colors.white,
+        fontSize: 17,
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(

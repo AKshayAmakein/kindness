@@ -29,7 +29,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                   children: [
                     Expanded(
                       child: Swiper(
-                        //itemHeight: screenHeight,
+                        itemHeight: Get.height,
                         itemWidth: Get.width,
                         //layout: SwiperLayout.STACK,
 
@@ -44,66 +44,63 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                         itemCount: 3,
                         itemBuilder: (context, index) {
                           DocumentSnapshot ds = snapshot.data!.docs[0];
-                          return SingleChildScrollView(
-                            child: Container(
-                              height: Get.height,
-                              decoration: getDecorationByIndex(index),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: Get.height * 0.05,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/handshake.png",
-                                    color: Colors.grey,
-                                    height: Get.height * 0.08,
-                                    width: Get.width * 0.15,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(25.0),
-                                    child: Container(
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                          color: Color.fromRGBO(
-                                              255, 255, 255, 0.61),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Column(
-                                        children: [
-                                          CachedNetworkImage(
-                                            imageUrl: ds["screens"]
-                                                ["screen${index + 1}"]["img"],
-                                            height: Get.height * 0.54,
-                                            width: Get.width * 3,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                                ds["screens"]
-                                                        ["screen${index + 1}"]
-                                                    ["title"],
-                                                style: headlineTextStyle),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 26, vertical: 8),
-                                            child: Text(
+                          return Container(
+                            height: Get.height * 1.18,
+                            decoration: getDecorationByIndex(index),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: Get.height * 0.05,
+                                ),
+                                Image.asset(
+                                  "assets/images/handshake.png",
+                                  color: Colors.grey,
+                                  height: Get.height * 0.08,
+                                  width: Get.width * 0.15,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(25.0),
+                                  child: Container(
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 0.61),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Column(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: ds["screens"]
+                                              ["screen${index + 1}"]["img"],
+                                          height: Get.height * 0.54,
+                                          width: Get.width * 3,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
                                               ds["screens"]
                                                       ["screen${index + 1}"]
-                                                  ["desc"],
-                                              textAlign: TextAlign.center,
-                                              style: bodyTextStyle,
-                                            ),
+                                                  ["title"],
+                                              style: headlineTextStyle),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 26, vertical: 8),
+                                          child: Text(
+                                            ds["screens"]["screen${index + 1}"]
+                                                ["desc"],
+                                            textAlign: TextAlign.center,
+                                            style: bodyTextStyle,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  _handleBottomText(index)
-                                ],
-                              ),
+                                ),
+                                _handleBottomText(index)
+                              ],
                             ),
                           );
                         },

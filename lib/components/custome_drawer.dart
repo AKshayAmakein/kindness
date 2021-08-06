@@ -56,6 +56,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
+            height: Get.height * 1.2,
             child: Column(
               children: [
                 DrawerHeader(
@@ -72,17 +73,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             width: Get.width * 0.05,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Get.back();
+                            },
                             child: Container(
                                 padding: EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                         color: Colors.white, width: 1.5)),
-                                child: Icon(
-                                  Icons.clear,
-                                  color: Colors.white,
-                                )),
+                                child: Icon(Icons.clear,
+                                    color: Colors.white, size: 18)),
                           )
                         ],
                       ),
@@ -94,7 +95,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         children: [
                           UserProfileImage(profileUrl, name),
                           Container(
-                            width: Get.width * 0.4,
+                            width: Get.width * 0.5,
                             padding: EdgeInsets.all(6),
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white),
