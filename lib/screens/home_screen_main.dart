@@ -8,11 +8,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/strings.dart';
-import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/points_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -103,88 +102,18 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
-        child: Container(
-          padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          child: Padding(
-            padding: EdgeInsets.all(18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.format_list_bulleted_outlined,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                Text(
-                  "Hi, $name",
-                  style: headlineTextStyle.copyWith(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.to(PointsScreen(
-                      name: name,
-                      coins: coins,
-                      photourl: profileUrl,
-                      uid: uid,
-                    ));
-                  },
-                  child: Container(
-                    height: Get.height * 0.055,
-                    width: Get.width * 0.12,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$coins',
-                          style: GoogleFonts.roboto(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Icon(
-                          Icons.savings_outlined,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          decoration: new BoxDecoration(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(17),
-            ),
-            gradient: new LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color.fromRGBO(179, 199, 242, 1),
-                  Color.fromRGBO(206, 117, 195, 1)
-                ]),
-          ),
-        ),
-      ),
+      appBar: customAppBar(
+          context,
+          "Hi, $name",
+          () {
+            Get.to(PointsScreen(
+                name: name, coins: coins, photourl: photourl, uid: uid));
+          },
+          false,
+          () {
+            Get.back();
+          },
+          coins),
 
       drawer: CustomDrawer(),
 
