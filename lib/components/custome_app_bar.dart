@@ -13,9 +13,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 // }
 
 class CustomAppBar extends StatefulWidget {
-  CustomAppBar({required this.title,
-    required this.leadingIcon,
-    required this.onTapLeading});
+  CustomAppBar(
+      {required this.title,
+      required this.leadingIcon,
+      required this.onTapLeading});
 
   String title;
   bool leadingIcon;
@@ -51,15 +52,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: new Size(MediaQuery
-          .of(context)
-          .size
-          .width, 150.0),
+      preferredSize: new Size(MediaQuery.of(context).size.width, 150.0),
       child: Container(
-        padding: new EdgeInsets.only(top: MediaQuery
-            .of(context)
-            .padding
-            .top),
+        padding: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: Padding(
           padding: EdgeInsets.all(18),
           child: Row(
@@ -74,13 +69,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: IconButton(
                   icon: widget.leadingIcon == false
                       ? Icon(
-                    Icons.format_list_bulleted_outlined,
-                    color: Colors.white,
-                  )
+                          Icons.format_list_bulleted_outlined,
+                          color: Colors.white,
+                        )
                       : Icon(
-                    Icons.arrow_back_outlined,
-                    color: Colors.white,
-                  ),
+                          Icons.arrow_back_outlined,
+                          color: Colors.white,
+                        ),
                   onPressed: widget.onTapLeading,
                 ),
               ),
