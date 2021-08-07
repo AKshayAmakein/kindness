@@ -227,16 +227,20 @@ class AuthController extends GetxController {
   Future<void> sendPasswordResetEmail(BuildContext context) async {
     showLoadingIndicator();
     try {
-      await _auth.sendPasswordResetEmail(email: emailController.text);
-      hideLoadingIndicator();
-      Get.snackbar(
-          'auth.resetPasswordNoticeTitle'.tr, 'auth.resetPasswordNotice'.tr,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 5),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+      await _auth
+          .sendPasswordResetEmail(email: emailController.text)
+          .then((value) {
+        Get.snackbar(
+            'auth.resetPasswordNoticeTitle'.tr, 'auth.resetPasswordNotice'.tr,
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 3),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+      });
+      //hideLoadingIndicator();
+
     } on FirebaseAuthException catch (error) {
-      hideLoadingIndicator();
+      //hideLoadingIndicator();
       Get.snackbar('auth.resetPasswordFailed'.tr, error.message!,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),

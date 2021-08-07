@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/controllers/auth_controller.dart';
+import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
@@ -174,7 +175,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ListTile(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Get.to(HomeScreenMain());
+                    Get.to(ActoftheDayScreen());
                   },
                   title: Text(
                     'Kindness Act of the Day',
