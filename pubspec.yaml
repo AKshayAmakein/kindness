@@ -60,6 +60,7 @@ dependencies:
   percent_indicator: ^3.0.1
   responsive_framework: ^0.1.4
   google_fonts: ^2.1.0
+  google_nav_bar: ^5.0.5
 
 
 dev_dependencies:

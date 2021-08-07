@@ -4,24 +4,7 @@ import 'package:kindness/constants/colors.dart';
 
 final myTheme = ThemeData(
     primaryColor: kPrimary,
-    scaffoldBackgroundColor: kLight,
-    fontFamily: 'NotoSerifJP',
-    textTheme: TextTheme(
-        headline6: TextStyle(
-            fontFamily: 'NotoSerifJP',
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
-            color: kPrimary),
-        headline3: TextStyle(
-            fontFamily: 'NotoSerifJP',
-            fontSize: 18,
-            color: kPrimary,
-            fontWeight: FontWeight.w800),
-        headline4: TextStyle(
-            fontFamily: 'NotoSerifJP',
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: kLight)),
+    scaffoldBackgroundColor: kWhite,
     appBarTheme: AppBarTheme(
       backgroundColor: kPrimary,
       titleTextStyle: headlineTextStyle.copyWith(

@@ -21,7 +21,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthController authController = AuthController.to;
   String uid = "";
-  String name = "name";
+  String name = "";
   String state = "";
   String profileUrl = "";
   double screenWidth = Get.width;
