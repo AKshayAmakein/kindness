@@ -21,3 +21,6 @@ TextStyle bodyTextStyle =
 
 TextStyle buttonTextStyle = GoogleFonts.poppins(
     textStyle: TextStyle(fontSize: 14, color: textPrimary, letterSpacing: 1));
+
+TextStyle descTextStyle = GoogleFonts.roboto(
+    textStyle: TextStyle(fontSize: 11, color: textSecondary1, letterSpacing: 1.8));

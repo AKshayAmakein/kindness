@@ -8,10 +8,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/components/text_styles.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/home_screen.dart';
 import 'package:kindness/screens/points_screen.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreenMain extends StatefulWidget {
@@ -97,7 +99,7 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   }
 
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Text(
       'Likes',
@@ -128,7 +130,42 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
             },
             coins),
         drawer: CustomDrawer(),
-        body: _widgetOptions.elementAt(_selectedIndex),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              _widgetOptions.elementAt(_selectedIndex),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xff000000).withOpacity(0.23),
+                        offset: Offset(0, 1),
+                        blurRadius: 9,
+                      )
+                    ]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Points earned this week",
+                      style: headlineTextStyle.copyWith(
+                          color: textSecondary1, fontSize: 12),
+                    ),
+                    Text(
+                      "$coins",
+                      style: headlineTextStyle.copyWith(
+                          color: textSecondary1, fontSize: 15),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(

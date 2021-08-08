@@ -7,3 +7,4 @@ const Color kWhite = Color(0xffffffff);
 const Color kDark = Color(0xffC2CEE5);
 const Color textPrimary = Color(0xff000000);
 const Color textSecondary = Color(0xff2B6975);
+const Color textSecondary1 = Color(0xff525252);
