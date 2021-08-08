@@ -29,7 +29,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                   children: [
                     Expanded(
                       child: Swiper(
-                        itemHeight: Get.height,
+                        itemHeight: Get.height * 0.8,
                         itemWidth: Get.width,
                         //layout: SwiperLayout.STACK,
 
@@ -99,7 +99,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                                     ),
                                   ),
                                 ),
-                                _handleBottomText(index)
+                                Expanded(child: _handleBottomText(index))
                               ],
                             ),
                           );
@@ -148,7 +148,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
     }
   }
 
-  _handleBottomText(int index) {
+  Widget _handleBottomText(int index) {
     if (index == 0 || index == 1) {
       return Text(
         'Swipe Left to move ahead',
@@ -156,6 +156,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
       );
     } else {
       return Container(
+        alignment: Alignment.bottomRight,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
