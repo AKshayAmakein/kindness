@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
@@ -89,8 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
         ),
         drawer: CustomDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
+        body: SingleChildScrollView(
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("help_and_support")
@@ -102,227 +102,405 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (snapshot.hasError) {
                 return Text('Fetch error!');
               } else {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Events of Kindness',
-                          style: headlineTextStyle.copyWith(
-                              color: textSecondary, fontSize: 15),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'See all >',
-                            style: subtitleTextStyle.copyWith(fontSize: 10),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: Get.height * 0.015,
-                    ),
-                    Container(
-                      height: Get.height * 0.34,
-                      child: Swiper(
-                        itemHeight: Get.height,
-                        itemWidth: Get.width,
-                        layout: SwiperLayout.STACK,
-                        itemCount: snapshot.data!.size,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot ds = snapshot.data!.docs[index];
-                          Timestamp timestamp = ds['time_when_needed'];
-                          var date = DateTime.fromMicrosecondsSinceEpoch(
-                              timestamp.microsecondsSinceEpoch);
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/rectangle1.png"),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
-                                      height: Get.height * 0.3,
-                                      width: Get.width * 0.6,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                offset: Offset(0, 2),
-                                                blurRadius: 12,
-                                                color: Color(0xff000000)
-                                                    .withOpacity(0.25))
-                                          ]),
-                                      padding: EdgeInsets.all(14),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Rs:${ds['requirements']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 13),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                            child: Text(ds['description'],
-                                                style: descTextStyle),
-                                          ),
-                                          Text(
-                                            "Location : ${ds['location']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 12),
-                                          ),
-                                          Text(
-                                            _date(date),
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 12),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomRight,
-                                            child: ElevatedButton(
-                                              onPressed: () {},
-                                              child: Text('Details',
-                                                  style: descTextStyle.copyWith(
-                                                      fontSize: 10)),
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Color(0xff68EDFF),
-                                                  minimumSize: Size(
-                                                      Get.width * 0.01,
-                                                      Get.height * 0.03)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Image.asset("assets/images/rectangle2.png"),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xff000000).withOpacity(0.23),
-                              offset: Offset(0, 1),
-                              blurRadius: 9,
-                            )
-                          ]),
-                      child: Row(
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Points earned this week",
+                            'Events of Kindness',
                             style: headlineTextStyle.copyWith(
-                                color: textSecondary1, fontSize: 12),
+                                color: textSecondary, fontSize: 15),
                           ),
-                          Text(
-                            "$coins",
-                            style: headlineTextStyle.copyWith(
-                                color: textSecondary1, fontSize: 15),
-                          )
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'See all >',
+                              style: subtitleTextStyle.copyWith(fontSize: 10),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: Get.height * 0.02),
-                    Text(
-                      'Kindness Act of the Day',
-                      style: headlineTextStyle.copyWith(
-                          fontSize: 15, color: textSecondary),
-                    ),
-                    SizedBox(height: Get.height * 0.015),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xff000000).withOpacity(0.25),
-                              blurRadius: 10,
+                      SizedBox(
+                        height: Get.height * 0.015,
+                      ),
+                      Container(
+                        height: Get.height * 0.34,
+                        child: Swiper(
+                          itemHeight: Get.height,
+                          itemWidth: Get.width,
+                          layout: SwiperLayout.STACK,
+                          itemCount: snapshot.data!.size,
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot ds = snapshot.data!.docs[index];
+                            Timestamp timestamp = ds['time_when_needed'];
+                            var date = DateTime.fromMicrosecondsSinceEpoch(
+                                timestamp.microsecondsSinceEpoch);
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/images/rectangle1.png"),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Container(
+                                        height: Get.height * 0.3,
+                                        width: Get.width * 0.6,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: Offset(0, 2),
+                                                  blurRadius: 12,
+                                                  color: Color(0xff000000)
+                                                      .withOpacity(0.25))
+                                            ]),
+                                        padding: EdgeInsets.all(14),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Rs:${ds['requirements']}",
+                                              style: headlineTextStyle.copyWith(
+                                                  color: textSecondary1,
+                                                  fontSize: 13),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10.0),
+                                              child: Text(ds['description'],
+                                                  style: descTextStyle),
+                                            ),
+                                            Text(
+                                              "Location : ${ds['location']}",
+                                              style: headlineTextStyle.copyWith(
+                                                  color: textSecondary1,
+                                                  fontSize: 12),
+                                            ),
+                                            Text(
+                                              _date(date),
+                                              style: headlineTextStyle.copyWith(
+                                                  color: textSecondary1,
+                                                  fontSize: 12),
+                                            ),
+                                            Container(
+                                              alignment: Alignment.bottomRight,
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text('Details',
+                                                    style:
+                                                        descTextStyle.copyWith(
+                                                            fontSize: 10)),
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Color(0xff68EDFF),
+                                                    minimumSize: Size(
+                                                        Get.width * 0.01,
+                                                        Get.height * 0.03)),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Image.asset("assets/images/rectangle2.png"),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xff000000).withOpacity(0.23),
+                                offset: Offset(0, 1),
+                                blurRadius: 9,
+                              )
+                            ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Points earned this week",
+                              style: headlineTextStyle.copyWith(
+                                  color: textSecondary1, fontSize: 12),
+                            ),
+                            Text(
+                              "$coins",
+                              style: headlineTextStyle.copyWith(
+                                  color: textSecondary1, fontSize: 15),
                             )
-                          ]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: Get.height * 0.02),
+                      Text(
+                        'Kindness Act of the Day',
+                        style: headlineTextStyle.copyWith(
+                            fontSize: 15, color: textSecondary),
+                      ),
+                      SizedBox(height: Get.height * 0.015),
+                      StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection("act_of_the_day")
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return new Text("fetch error");
+                            } else if (!snapshot.hasData) {
+                              return Center(child: Spinner());
+                            } else {
+                              return Container(
+                                height: Get.height * 0.172,
+                                child: ListView.builder(
+                                    itemCount: snapshot.data!.size,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot ds =
+                                          snapshot.data!.docs[index];
+                                      List<String> userId =
+                                          List.from(ds["actCompletedBy"]);
+                                      return Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Color(0xff000000)
+                                                      .withOpacity(0.25),
+                                                  blurRadius: 10,
+                                                  offset: Offset(0, 2))
+                                            ]),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Container(
+                                                      height: Get.height * 0.1,
+                                                      width: Get.width * 0.25,
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: ds["img"],
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: Get.width * 0.01,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        ds["title"],
+                                                        style: headlineTextStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    textSecondary,
+                                                                fontSize: 12),
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            Get.height * 0.01,
+                                                      ),
+                                                      Text(
+                                                        ds["desc"],
+                                                        style: descTextStyle
+                                                            .copyWith(
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Status',
+                                                    style: subtitleTextStyle
+                                                        .copyWith(
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                textSecondary1),
+                                                  ),
+                                                  (userId.any((element) =>
+                                                          element == uid))
+                                                      ? Container(
+                                                          padding:
+                                                              EdgeInsets.all(4),
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.green,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5))),
+                                                          child: Center(
+                                                            child: Text(
+                                                              'Completed',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          padding:
+                                                              EdgeInsets.all(4),
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.orange,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5))),
+                                                          child: Center(
+                                                            child: Text(
+                                                                'Pending',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                          ),
+                                                        )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              );
+                            }
+                          }),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    height: Get.height * 0.1,
-                                    width: Get.width * 0.25,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          'https://html.com/wp-content/uploads/very-large-flamingo.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
-                                      'Status',
-                                      style: subtitleTextStyle.copyWith(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: textSecondary1),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.01,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Bring Toys to a Home Shelter',
-                                    style: headlineTextStyle.copyWith(
-                                        color: textSecondary, fontSize: 12),
-                                  ),
-                                  Text(
-                                    'Bring Toys to a Home Shelter',
-                                    style: headlineTextStyle.copyWith(
-                                        color: textSecondary, fontSize: 12),
-                                  ),
-                                  Text(
-                                    'Rewards:  ',
-                                    style: headlineTextStyle.copyWith(
-                                        color: textSecondary, fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          Text(
+                            'My acts / Achievements',
+                            style: headlineTextStyle.copyWith(
+                                fontSize: 15, color: textSecondary),
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'See all >',
+                              style: subtitleTextStyle.copyWith(fontSize: 10),
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  ],
+                      StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection("act_completed")
+                              .where('uid', isEqualTo: uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return new Text("fetch error");
+                            } else if (!snapshot.hasData) {
+                              return Spinner();
+                            } else {
+                              return Container(
+                                height: Get.height * 0.15,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data!.size,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot ds =
+                                          snapshot.data!.docs[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Color(0xff000000)
+                                                        .withOpacity(0.24),
+                                                    offset: Offset(0, 1),
+                                                    blurRadius: 9)
+                                              ]),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                ds['actTitle'],
+                                                style:
+                                                    headlineTextStyle.copyWith(
+                                                        color: textSecondary1,
+                                                        fontSize: 12),
+                                              ),
+                                              SizedBox(
+                                                height: 4,
+                                              ),
+                                              Container(
+                                                height: Get.height * 0.1,
+                                                width: Get.width * 0.25,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: ds['cmtImg'],
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              );
+                            }
+                          })
+                    ],
+                  ),
                 );
               }
             },

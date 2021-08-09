@@ -84,21 +84,7 @@ class _MyActsScreenState extends State<MyActsScreen> {
                         ],
                       ),
                     );
-                    //   ListTile(
-                    //   title: Text(ds['actTitle']),
-                    //   leading: Container(
-                    //       clipBehavior: Clip.antiAlias,
-                    //       decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(8)),
-                    //       child: CachedNetworkImage(
-                    //         imageUrl: ds['cmtImg'],
-                    //         height: Get.height * 0.08,
-                    //       )),
-                    //   trailing: Text(timeago.format(
-                    //     DateTime.parse(ds['time'].toDate().toString()),
-                    //   )),
-                    //   subtitle: Text(ds['cmt']),
-                    // );
+
                   });
             }
           },

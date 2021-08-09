@@ -99,7 +99,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                     return new Text("fetch error");
                   } else if (!snapshot.hasData) {
                     return Center(child: Spinner());
-                  } else
+                  } else {
                     return ListView.builder(
                         itemCount: snapshot.data!.size,
                         itemBuilder: (context, index) {
@@ -438,6 +438,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                             ],
                           );
                         });
+                  }
                 },
               ),
             ),
