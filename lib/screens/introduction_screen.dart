@@ -155,18 +155,8 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
         style: bodyTextStyle.copyWith(fontSize: 12),
       );
     } else {
-      return Container(
+      return Align(
         alignment: Alignment.bottomRight,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(255, 220, 185, 0.65),
-                Color.fromRGBO(236, 133, 26, 1)
-              ],
-            )),
         child: IconButton(
             onPressed: () {
               Get.offAll(LoginScreen());
