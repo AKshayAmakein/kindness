@@ -4,11 +4,8 @@ import 'package:get/get.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
-import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
-import 'package:kindness/screens/home_screen_main.dart';
-import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -57,7 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            height: Get.height * 1.2,
+            height: Get.height * 1,
             child: Column(
               children: [
                 DrawerHeader(
@@ -121,46 +118,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               ],
                             ),
                           ),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     color: kPrimary.withOpacity(0.5),
-                          //     shape: BoxShape.circle,
-                          //   ),
-                          //   child: IconButton(
-                          //       onPressed: () {
-                          //         Navigator.pop(context);
-                          //         Get.to(ProfileUpdateScreen(
-                          //           uid: uid,
-                          //         ));
-                          //       },
-                          //       icon: Icon(
-                          //         Icons.edit_outlined,
-                          //         color: Colors.white,
-                          //       )),
-                          // )
                         ],
                       ),
-                      // Expanded(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.only(top: 8),
-                      //     child: Text(
-                      //       name,
-                      //       style: Theme.of(context)
-                      //           .textTheme
-                      //           .headline3!
-                      //           .copyWith(color: kLight, fontSize: 15),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.only(top: 4),
-                      //     child: Text(
-                      //       state,
-                      //       style: TextStyle(color: Colors.white, fontSize: 12),
-                      //     ),
-                      //   ),
-                      // )
                     ],
                   ),
                   decoration: BoxDecoration(
@@ -191,20 +150,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ListTile(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Get.to(ExploreKindness());
-                    },
-                    title: Text(
-                      'Explore Kindness',
-                      style: headlineTextStyle.copyWith(
-                          fontSize: 14, color: Color(0xffA3A3A3)),
-                    ),
-                    leading: Icon(
-                      Icons.travel_explore_outlined,
-                      color: Color(0xff525252),
-                    )),
-                ListTile(
-                    onTap: () {
-                      Navigator.of(context).pop();
                       Get.to(GoalsScreen());
                     },
                     title: Text(
@@ -216,33 +161,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Icons.sports_score_outlined,
                       color: Color(0xff525252),
                     )),
-                // ListTile(
-                //     onTap: () {
-                //       Navigator.of(context).pop();
-                //       Get.to(CreateGoalScreen());
-                //     },
-                //     title: Text(
-                //       'Create Your Goal',
-                //       style: headlineTextStyle.copyWith(
-                //           fontSize: 14, color: Color(0xffA3A3A3)),
-                //     ),
-                //     leading: Icon(
-                //       Icons.outlined_flag_outlined,
-                //       color: Color(0xff525252),
-                //     )),
-                ListTile(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Get.to(MyConnectionScreen(
-                        uid: uid,
-                        name: name,
-                      ));
-                    },
-                    title: Text('Connections',
-                        style: headlineTextStyle.copyWith(
-                            fontSize: 14, color: Color(0xffA3A3A3))),
-                    leading:
-                        Icon(Icons.groups_outlined, color: Color(0xff525252))),
                 ListTile(
                     onTap: () {
                       Navigator.of(context).pop();
@@ -265,14 +183,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                     leading:
                         Icon(Icons.article_outlined, color: Color(0xff525252))),
-                ListTile(
-                    title: Text(
-                      'Your Kindness Score',
-                      style: headlineTextStyle.copyWith(
-                          fontSize: 14, color: Color(0xffA3A3A3)),
-                    ),
-                    leading: Icon(Icons.military_tech_outlined,
-                        color: Color(0xff525252))),
                 ListTile(
                     onTap: () {
                       Navigator.of(context).pop();

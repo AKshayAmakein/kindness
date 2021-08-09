@@ -16,11 +16,13 @@ TextStyle headlineSecondaryTextStyle = GoogleFonts.poppins(
 TextStyle subtitleTextStyle = GoogleFonts.poppins(
     textStyle: TextStyle(fontSize: 14, color: textSecondary, letterSpacing: 1));
 
-TextStyle bodyTextStyle =
-    GoogleFonts.poppins(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400,color: textPrimary));
+TextStyle bodyTextStyle = GoogleFonts.poppins(
+    textStyle: TextStyle(
+        fontSize: 16, fontWeight: FontWeight.w400, color: textPrimary));
 
 TextStyle buttonTextStyle = GoogleFonts.poppins(
     textStyle: TextStyle(fontSize: 14, color: textPrimary, letterSpacing: 1));
 
 TextStyle descTextStyle = GoogleFonts.roboto(
-    textStyle: TextStyle(fontSize: 11, color: textSecondary1, letterSpacing: 1.8));
+    textStyle:
+        TextStyle(fontSize: 11, color: textSecondary1, letterSpacing: 1.5));
