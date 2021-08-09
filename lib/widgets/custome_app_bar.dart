@@ -5,7 +5,6 @@ import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/helpers/getUserData.dart';
 import 'package:kindness/screens/points_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // PreferredSizeWidget customAppBar(
 //     title, onTapTrealing, bool leadingIcon, onTapLeading, coins) {
@@ -29,8 +28,8 @@ class CustomAppBar extends StatefulWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   final AuthController authController = AuthController.to;
   String uid = "";
-  String name = "name";
-  int coins = 0;
+  String name = "";
+  int? coins;
   String profileUrl = "";
   double screenWidth = Get.width;
 
@@ -38,7 +37,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
     Map userData = await getUserDataLocally();
     uid = userData['userUid'];
     name = userData['userName'];
-    //state = userData['userState'];
     profileUrl = userData['userProfileUrl'];
     coins = userData['userCoins'];
   }
@@ -90,7 +88,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 onTap: () {
                   Get.to(PointsScreen(
                       name: name,
-                      coins: coins,
+                      coins: coins!,
                       photourl: profileUrl,
                       uid: uid));
                 },
@@ -112,11 +110,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             fontSize: 10,
                             fontWeight: FontWeight.w700),
                       ),
-                      Expanded(
-                        child: Icon(
-                          Icons.savings_outlined,
-                          color: Colors.white,
-                        ),
+                      Icon(
+                        Icons.savings_outlined,
+                        color: Colors.white,
                       ),
                     ],
                   ),

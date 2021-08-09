@@ -11,18 +11,29 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
         body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                Color(0xffffffff),
-                Color(0xffdadada),
-                Color(0xff729dc3)
-              ])),
-          child: Form(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+            Color(0xffffffff),
+            Color(0xffdadada),
+            Color(0xff729dc3)
+          ])),
+      child: Stack(
+        children: [
+          SafeArea(
+            child: Container(
+                child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_outlined,
+                    ))),
+          ),
+          Form(
             key: _formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -110,6 +121,8 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
             ),
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }
