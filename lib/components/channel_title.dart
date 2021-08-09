@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/components/video_channel_tile.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/utils/api_service.dart';
@@ -84,58 +86,37 @@ class _ChannelTileState extends State<ChannelTile> {
     return GestureDetector(
       onTap: () => Get.to(VideoChannelScreen(id: video.id)),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-                color: kDark,
-                blurRadius: 12,
-                spreadRadius: -4,
-                offset: Offset(0.0, 12)),
-          ],
-        ),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Text(
-                video.title,
-                style: Theme.of(context).textTheme.headline3,
-              ),
-            ),
-            CachedNetworkImage(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          padding: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                  color: kDark,
+                  blurRadius: 12,
+                  spreadRadius: -4,
+                  offset: Offset(0.0, 12)),
+            ],
+          ),
+          child: ListTile(
+            horizontalTitleGap: 1,
+            leading: CachedNetworkImage(
               imageUrl: video.thumbnailUrl,
-              height: Get.height * 0.33,
-              // width: double.infinity,
             ),
-            SizedBox(width: 10.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Share',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                    onPressed: () {
-                      _share(video.thumbnailUrl, video.title);
-                    },
-                    icon: Icon(
-                      Icons.share,
-                      color: Colors.grey[600],
-                    )),
-              ],
-            )
-          ],
-        ),
-      ),
+            title: Text(
+              video.title,
+              style: bodyTextStyle.copyWith(fontSize: 14),
+            ),
+            trailing: IconButton(
+                onPressed: () {
+                  _share(video.thumbnailUrl, video.title);
+                },
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.grey[600],
+                )),
+          )),
     );
   }
 
@@ -169,15 +150,17 @@ class _ChannelTileState extends State<ChannelTile> {
               }
               return false;
             },
-            child: ListView.builder(
-                itemCount: 1 + _channel!.videos.length,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return _buildProfileInfo();
-                  }
-                  Video video = _channel!.videos[index - 1];
-                  return _buildVideo(video);
-                }))
+            child: Container(
+              child: ListView.builder(
+                  itemCount: 1 + _channel!.videos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return _buildProfileInfo();
+                    }
+                    Video video = _channel!.videos[index - 1];
+                    return _buildVideo(video);
+                  }),
+            ))
         : Center(child: Spinner());
   }
 

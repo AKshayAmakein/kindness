@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kindness/components/channel_title.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/kindness_tile.dart';
 import 'package:kindness/components/quotes_tiles.dart';
+import 'package:kindness/components/text_styles.dart';
+import 'package:kindness/constants/colors.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
 
 class ExploreKindness extends StatefulWidget {
   @override
@@ -15,31 +19,54 @@ class _ExploreKindnessState extends State<ExploreKindness> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Explore Kindness'),
-          bottom: TabBar(
-            indicatorColor: Colors.white,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: [
-              Tab(
-                text: "Videos",
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120),
+          child: CustomAppBar(
+              title: 'Explore Kindness',
+              leadingIcon: false,
+              onTapLeading: () {
+                Get.back();
+              }),
+        ),
+        drawer: CustomDrawer(),
+        body: Container(
+          height: Get.height * 0.9,
+          child: Column(
+            children: [
+              Container(
+                height: Get.height * 0.075,
+                child: TabBar(
+                  indicatorColor: textSecondary,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  labelColor: textSecondary,
+                  labelStyle: bodyTextStyle,
+                  tabs: [
+                    Tab(
+                      text: "Videos",
+                    ),
+                    Tab(
+                      text: "Quotes",
+                    ),
+                    Tab(
+                      text: "Kindness",
+                    ),
+                  ],
+                ),
               ),
-              Tab(
-                text: "Quotes",
-              ),
-              Tab(
-                text: "Kindness",
+              Expanded(
+                child: Container(
+                  //height: Get.height * 0.6,
+                  child: TabBarView(
+                    children: [
+                      ChannelTile(),
+                      QuotesTile(),
+                      KindnessTile(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
-        ),
-        drawer: CustomDrawer(),
-        body: TabBarView(
-          children: [
-            ChannelTile(),
-            QuotesTile(),
-            KindnessTile(),
-          ],
         ),
       ),
     );

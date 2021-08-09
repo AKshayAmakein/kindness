@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/model/states.dart';
@@ -64,6 +65,15 @@ class _ProfileState extends State<Profile> {
     return loading
         ? Center(child: Spinner())
         : Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                  Color(0xffffffff),
+                  Color(0xffdadada),
+                  Color(0xff729dc3)
+                ])),
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -92,7 +102,7 @@ class _ProfileState extends State<Profile> {
                             alignment: AlignmentDirectional.topStart,
                             child: Text(
                               'Date of Birth',
-                              style: Theme.of(context).textTheme.headline3,
+                              style: bodyTextStyle,
                             ),
                           ),
                         ),
@@ -103,15 +113,12 @@ class _ProfileState extends State<Profile> {
                             child: (birthday.isNull)
                                 ? Text(
                                     'DD-MM-YYYY',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3!
-                                        .copyWith(color: kPrimary),
+                                    style: bodyTextStyle.copyWith(
+                                        color: textSecondary),
                                   )
                                 : Text(
                                     '${birthday!.year}-${birthday!.month}-${birthday!.day}',
-                                    style:
-                                        Theme.of(context).textTheme.headline3,
+                                    style: bodyTextStyle,
                                   )),
                       ],
                     ),
@@ -125,7 +132,7 @@ class _ProfileState extends State<Profile> {
                             alignment: AlignmentDirectional.topStart,
                             child: Text(
                               'Where are you from?',
-                              style: Theme.of(context).textTheme.headline3,
+                              style: bodyTextStyle,
                             ),
                           ),
                         ),
@@ -136,15 +143,12 @@ class _ProfileState extends State<Profile> {
                             child: (state.isNull)
                                 ? Text(
                                     'Select Place',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3!
-                                        .copyWith(color: kPrimary),
+                                    style: bodyTextStyle.copyWith(
+                                        color: textSecondary),
                                   )
                                 : Text(
                                     state!,
-                                    style:
-                                        Theme.of(context).textTheme.headline3,
+                                    style: bodyTextStyle,
                                   )),
                       ],
                     ),
@@ -152,9 +156,9 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.only(top: 20),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: kPrimary,
+                              primary: Colors.white,
                               minimumSize: Size(
-                                screenWidth * 0.7,
+                                screenWidth * 0.8,
                                 screenHeight * 0.065,
                               )),
                           onPressed: () {
@@ -162,10 +166,9 @@ class _ProfileState extends State<Profile> {
                           },
                           child: Text(
                             'Submit Details',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3!
-                                .copyWith(color: kLight),
+                            style: bodyTextStyle.copyWith(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold),
                           )),
                     )
                   ],
@@ -180,12 +183,15 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          child: Text('Gender', style: Theme.of(context).textTheme.headline3),
+          child: Text(
+            'Gender',
+            style: bodyTextStyle,
+          ),
         ),
         Row(
           children: [
             Radio(
-              activeColor: kPrimary,
+              activeColor: Colors.deepOrange,
               value: 'M',
               onChanged: (val) {
                 radioValue = val;
@@ -197,11 +203,10 @@ class _ProfileState extends State<Profile> {
             ),
             Text(
               'Male',
-              style:
-                  Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
+              style: bodyTextStyle.copyWith(fontSize: 14),
             ),
             Radio(
-              activeColor: kPrimary,
+              activeColor: Colors.deepOrange,
               value: 'F',
               groupValue: radioValue,
               onChanged: (val) {
@@ -213,11 +218,10 @@ class _ProfileState extends State<Profile> {
             ),
             Text(
               'Female',
-              style:
-                  Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
+              style: bodyTextStyle.copyWith(fontSize: 14),
             ),
             Radio(
-              activeColor: kPrimary,
+              activeColor: Colors.deepOrange,
               value: 'O',
               groupValue: radioValue,
               onChanged: (val) {
@@ -229,8 +233,7 @@ class _ProfileState extends State<Profile> {
             ),
             Text(
               'Other',
-              style:
-                  Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14),
+              style: bodyTextStyle.copyWith(fontSize: 14),
             )
           ],
         ),
@@ -375,7 +378,7 @@ class MyTextField extends StatelessWidget {
       child: Container(
         width: Width,
         decoration: BoxDecoration(
-            color: kLight,
+            color: Colors.white,
             border: Border.all(width: 1, color: kDark),
             borderRadius: BorderRadius.circular(10)),
         child: TextField(
@@ -384,7 +387,7 @@ class MyTextField extends StatelessWidget {
           decoration: InputDecoration(
             border: InputBorder.none,
             labelText: title,
-            labelStyle: Theme.of(context).textTheme.headline3,
+            labelStyle: bodyTextStyle,
             contentPadding:
                 EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           ),

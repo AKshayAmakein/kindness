@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/NewsVideoPlayerAndImg.dart';
+import 'package:kindness/components/strings.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
+import 'package:http/http.dart' as http;
 
 class KindnessTile extends StatefulWidget {
   @override
@@ -40,6 +44,7 @@ class _KindnessTileState extends State<KindnessTile> {
                     child: Column(
                       children: [
                         Container(
+                            padding: EdgeInsets.all(8),
                             height: Get.height / 4,
                             width: Get.width,
                             clipBehavior: Clip.antiAlias,
@@ -50,11 +55,23 @@ class _KindnessTileState extends State<KindnessTile> {
                               img: ds['mediaUrl']['imgUrl'],
                             )),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 4, left: 4, right: 4, bottom: 4),
-                          child: Text(
-                            ds["title"],
-                            style: Theme.of(context).textTheme.headline3,
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  ds["title"],
+                                  style: bodyTextStyle,
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    _share(
+                                        ds['mediaUrl']['imgUrl'], ds["title"]);
+                                  },
+                                  icon: Icon(Icons.share))
+                            ],
                           ),
                         ),
                       ],
@@ -63,5 +80,22 @@ class _KindnessTileState extends State<KindnessTile> {
                 );
               });
         });
+  }
+
+  void _share(
+    String img,
+    String title,
+  ) async {
+    http.Response response = await http.get(Uri.parse(img));
+    final bytes = response.bodyBytes;
+    await WcFlutterShare.share(
+        sharePopupTitle: 'share',
+        subject:
+            'For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness',
+        text:
+            ' Act of the day $title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
+        fileName: 'share.png',
+        mimeType: 'image/png',
+        bytesOfFile: bytes);
   }
 }

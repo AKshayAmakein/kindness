@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/helpers/getUserData.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
+import 'package:kindness/screens/points_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +81,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: CustomAppBar(
-          leadingIcon: true,
+          leadingIcon: false,
           onTapLeading: () {
             Get.back();
           },
@@ -127,14 +129,14 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                                 (element) => element == uid))
                                             ? Padding(
                                                 padding:
-                                                    const EdgeInsets.all(24.0),
+                                                    const EdgeInsets.all(10.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.green,
                                                       borderRadius:
                                                           BorderRadius.all(
                                                               Radius.circular(
-                                                                  7))),
+                                                                  12))),
                                                   child: Center(
                                                     child: Text(
                                                       'Completed',
@@ -146,14 +148,14 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                               )
                                             : Padding(
                                                 padding:
-                                                    const EdgeInsets.all(24.0),
+                                                    const EdgeInsets.all(10.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.orange,
                                                       borderRadius:
                                                           BorderRadius.all(
                                                               Radius.circular(
-                                                                  7))),
+                                                                  12))),
                                                   child: Center(
                                                     child: Text('Pending',
                                                         style: TextStyle(
