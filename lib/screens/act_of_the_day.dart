@@ -54,18 +54,17 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
         .collection("act_completed")
         .doc(uid)
         .snapshots();
-    stream.map((event) =>
-        () {
-      if (event.get('uid') == uid) {
-        setState(() {
-          taskCompleted = true;
+    stream.map((event) => () {
+          if (event.get('uid') == uid) {
+            setState(() {
+              taskCompleted = true;
+            });
+          } else {
+            setState(() {
+              taskCompleted = false;
+            });
+          }
         });
-      } else {
-        setState(() {
-          taskCompleted = false;
-        });
-      }
-    });
   }
 
   @override
@@ -82,7 +81,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: CustomAppBar(
-          leadingIcon: false,
+          leadingIcon: true,
           onTapLeading: () {
             Get.back();
           },
@@ -92,359 +91,358 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
       body: (loading)
           ? Spinner()
           : Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 12),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("act_of_the_day")
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return new Text("fetch error");
-            } else if (!snapshot.hasData) {
-              return Center(child: Spinner());
-            } else
-              return ListView.builder(
-                  itemCount: snapshot.data!.size,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data!.docs[index];
-                    List<String> userId = List.from(ds["actCompletedBy"]);
-                    print(userId);
-                    return Column(
-                      children: [
-                        Container(
-                          height: Get.height / 10,
-                          child: Row(
+              padding: EdgeInsets.only(left: 8, right: 8, top: 12),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("act_of_the_day")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return new Text("fetch error");
+                  } else if (!snapshot.hasData) {
+                    return Center(child: Spinner());
+                  } else
+                    return ListView.builder(
+                        itemCount: snapshot.data!.size,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data!.docs[index];
+                          List<String> userId = List.from(ds["actCompletedBy"]);
+                          print(userId);
+                          return Column(
                             children: [
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  'Kindness Act Of The Day',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: textSecondary,
-                                      fontWeight: FontWeight.bold),
+                              Container(
+                                height: Get.height / 10,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'Kindness Act Of The Day',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: textSecondary,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: (userId.any(
+                                                (element) => element == uid))
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  12))),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Completed',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.orange,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  12))),
+                                                  child: Center(
+                                                    child: Text('Pending',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white)),
+                                                  ),
+                                                ),
+                                              ))
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                  child: (userId.any(
-                                          (element) => element == uid))
-                                      ? Padding(
-                                    padding:
-                                    const EdgeInsets.all(10.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                          BorderRadius.all(
-                                              Radius.circular(
-                                                  12))),
-                                      child: Center(
-                                        child: Text(
-                                          'Completed',
-                                          style: TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                      : Padding(
-                                    padding:
-                                    const EdgeInsets.all(10.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.orange,
-                                          borderRadius:
-                                          BorderRadius.all(
-                                              Radius.circular(
-                                                  12))),
-                                      child: Center(
-                                        child: Text('Pending',
-                                            style: TextStyle(
-                                                color:
-                                                Colors.white)),
-                                      ),
-                                    ),
-                                  ))
-                            ],
-                          ),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              // height: Get.height,
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                12)),
-                                        child: CachedNetworkImage(
-                                          imageUrl: ds["img"],
-                                          fit: BoxFit.cover,
-                                          height: Get.height * 0.40,
-                                          width: Get.width,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 6,
-                                        right: 6,
-                                        child: Container(
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.white),
-                                          child: IconButton(
-                                            icon: Icon(Icons.share),
-                                            onPressed: () {
-                                              _share(
-                                                  ds["img"], ds['title']);
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.02,
-                                  ),
-                                  Text(
-                                    ds["title"],
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headline3,
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.02,
-                                  ),
-                                  Text(
-                                    ds["desc"],
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.02,
-                                  ),
-                                  (userId.any(
-                                          (element) => element == uid))
-                                      ? Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Status : ',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                          ),
-                                          Text(
-                                              'You Have Completed This Act.'),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.02,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Upload Images : ',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                          ),
-                                          InkWell(
-                                              onTap: () async {
-                                                FilePickerResult?
-                                                result =
-                                                await FilePicker
-                                                    .platform
-                                                    .pickFiles();
-
-                                                if (result !=
-                                                    null) {
-                                                  setState(() {
-                                                    File file =
-                                                    File(result
-                                                        .files
-                                                        .single
-                                                        .path!);
-                                                    photo = file;
-                                                  });
-                                                }
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                                children: [
-                                                  Icon(Icons
-                                                      .collections_outlined),
-                                                  (photo == null)
-                                                      ? Container()
-                                                      : Icon(Icons
-                                                      .done_outlined)
-                                                ],
-                                              )),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.02,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .all(8.0),
-                                            child: CircleAvatar(
-                                              radius:
-                                              Get.width / 15,
-                                              backgroundImage:
-                                              CachedNetworkImageProvider(
-                                                  profileUrl),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    // height: Get.height,
+                                    child: Column(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              clipBehavior: Clip.antiAlias,
                                               decoration: BoxDecoration(
-                                                  color:
-                                                  Colors.white,
-                                                  border: Border.all(
-                                                      width: 1,
-                                                      color: kDark),
                                                   borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      10)),
-                                              child: TextField(
-                                                controller:
-                                                commentController,
-                                                keyboardType:
-                                                TextInputType
-                                                    .multiline,
-                                                decoration:
-                                                InputDecoration(
-                                                  border:
-                                                  InputBorder
-                                                      .none,
-                                                  labelText:
-                                                  "Add a Comment ..",
-                                                  contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical:
-                                                      10.0,
-                                                      horizontal:
-                                                      20.0),
+                                                      BorderRadius.circular(
+                                                          12)),
+                                              child: CachedNetworkImage(
+                                                imageUrl: ds["img"],
+                                                fit: BoxFit.cover,
+                                                height: Get.height * 0.40,
+                                                width: Get.width,
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 6,
+                                              right: 6,
+                                              child: Container(
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.white),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.share),
+                                                  onPressed: () {
+                                                    _share(
+                                                        ds["img"], ds['title']);
+                                                  },
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.02,
-                                      ),
-                                      ElevatedButton(
-                                          style: ElevatedButton
-                                              .styleFrom(
-                                            primary: kPrimary,
-                                            minimumSize: Size(
-                                                Get.width,
-                                                Get.height / 20),
-                                          ),
-                                          onPressed: () {
-                                            submitData(ds["title"]);
-                                          },
-                                          child: Text('Submit'))
-                                    ],
-                                  )
-                                      : Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment
-                                        .spaceEvenly,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Status : ',
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                          ),
-                                          Text(
-                                              'You Have not Completed This Act.'),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.02,
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton
-                                            .styleFrom(
-                                          primary: Colors.green,
-                                          minimumSize: Size(
-                                              Get.width,
-                                              Get.height / 20),
+                                          ],
                                         ),
-                                        onPressed: () {
-                                          ScratchCard(
-                                            context,
-                                            confetti!,
-                                            ds['coin1'],
-                                            uid,
-                                            coins,
-                                          );
-                                        },
-                                        child: Text(
-                                          ds['answer1'],
-                                          style: TextStyle(
-                                              color: Colors.white),
+                                        SizedBox(
+                                          height: Get.height * 0.02,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.02,
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton
-                                            .styleFrom(
-                                          minimumSize: Size(
-                                              Get.width,
-                                              Get.height / 20),
+                                        Text(
+                                          ds["title"],
+                                          style: bodyTextStyle.copyWith(
+                                              color: textSecondary,
+                                              fontSize: 20),
                                         ),
-                                        onPressed: () {
-                                          ScratchCard(
-                                              context,
-                                              confetti!,
-                                              ds['coin2'],
-                                              uid,
-                                              coins);
-                                        },
-                                        child: Text(
-                                          ds['answer2'],
-                                          style: TextStyle(
-                                              color: Colors.white),
+                                        SizedBox(
+                                          height: Get.height * 0.02,
                                         ),
-                                      )
-                                    ],
+                                        Text(
+                                          ds["desc"],
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.02,
+                                        ),
+                                        (userId.any(
+                                                (element) => element == uid))
+                                            ? Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        'Status : ',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                          'You Have Completed This Act.'),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        'Upload Images : ',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () async {
+                                                            FilePickerResult?
+                                                                result =
+                                                                await FilePicker
+                                                                    .platform
+                                                                    .pickFiles();
+
+                                                            if (result !=
+                                                                null) {
+                                                              setState(() {
+                                                                File file =
+                                                                    File(result
+                                                                        .files
+                                                                        .single
+                                                                        .path!);
+                                                                photo = file;
+                                                              });
+                                                            }
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Icon(Icons
+                                                                  .collections_outlined),
+                                                              (photo == null)
+                                                                  ? Container()
+                                                                  : Icon(Icons
+                                                                      .done_outlined)
+                                                            ],
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: CircleAvatar(
+                                                          radius:
+                                                              Get.width / 15,
+                                                          backgroundImage:
+                                                              CachedNetworkImageProvider(
+                                                                  profileUrl),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              border: Border.all(
+                                                                  width: 1,
+                                                                  color: kDark),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          child: TextField(
+                                                            controller:
+                                                                commentController,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .multiline,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border:
+                                                                  InputBorder
+                                                                      .none,
+                                                              labelText:
+                                                                  "Add a Comment ..",
+                                                              contentPadding:
+                                                                  EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          10.0,
+                                                                      horizontal:
+                                                                          20.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                  ),
+                                                  ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: kPrimary,
+                                                        minimumSize: Size(
+                                                            Get.width,
+                                                            Get.height / 20),
+                                                      ),
+                                                      onPressed: () {
+                                                        submitData(ds["title"]);
+                                                      },
+                                                      child: Text('Submit'))
+                                                ],
+                                              )
+                                            : Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        'Status : ',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                          'You Have not Completed This Act.'),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Colors.green,
+                                                      minimumSize: Size(
+                                                          Get.width,
+                                                          Get.height / 20),
+                                                    ),
+                                                    onPressed: () {
+                                                      ScratchCard(
+                                                        context,
+                                                        confetti!,
+                                                        ds['coin1'],
+                                                        uid,
+                                                        coins,
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      ds['answer1'],
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      minimumSize: Size(
+                                                          Get.width,
+                                                          Get.height / 20),
+                                                    ),
+                                                    onPressed: () {
+                                                      ScratchCard(
+                                                          context,
+                                                          confetti!,
+                                                          ds['coin2'],
+                                                          uid,
+                                                          coins);
+                                                    },
+                                                    child: Text(
+                                                      ds['answer2'],
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                      ],
+                                    ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-          },
-        ),
-      ),
+                            ],
+                          );
+                        });
+                },
+              ),
+            ),
     );
   }
 
@@ -509,16 +507,18 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
     }
   }
 
-  void _share(String img,
-      String title,) async {
+  void _share(
+    String img,
+    String title,
+  ) async {
     http.Response response = await http.get(Uri.parse(img));
     final bytes = response.bodyBytes;
     await WcFlutterShare.share(
         sharePopupTitle: 'share',
         subject:
-        'For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness',
+            'For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness',
         text:
-        ' Act of the day $title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
+            ' Act of the day $title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
         fileName: 'share.png',
         mimeType: 'image/png',
         bytesOfFile: bytes);

@@ -57,7 +57,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            height: Get.height * 1.2,
+            //height: Get.height * 1.5,
             child: Column(
               children: [
                 DrawerHeader(
@@ -94,7 +94,39 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          UserProfileImage(profileUrl, name),
+                          Stack(
+                            children: [
+                              UserProfileImage(profileUrl, name),
+                              Positioned(
+                                right: 0.5,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xffF0F0F0),
+                                      ),
+                                      height: Get.width / 15,
+                                      width: Get.width / 15,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                right: -4,
+                                top: -6,
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/pencil.png",
+                                      height: 28,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
                           Container(
                             width: Get.width * 0.5,
                             padding: EdgeInsets.all(6),

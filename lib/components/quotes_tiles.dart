@@ -22,14 +22,14 @@ class QuotesTile extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClayContainer(
-                    color: kLight,
+                    color: Colors.white,
                     child: Padding(
                       padding: EdgeInsets.all(20),
                       child: ClayText(
                         ds['quotes'],
                         emboss: true,
-                        size: 24,
-                        color: kSecondary,
+                        size: 18,
+                        color: textSecondary,
                       ),
                     ),
                   ),

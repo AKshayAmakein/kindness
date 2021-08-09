@@ -34,7 +34,7 @@ class BuildCircleAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: Get.width / 5,
-      backgroundColor: kLight,
+      backgroundColor: Colors.white,
       backgroundImage: image,
       //foregroundColor: subtitleColor,
     );
@@ -135,49 +135,17 @@ UserProfileImage(String profileUrl, String name) {
   if ((profileUrl == "")) {
     return UserImage(name, 24);
   } else {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 1.5)),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: CachedNetworkImageProvider(
-              profileUrl,
-            ),
-            radius: 24,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 1.5)),
+      child: CircleAvatar(
+        backgroundColor: Colors.white,
+        backgroundImage: CachedNetworkImageProvider(
+          profileUrl,
         ),
-        Positioned(
-          right: -4,
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xffF0F0F0),
-                ),
-                height: 26,
-                width: 26,
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          right: -9,
-          top: -6,
-          child: Stack(
-            children: [
-              Image.asset(
-                "assets/images/pencil.png",
-                height: 28,
-              ),
-            ],
-          ),
-        ),
-      ],
+        radius: 24,
+      ),
     );
   }
 }

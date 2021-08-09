@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -96,11 +97,9 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   }
 
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Text(
-      'Likes',
-    ),
+    ExploreKindness(),
     Text(
       'Search',
     ),
@@ -114,16 +113,16 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: CustomAppBar(
-              title: 'Hi $name',
-              leadingIcon: false,
-              onTapLeading: () {
-                Get.back();
-              }),
-        ),
-        drawer: CustomDrawer(),
+        // appBar: PreferredSize(
+        //   preferredSize: Size.fromHeight(120),
+        //   child: CustomAppBar(
+        //       title: 'Hi $name',
+        //       leadingIcon: false,
+        //       onTapLeading: () {
+        //         Get.back();
+        //       }),
+        // ),
+        // drawer: CustomDrawer(),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -146,15 +145,14 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
           ),
           child: SafeArea(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: GNav(
                 rippleColor: Colors.grey[300]!,
                 hoverColor: Colors.grey[100]!,
-                gap: 8,
+                gap: Get.width / 90,
                 activeColor: Colors.black,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                iconSize: Get.width / 15,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 duration: Duration(milliseconds: 400),
                 tabBackgroundColor: Colors.grey[100]!,
                 color: Colors.white,
