@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/home_screen.dart';

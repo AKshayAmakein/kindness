@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
@@ -17,6 +16,7 @@ import 'package:kindness/helpers/getUserData.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/points_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
@@ -81,7 +81,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: CustomAppBar(
-          leadingIcon: true,
+          leadingIcon: false,
           onTapLeading: () {
             Get.back();
           },
@@ -213,9 +213,9 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                         ),
                                         Text(
                                           ds["title"],
-                                          style: bodyTextStyle.copyWith(
-                                              color: textSecondary,
-                                              fontSize: 20),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3,
                                         ),
                                         SizedBox(
                                           height: Get.height * 0.02,

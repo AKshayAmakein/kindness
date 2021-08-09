@@ -85,96 +85,96 @@ class _ProfileState extends State<Profile> {
                       height: screenHeight / 30,
                     ),
                     Avatar(),
-              MyTextField(
-                title: 'Full Name',
-                keyBoardType: TextInputType.name,
-                Width: screenWidth,
-                controller: nameController,
-              ),
-              GenderRadio(context),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, top: 10),
-                    child: Align(
-                      alignment: AlignmentDirectional.topStart,
-                      child: Text(
-                        'Date of Birth',
+                    MyTextField(
+                      title: 'Full Name',
+                      keyBoardType: TextInputType.name,
+                      Width: screenWidth,
+                      controller: nameController,
+                    ),
+                    GenderRadio(context),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, top: 10),
+                          child: Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              'Date of Birth',
                               style: bodyTextStyle,
                             ),
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        PickDate(context);
-                      },
-                      child: (birthday.isNull)
-                          ? Text(
-                        'DD-MM-YYYY',
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              PickDate(context);
+                            },
+                            child: (birthday.isNull)
+                                ? Text(
+                                    'DD-MM-YYYY',
                                     style: bodyTextStyle.copyWith(
                                         color: textSecondary),
                                   )
-                          : Text(
-                        '${birthday!.year}-${birthday!.month}-${birthday!.day}',
+                                : Text(
+                                    '${birthday!.year}-${birthday!.month}-${birthday!.day}',
                                     style: bodyTextStyle,
                                   )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, top: 10),
-                    child: Align(
-                      alignment: AlignmentDirectional.topStart,
-                      child: Text(
-                        'Where are you from?',
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, top: 10),
+                          child: Align(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              'Where are you from?',
                               style: bodyTextStyle,
                             ),
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        PickPlace(context);
-                      },
-                      child: (state.isNull)
-                          ? Text(
-                        'Select Place',
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              PickPlace(context);
+                            },
+                            child: (state.isNull)
+                                ? Text(
+                                    'Select Place',
                                     style: bodyTextStyle.copyWith(
                                         color: textSecondary),
                                   )
-                          : Text(
-                        state!,
+                                : Text(
+                                    state!,
                                     style: bodyTextStyle,
                                   )),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
                               minimumSize: Size(
                                 screenWidth * 0.8,
                                 screenHeight * 0.065,
                               )),
-                    onPressed: () {
-                      submitDetails();
-                    },
-                    child: Text(
-                      'Submit Details',
+                          onPressed: () {
+                            submitDetails();
+                          },
+                          child: Text(
+                            'Submit Details',
                             style: bodyTextStyle.copyWith(
                                 color: Colors.blue[700],
                                 fontWeight: FontWeight.bold),
                           )),
-              )
-            ],
-          ),
-        ),
-      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           );
   }
 

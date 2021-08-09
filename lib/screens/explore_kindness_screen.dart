@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/channel_title.dart';
-import 'package:kindness/components/custome_app_bar.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/kindness_tile.dart';
 import 'package:kindness/components/quotes_tiles.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
 
 class ExploreKindness extends StatefulWidget {
   @override
