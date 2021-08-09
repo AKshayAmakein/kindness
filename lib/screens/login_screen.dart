@@ -13,7 +13,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -32,6 +31,7 @@ class LoginScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
+
                     Image.asset(
                       appLogo,
                       height: Get.height / 7,
