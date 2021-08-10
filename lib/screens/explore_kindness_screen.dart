@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:kindness/components/channel_title.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/kindness_tile.dart';
@@ -14,27 +13,29 @@ class ExploreKindness extends StatefulWidget {
 }
 
 class _ExploreKindnessState extends State<ExploreKindness> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(120),
           child: CustomAppBar(
               title: 'Explore Kindness',
               leadingIcon: false,
               onTapLeading: () {
-                Get.back();
-              }),
+                _scaffoldKey.currentState!.openDrawer();
+              }, coins: 0, profileUrl: '', uid: '',),
         ),
         drawer: CustomDrawer(),
         body: Container(
-          height: Get.height * 0.9,
+          // height: Get.height * 0.9,
           child: Column(
             children: [
               Container(
-                height: Get.height * 0.075,
+                // height: Get.height * 0.075,
                 child: TabBar(
                   indicatorColor: textSecondary,
                   indicatorSize: TabBarIndicatorSize.label,
@@ -54,15 +55,12 @@ class _ExploreKindnessState extends State<ExploreKindness> {
                 ),
               ),
               Expanded(
-                child: Container(
-                  //height: Get.height * 0.6,
-                  child: TabBarView(
-                    children: [
-                      ChannelTile(),
-                      QuotesTile(),
-                      KindnessTile(),
-                    ],
-                  ),
+                child: TabBarView(
+                  children: [
+                    ChannelTile(),
+                    QuotesTile(),
+                    KindnessTile(),
+                  ],
                 ),
               ),
             ],

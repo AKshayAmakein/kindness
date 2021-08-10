@@ -1,52 +1,56 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
-import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
-import 'package:kindness/helpers/getUserData.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
-import 'package:kindness/screens/points_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
-class ActoftheDayScreen extends StatefulWidget {
+class ActOfTheDayScreen extends StatefulWidget {
   @override
-  _ActoftheDayScreenState createState() => _ActoftheDayScreenState();
+  _ActOfTheDayScreenState createState() => _ActOfTheDayScreenState();
 }
 
-class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
+class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
   ConfettiController? confetti;
-  late String uid;
+  String uid = "";
   String name = "";
   late String state;
-  late String profileUrl;
+  String profileUrl = "";
   late Timer timer;
   bool loading = false;
   File? photo;
   String photourl = "";
   bool taskCompleted = false;
-  int coins = 0;
+  int? coins;
   late SharedPreferences _prefs;
   TextEditingController commentController = TextEditingController();
 
-  getUserData() async {
-    Map userData = await getUserDataLocally();
-    uid = userData['userUid'];
-    name = userData['userName'];
-    state = userData['userState'];
-    profileUrl = userData['userProfileUrl'];
-    coins = userData['userCoins'];
+  getUserDataLocally() async {
+    _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uid = _prefs.getString("uid")!;
+      print(uid);
+      name = _prefs.getString("name")!;
+      print(name);
+      state = _prefs.getString("state")!;
+      print(state);
+      profileUrl = _prefs.getString("profileUrl")!;
+
+      coins = _prefs.getInt("coins")!;
+      print(state);
+    });
   }
 
   getCompletedActbyUser() {
@@ -69,7 +73,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
 
   @override
   void initState() {
-    getUserData();
+    getUserDataLocally();
     confetti = ConfettiController(duration: Duration(seconds: 5));
     super.initState();
   }
@@ -81,11 +85,14 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: CustomAppBar(
-          leadingIcon: false,
+          leadingIcon: true,
           onTapLeading: () {
             Get.back();
           },
           title: 'Act of the Day',
+          uid: uid,
+          profileUrl: profileUrl,
+          coins: coins,
         ),
       ),
       body: (loading)
@@ -129,7 +136,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                                 (element) => element == uid))
                                             ? Padding(
                                                 padding:
-                                                    const EdgeInsets.all(10.0),
+                                                    const EdgeInsets.all(24.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.green,
@@ -148,7 +155,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                               )
                                             : Padding(
                                                 padding:
-                                                    const EdgeInsets.all(10.0),
+                                                    const EdgeInsets.all(24.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.orange,
@@ -397,7 +404,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                                         confetti!,
                                                         ds['coin1'],
                                                         uid,
-                                                        coins,
+                                                        coins!,
                                                       );
                                                     },
                                                     child: Text(
@@ -422,7 +429,7 @@ class _ActoftheDayScreenState extends State<ActoftheDayScreen> {
                                                           confetti!,
                                                           ds['coin2'],
                                                           uid,
-                                                          coins);
+                                                          coins!);
                                                     },
                                                     child: Text(
                                                       ds['answer2'],

@@ -14,12 +14,9 @@ import 'package:scratcher/scratcher.dart';
 class Spinner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SpinKitDoubleBounce(
-          color: kSecondary,
-          size: 80,
-        ),
+    return Center(
+      child: SpinKitDoubleBounce(
+        color: kSecondary,
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,12 +23,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = false;
-  String? uid;
+  String uid = "";
   String? month;
   int? coins;
-  String? name;
-  String? state;
-  String? profileUrl;
+  String name = "";
+  String state = "";
+  String profileUrl = "";
   late Timer timer;
   late SharedPreferences _prefs;
   getCoins() {
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .doc(uid)
         .get()
         .then((value) async {
+      _prefs = await SharedPreferences.getInstance();
       setState(() {
         coins = value.get("coins");
         _prefs.setInt("coins", coins!);
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
-    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getCoins());
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -56,12 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
         name = value.get("name");
         state = value.get("state");
         profileUrl = value.get("photourl");
-        _prefs.setString("uid", uid!).then((value) {
+        _prefs.setString("uid", uid).then((value) {
           print(_prefs.get("uid"));
         });
-        _prefs.setString("name", name!);
-        _prefs.setString("state", state!);
-        _prefs.setString("profileUrl", profileUrl!);
+        _prefs.setString("name", name);
+        _prefs.setString("state", state);
+        _prefs.setString("profileUrl", profileUrl);
       });
     });
   }
@@ -69,445 +71,431 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getUserData();
+    getCoins();
     super.initState();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    if ((loading)) {
-      return Spinner();
-    } else {
-      return Scaffold(
-        key: _scaffoldKey,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: CustomAppBar(
-              title: 'Hi $name',
-              leadingIcon: false,
-              onTapLeading: () {
-                _scaffoldKey.currentState!.openDrawer();
-              }),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: CustomAppBar(
+          title: 'Hi $name',
+          leadingIcon: false,
+          onTapLeading: () {
+            _scaffoldKey.currentState!.openDrawer();
+          },
+          coins: coins,
+          profileUrl: profileUrl,
+          uid: uid,
         ),
-        drawer: CustomDrawer(),
-        body: SingleChildScrollView(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("help_and_support")
-                .where("uid", isNotEqualTo: uid)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Spinner();
-              } else if (snapshot.hasError) {
-                return Text('Fetch error!');
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+      ),
+      drawer: CustomDrawer(),
+      body: SingleChildScrollView(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("help_and_support")
+              .where("uid", isNotEqualTo: uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Spinner();
+            } else if (snapshot.hasError) {
+              return Text('Fetch error!');
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Events of Kindness',
+                          style: headlineTextStyle.copyWith(
+                              color: textSecondary, fontSize: 15),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'See all >',
+                            style: subtitleTextStyle.copyWith(fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.015,
+                    ),
+                    Container(
+                      height: Get.height * 0.34,
+                      child: Swiper(
+                        itemHeight: Get.height,
+                        itemWidth: Get.width,
+                        layout: SwiperLayout.STACK,
+                        itemCount: snapshot.data!.size,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data!.docs[index];
+                          Timestamp timestamp = ds['time_when_needed'];
+                          var date = DateTime.fromMicrosecondsSinceEpoch(
+                              timestamp.microsecondsSinceEpoch);
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/images/rectangle1.png"),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(
+                                      height: Get.height * 0.3,
+                                      width: Get.width * 0.6,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: Offset(0, 2),
+                                                blurRadius: 12,
+                                                color: Color(0xff000000)
+                                                    .withOpacity(0.25))
+                                          ]),
+                                      padding: EdgeInsets.all(14),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Rs:${ds['requirements']}",
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 13),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0),
+                                            child: Text(ds['description'],
+                                                style: descTextStyle),
+                                          ),
+                                          Text(
+                                            "Location : ${ds['location']}",
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 12),
+                                          ),
+                                          Text(
+                                            _date(date),
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 12),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text('Details',
+                                                  style: descTextStyle.copyWith(
+                                                      fontSize: 10)),
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Color(0xff68EDFF),
+                                                  minimumSize: Size(
+                                                      Get.width * 0.01,
+                                                      Get.height * 0.03)),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Image.asset("assets/images/rectangle2.png"),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xff000000).withOpacity(0.23),
+                              offset: Offset(0, 1),
+                              blurRadius: 9,
+                            )
+                          ]),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Events of Kindness',
+                            "Points earned this week",
                             style: headlineTextStyle.copyWith(
-                                color: textSecondary, fontSize: 15),
+                                color: textSecondary1, fontSize: 12),
                           ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'See all >',
-                              style: subtitleTextStyle.copyWith(fontSize: 10),
-                            ),
-                          ),
+                          StreamBuilder<DocumentSnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(uid)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Container();
+                                } else {
+                                  int coins1 = snapshot.data!.get("coins");
+                                  return Text(
+                                    "$coins1",
+                                    style: headlineTextStyle.copyWith(
+                                        color: textSecondary1, fontSize: 15),
+                                  );
+                                }
+                              })
                         ],
                       ),
-                      SizedBox(
-                        height: Get.height * 0.015,
-                      ),
-                      Container(
-                        height: Get.height * 0.34,
-                        child: Swiper(
-                          itemHeight: Get.height,
-                          itemWidth: Get.width,
-                          layout: SwiperLayout.STACK,
-                          itemCount: snapshot.data!.size,
-                          itemBuilder: (context, index) {
-                            DocumentSnapshot ds = snapshot.data!.docs[index];
-                            Timestamp timestamp = ds['time_when_needed'];
-                            var date = DateTime.fromMicrosecondsSinceEpoch(
-                                timestamp.microsecondsSinceEpoch);
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    SizedBox(height: Get.height * 0.02),
+                    Text(
+                      'Kindness Act of the Day',
+                      style: headlineTextStyle.copyWith(
+                          fontSize: 15, color: textSecondary),
+                    ),
+                    SizedBox(height: Get.height * 0.015),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("act_of_the_day")
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return new Text("fetch error");
+                          } else if (!snapshot.hasData) {
+                            return Center(child: Spinner());
+                          } else {
+                            DocumentSnapshot ds = snapshot.data!.docs[0];
+                            List<String> userId =
+                                List.from(ds["actCompletedBy"]);
+                            return InkWell(
+                              onTap: (){
+                                Get.to(ActOfTheDayScreen());
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color:
+                                              Color(0xff000000).withOpacity(0.25),
+                                          blurRadius: 10,
+                                          offset: Offset(0, 2))
+                                    ]),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.asset("assets/images/rectangle1.png"),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Container(
+                                              height: Get.height * 0.1,
+                                              width: Get.width * 0.25,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl: ds["img"],
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: Get.width * 0.01,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                ds["title"],
+                                                style: headlineTextStyle.copyWith(
+                                                    color: textSecondary,
+                                                    fontSize: 12),
+                                              ),
+                                              SizedBox(
+                                                height: Get.height * 0.01,
+                                              ),
+                                              Text(
+                                                ds["desc"],
+                                                style: descTextStyle.copyWith(
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     Padding(
-                                      padding: const EdgeInsets.all(4.0),
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Status',
+                                            style: subtitleTextStyle.copyWith(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                                color: textSecondary1),
+                                          ),
+                                          (userId.any(
+                                                  (element) => element == uid))
+                                              ? Container(
+                                                  padding: EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  5))),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Completed',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  padding: EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.orange,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  5))),
+                                                  child: Center(
+                                                    child: Text('Pending',
+                                                        style: TextStyle(
+                                                            color: Colors.white)),
+                                                  ),
+                                                )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'My acts / Achievements',
+                          style: headlineTextStyle.copyWith(
+                              fontSize: 15, color: textSecondary),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'See all >',
+                            style: subtitleTextStyle.copyWith(fontSize: 10),
+                          ),
+                        ),
+                      ],
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("act_completed")
+                            .where('uid', isEqualTo: uid)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return new Text("fetch error");
+                          } else if (!snapshot.hasData) {
+                            return Spinner();
+                          } else {
+                            return Container(
+                              height: Get.height * 0.15,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data!.size,
+                                  itemBuilder: (context, index) {
+                                    DocumentSnapshot ds =
+                                        snapshot.data!.docs[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
                                       child: Container(
-                                        height: Get.height * 0.3,
-                                        width: Get.width * 0.6,
+                                        padding: EdgeInsets.all(10.5),
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             boxShadow: [
                                               BoxShadow(
-                                                  offset: Offset(0, 2),
-                                                  blurRadius: 12,
                                                   color: Color(0xff000000)
-                                                      .withOpacity(0.25))
+                                                      .withOpacity(0.24),
+                                                  offset: Offset(0, 1),
+                                                  blurRadius: 9)
                                             ]),
-                                        padding: EdgeInsets.all(14),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Rs:${ds['requirements']}",
-                                              style: headlineTextStyle.copyWith(
-                                                  color: textSecondary1,
-                                                  fontSize: 13),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10.0),
-                                              child: Text(ds['description'],
-                                                  style: descTextStyle),
-                                            ),
-                                            Text(
-                                              "Location : ${ds['location']}",
+                                              ds['actTitle'],
                                               style: headlineTextStyle.copyWith(
                                                   color: textSecondary1,
                                                   fontSize: 12),
                                             ),
-                                            Text(
-                                              _date(date),
-                                              style: headlineTextStyle.copyWith(
-                                                  color: textSecondary1,
-                                                  fontSize: 12),
+                                            SizedBox(
+                                              height: 4,
                                             ),
                                             Container(
-                                              alignment: Alignment.bottomRight,
-                                              child: ElevatedButton(
-                                                onPressed: () {},
-                                                child: Text('Details',
-                                                    style:
-                                                        descTextStyle.copyWith(
-                                                            fontSize: 10)),
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Color(0xff68EDFF),
-                                                    minimumSize: Size(
-                                                        Get.width * 0.01,
-                                                        Get.height * 0.03)),
+                                              height: Get.height * 0.1,
+                                              width: Get.width * 0.25,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: CachedNetworkImage(
+                                                imageUrl: ds['cmtImg'],
+                                                fit: BoxFit.cover,
                                               ),
                                             )
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    Image.asset("assets/images/rectangle2.png"),
-                                  ],
-                                ),
-                              ],
+                                    );
+                                  }),
                             );
-                          },
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xff000000).withOpacity(0.23),
-                                offset: Offset(0, 1),
-                                blurRadius: 9,
-                              )
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Points earned this week",
-                              style: headlineTextStyle.copyWith(
-                                  color: textSecondary1, fontSize: 12),
-                            ),
-                            Text(
-                              "$coins",
-                              style: headlineTextStyle.copyWith(
-                                  color: textSecondary1, fontSize: 15),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: Get.height * 0.02),
-                      Text(
-                        'Kindness Act of the Day',
-                        style: headlineTextStyle.copyWith(
-                            fontSize: 15, color: textSecondary),
-                      ),
-                      SizedBox(height: Get.height * 0.015),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection("act_of_the_day")
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return new Text("fetch error");
-                            } else if (!snapshot.hasData) {
-                              return Center(child: Spinner());
-                            } else {
-                              return Container(
-                                height: Get.height * 0.172,
-                                child: ListView.builder(
-                                    itemCount: snapshot.data!.size,
-                                    itemBuilder: (context, index) {
-                                      DocumentSnapshot ds =
-                                          snapshot.data!.docs[index];
-                                      List<String> userId =
-                                          List.from(ds["actCompletedBy"]);
-                                      return Container(
-                                        padding: EdgeInsets.all(10.0),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Color(0xff000000)
-                                                      .withOpacity(0.25),
-                                                  blurRadius: 10,
-                                                  offset: Offset(0, 2))
-                                            ]),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Container(
-                                                      height: Get.height * 0.1,
-                                                      width: Get.width * 0.25,
-                                                      clipBehavior:
-                                                          Clip.antiAlias,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(6),
-                                                      ),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: ds["img"],
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  width: Get.width * 0.01,
-                                                ),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        ds["title"],
-                                                        style: headlineTextStyle
-                                                            .copyWith(
-                                                                color:
-                                                                    textSecondary,
-                                                                fontSize: 12),
-                                                      ),
-                                                      SizedBox(
-                                                        height:
-                                                            Get.height * 0.01,
-                                                      ),
-                                                      Text(
-                                                        ds["desc"],
-                                                        style: descTextStyle
-                                                            .copyWith(
-                                                          fontSize: 10,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    'Status',
-                                                    style: subtitleTextStyle
-                                                        .copyWith(
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color:
-                                                                textSecondary1),
-                                                  ),
-                                                  (userId.any((element) =>
-                                                          element == uid))
-                                                      ? Container(
-                                                          padding:
-                                                              EdgeInsets.all(4),
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.green,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          5))),
-                                                          child: Center(
-                                                            child: Text(
-                                                              'Completed',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          padding:
-                                                              EdgeInsets.all(4),
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.orange,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          5))),
-                                                          child: Center(
-                                                            child: Text(
-                                                                'Pending',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ),
-                                                        )
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              );
-                            }
-                          }),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'My acts / Achievements',
-                            style: headlineTextStyle.copyWith(
-                                fontSize: 15, color: textSecondary),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'See all >',
-                              style: subtitleTextStyle.copyWith(fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection("act_completed")
-                              .where('uid', isEqualTo: uid)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return new Text("fetch error");
-                            } else if (!snapshot.hasData) {
-                              return Spinner();
-                            } else {
-                              return Container(
-                                height: Get.height * 0.15,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshot.data!.size,
-                                    itemBuilder: (context, index) {
-                                      DocumentSnapshot ds =
-                                          snapshot.data!.docs[index];
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        child: Container(
-                                          padding: EdgeInsets.all(10.5),
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Color(0xff000000)
-                                                        .withOpacity(0.24),
-                                                    offset: Offset(0, 1),
-                                                    blurRadius: 9)
-                                              ]),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                ds['actTitle'],
-                                                style:
-                                                    headlineTextStyle.copyWith(
-                                                        color: textSecondary1,
-                                                        fontSize: 12),
-                                              ),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Container(
-                                                height: Get.height * 0.1,
-                                                width: Get.width * 0.25,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: ds['cmtImg'],
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              );
-                            }
-                          })
-                    ],
-                  ),
-                );
-              }
-            },
-          ),
+                          }
+                        })
+                  ],
+                ),
+              );
+            }
+          },
         ),
-      );
-    }
+      ),
+    );
   }
 
   _date(DateTime tm) {

@@ -22,6 +22,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String name = "";
   String state = "";
   String profileUrl = "";
+
   double screenWidth = Get.width;
 
   late SharedPreferences preferences;
@@ -134,7 +135,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ListTile(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Get.to(ActoftheDayScreen());
+                    Get.to(ActOfTheDayScreen());
                   },
                   title: Text(
                     'Kindness Act of the Day',
