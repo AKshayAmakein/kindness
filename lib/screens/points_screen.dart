@@ -5,18 +5,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PointsScreen extends StatelessWidget {
-  final String name;
-  final int coins;
-  final String photourl;
-  final String uid;
+class PointsScreen extends StatefulWidget {
+  @override
+  _PointsScreenState createState() => _PointsScreenState();
+}
 
-  PointsScreen(
-      {required this.name,
-      required this.coins,
-      required this.photourl,
-      required this.uid});
+class _PointsScreenState extends State<PointsScreen> {
+  String uid = '';
+  int coins = 0;
+  String name = 'name';
+  String profileUrl = '';
+  late SharedPreferences prefs;
+
+  getUserData() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uid = prefs.getString('uid')!;
+      coins = prefs.getInt('coins')!;
+      name = prefs.getString('name')!;
+      profileUrl = prefs.getString('profileUrl')!;
+    });
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +66,7 @@ class PointsScreen extends StatelessWidget {
                 )
               ],
             ),
-            UserProfileImage(photourl, name),
+            UserProfileImage(profileUrl, name),
             Text('$coins',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
             Text(

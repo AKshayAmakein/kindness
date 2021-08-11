@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 
@@ -78,26 +79,14 @@ class _FriendsTileState extends State<FriendsTile> {
                                 ],
                                 borderRadius: BorderRadius.circular(10)),
                             child: ListTile(
-                                title: Text(
-                                  snapshot.data!['name']!,
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                                leading: UserProfileImage(
-                                    snapshot.data!['photourl']!,
-                                    snapshot.data!['name']!),
-                                trailing: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.primaries[Random()
-                                          .nextInt(Colors.primaries.length)],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        snapshot.data!['coins']!,
-                                        style: TextStyle(color: kLight),
-                                      ),
-                                    ))),
+                              title: Text(
+                                snapshot.data!['name']!,
+                                style: bodyTextStyle,
+                              ),
+                              leading: UserProfileImage(
+                                  snapshot.data!['photourl']!,
+                                  snapshot.data!['name']!),
+                            ),
                           ),
                         );
                       });

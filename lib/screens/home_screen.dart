@@ -89,8 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _scaffoldKey.currentState!.openDrawer();
           },
           coins: coins,
-          profileUrl: profileUrl,
-          uid: uid,
         ),
       ),
       drawer: CustomDrawer(),

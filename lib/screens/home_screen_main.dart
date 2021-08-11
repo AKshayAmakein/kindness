@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:kindness/components/people_tile.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/home_screen.dart';
 import 'package:kindness/screens/user_profile_screen.dart';
@@ -16,9 +17,7 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     ExploreKindness(),
-    Text(
-      'Search',
-    ),
+    PeopleTitle(),
     UserProfileScreen()
   ];
   @override

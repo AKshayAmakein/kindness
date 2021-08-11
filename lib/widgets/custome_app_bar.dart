@@ -10,16 +10,12 @@ class CustomAppBar extends StatefulWidget {
       {required this.title,
       required this.leadingIcon,
       required this.onTapLeading,
-      required this.coins,
-      required this.profileUrl,
-      required this.uid});
+      required this.coins});
 
   final String title;
   final bool leadingIcon;
   final Function() onTapLeading;
   int? coins;
-  final String profileUrl;
-  final String uid;
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -67,39 +63,37 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           fontSize: 17,
                           fontWeight: FontWeight.w600),
                     ),
-              InkWell(
-                onTap: () {
-                  Get.to(PointsScreen(
-                      name: widget.title,
-                      coins: widget.coins!,
-                      photourl: widget.profileUrl,
-                      uid: widget.uid));
-                },
-                child: Container(
-                  height: Get.height * 0.055,
-                  width: Get.width * 0.12,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      widget.coins == null
-                          ? Container()
-                          : Text(
-                              "${widget.coins!}",
-                              style: GoogleFonts.roboto(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                      Icon(
-                        Icons.savings_outlined,
-                        color: Colors.white,
-                      ),
-                    ],
+              Flexible(
+                child: InkWell(
+                  onTap: () {
+                    Get.to(PointsScreen());
+                  },
+                  child: Container(
+                    height: Get.height * 0.060,
+                    width: Get.width * 0.12,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        widget.coins == null
+                            ? Container()
+                            : Text(
+                                "${widget.coins!}",
+                                style: GoogleFonts.roboto(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                        Icon(
+                          Icons.savings_outlined,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )

@@ -36,7 +36,7 @@ class _ChannelTileState extends State<ChannelTile> {
     return Container(
       margin: EdgeInsets.all(20.0),
       padding: EdgeInsets.all(20.0),
-      height: Get.height * 0.12,
+      //height: Get.height * 0.12,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),

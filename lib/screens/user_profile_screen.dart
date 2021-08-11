@@ -68,8 +68,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             _scaffoldKey.currentState!.openDrawer();
           },
           coins: coins,
-          profileUrl: '',
-          uid: '',
         ),
       ),
       drawer: CustomDrawer(),

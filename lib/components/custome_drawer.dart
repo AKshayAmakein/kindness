@@ -6,6 +6,7 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
+import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -52,7 +53,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            height: Get.height * 1,
+            height: Get.height * 1.15,
             child: Column(
               children: [
                 DrawerHeader(
@@ -202,6 +203,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     )),
                 Divider(),
                 ListTile(
+                  onTap: () {},
                   title: Text(
                     'Settings',
                     style: headlineTextStyle.copyWith(

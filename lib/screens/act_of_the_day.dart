@@ -90,8 +90,6 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
             Get.back();
           },
           title: 'Act of the Day',
-          uid: uid,
-          profileUrl: profileUrl,
           coins: coins,
         ),
       ),
