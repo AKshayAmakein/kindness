@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoChannelScreen extends StatefulWidget {
@@ -22,52 +21,19 @@ class _VideoChannelScreenState extends State<VideoChannelScreen> {
       flags: YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
+        hideControls: true,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
-        onReady: () {
-          print('Player is ready.');
-        },
-      ),
-    );
-  }
-
-  customDivider(String title) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            color: Colors.white,
-            height: Get.height * 0.01,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(13),
-            color: Colors.white,
-          ),
-          child: Center(
-              child: Text(
-            title,
-            style: Theme.of(context).textTheme.headline3,
-          )),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.white,
-            height: Get.height * 0.01,
-          ),
-        ),
-      ],
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+      onReady: () {
+        print('Player is ready.');
+      },
     );
   }
 }

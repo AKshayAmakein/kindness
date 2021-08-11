@@ -45,14 +45,7 @@ class _NewsVideoPlayerAndImgState extends State<NewsVideoPlayerAndImg> {
               aspectRatio: _controller.value.aspectRatio,
               child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8)),
-                        child: VideoPlayer(_controller)),
-                  ),
+                  VideoPlayer(_controller),
                   Center(
                     child: IconButton(
                         onPressed: () {

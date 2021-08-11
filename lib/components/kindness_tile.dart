@@ -43,9 +43,17 @@ class _KindnessTileState extends State<KindnessTile> {
                         ]),
                     child: Column(
                       children: [
-                        NewsVideoPlayerAndImg(
-                          videoUrl: ds['mediaUrl']['videoUrl'],
-                          img: ds['mediaUrl']['imgUrl'],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8)),
+                            child: NewsVideoPlayerAndImg(
+                              videoUrl: ds['mediaUrl']['videoUrl'],
+                              img: ds['mediaUrl']['imgUrl'],
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8),
