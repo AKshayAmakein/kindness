@@ -87,7 +87,11 @@ class _ChannelTileState extends State<ChannelTile> {
 
   _buildVideo(Video video) {
     return GestureDetector(
-      onTap: () => Get.to(VideoChannelScreen(id: video.id)),
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (ctx) => VideoChannelScreen(id: video.id));
+      },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
