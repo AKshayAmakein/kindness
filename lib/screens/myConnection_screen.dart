@@ -39,9 +39,7 @@ class MyConnectionScreen extends StatelessWidget {
         drawer: CustomDrawer(),
         body: TabBarView(
           children: [
-            PeopleTitle(
-              uid: uid,
-            ),
+            PeopleTitle(),
             FriendsTile(
               uid: uid,
             )

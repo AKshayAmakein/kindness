@@ -89,8 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _scaffoldKey.currentState!.openDrawer();
           },
           coins: coins,
-          profileUrl: profileUrl,
-          uid: uid,
         ),
       ),
       drawer: CustomDrawer(),
@@ -283,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             List<String> userId =
                                 List.from(ds["actCompletedBy"]);
                             return InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Get.to(ActOfTheDayScreen());
                               },
                               child: Container(
@@ -293,8 +291,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
-                                          color:
-                                              Color(0xff000000).withOpacity(0.25),
+                                          color: Color(0xff000000)
+                                              .withOpacity(0.25),
                                           blurRadius: 10,
                                           offset: Offset(0, 2))
                                     ]),
@@ -332,9 +330,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: [
                                               Text(
                                                 ds["title"],
-                                                style: headlineTextStyle.copyWith(
-                                                    color: textSecondary,
-                                                    fontSize: 12),
+                                                style:
+                                                    headlineTextStyle.copyWith(
+                                                        color: textSecondary,
+                                                        fontSize: 12),
                                               ),
                                               SizedBox(
                                                 height: Get.height * 0.01,
@@ -392,7 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   child: Center(
                                                     child: Text('Pending',
                                                         style: TextStyle(
-                                                            color: Colors.white)),
+                                                            color:
+                                                                Colors.white)),
                                                   ),
                                                 )
                                         ],

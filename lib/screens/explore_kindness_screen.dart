@@ -45,8 +45,6 @@ class _ExploreKindnessState extends State<ExploreKindness> {
               _scaffoldKey.currentState!.openDrawer();
             },
             coins: coins,
-            profileUrl: '',
-            uid: '',
           ),
         ),
         drawer: CustomDrawer(),
