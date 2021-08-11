@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:kindness/components/NewsVideoPlayerAndImg.dart';
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
-import 'package:http/http.dart' as http;
 
 class KindnessTile extends StatefulWidget {
   @override
@@ -43,17 +43,10 @@ class _KindnessTileState extends State<KindnessTile> {
                         ]),
                     child: Column(
                       children: [
-                        Container(
-                            padding: EdgeInsets.all(8),
-                            height: Get.height / 4,
-                            width: Get.width,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: NewsVideoPlayerAndImg(
-                              videoUrl: ds['mediaUrl']['videoUrl'],
-                              img: ds['mediaUrl']['imgUrl'],
-                            )),
+                        NewsVideoPlayerAndImg(
+                          videoUrl: ds['mediaUrl']['videoUrl'],
+                          img: ds['mediaUrl']['imgUrl'],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Row(
@@ -62,7 +55,8 @@ class _KindnessTileState extends State<KindnessTile> {
                               Expanded(
                                 child: Text(
                                   ds["title"],
-                                  style: bodyTextStyle,
+                                  style: bodyTextStyle.copyWith(
+                                      color: textSecondary, fontSize: 15),
                                 ),
                               ),
                               IconButton(
@@ -70,7 +64,10 @@ class _KindnessTileState extends State<KindnessTile> {
                                     _share(
                                         ds['mediaUrl']['imgUrl'], ds["title"]);
                                   },
-                                  icon: Icon(Icons.share))
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: textSecondary,
+                                  ))
                             ],
                           ),
                         ),

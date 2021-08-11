@@ -18,7 +18,7 @@ TextStyle subtitleTextStyle = GoogleFonts.poppins(
 
 TextStyle bodyTextStyle = GoogleFonts.poppins(
     textStyle: TextStyle(
-        fontSize: 16, fontWeight: FontWeight.w400, color: textPrimary));
+        fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary));
 
 TextStyle buttonTextStyle = GoogleFonts.poppins(
     textStyle: TextStyle(fontSize: 14, color: textPrimary, letterSpacing: 1));

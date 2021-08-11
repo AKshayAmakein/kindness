@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
@@ -35,7 +36,7 @@ class _ChannelTileState extends State<ChannelTile> {
     return Container(
       margin: EdgeInsets.all(20.0),
       padding: EdgeInsets.all(20.0),
-      height: 100.0,
+      height: Get.height * 0.12,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -43,16 +44,18 @@ class _ChannelTileState extends State<ChannelTile> {
           BoxShadow(
               color: kDark,
               blurRadius: 12,
-              spreadRadius: -4,
-              offset: Offset(0.0, 12)),
+              spreadRadius: 2,
+              offset: Offset(-2, 2)),
         ],
       ),
       child: Row(
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.white,
-            radius: 35.0,
-            backgroundImage: NetworkImage(_channel!.profilePictureUrl),
+            radius: 30.0,
+            backgroundImage: CachedNetworkImageProvider(
+              _channel!.profilePictureUrl,
+            ),
           ),
           SizedBox(width: 12.0),
           Expanded(
@@ -62,16 +65,16 @@ class _ChannelTileState extends State<ChannelTile> {
               children: <Widget>[
                 Text(
                   _channel!.title,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: headlineTextStyle.copyWith(
+                      color: Colors.black, fontSize: 18),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '${_channel!.subscriberCount} subscribers',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: headlineTextStyle.copyWith(
+                      color: Colors.grey.shade600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -85,9 +88,11 @@ class _ChannelTileState extends State<ChannelTile> {
   _buildVideo(Video video) {
     return GestureDetector(
       onTap: () => Get.to(VideoChannelScreen(id: video.id)),
-      child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          padding: EdgeInsets.all(6.0),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          height: Get.height * 0.13,
+          padding: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
@@ -95,28 +100,53 @@ class _ChannelTileState extends State<ChannelTile> {
               BoxShadow(
                   color: kDark,
                   blurRadius: 12,
-                  spreadRadius: -4,
-                  offset: Offset(0.0, 12)),
+                  spreadRadius: 2,
+                  offset: Offset(-2, 2)),
             ],
           ),
-          child: ListTile(
-            horizontalTitleGap: 1,
-            leading: CachedNetworkImage(
-              imageUrl: video.thumbnailUrl,
-            ),
-            title: Text(
-              video.title,
-              style: bodyTextStyle.copyWith(fontSize: 14),
-            ),
-            trailing: IconButton(
-                onPressed: () {
-                  _share(video.thumbnailUrl, video.title);
-                },
-                icon: Icon(
-                  Icons.share,
-                  color: Colors.grey[600],
-                )),
-          )),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: Get.height * 0.083,
+                    width: Get.width * 0.34,
+                    child: CachedNetworkImage(
+                      imageUrl: video.thumbnailUrl,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      video.title,
+                      style: GoogleFonts.workSans(
+                          fontSize: 11, fontWeight: FontWeight.w500),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          // child: ListTile(
+          //   horizontalTitleGap: 1,
+          //   leading: CachedNetworkImage(
+          //     imageUrl: video.thumbnailUrl,
+          //   ),
+          //   title: Text(
+          //     video.title,
+          //     style: bodyTextStyle.copyWith(fontSize: 14),
+          //   ),
+          //   trailing: IconButton(
+          //       onPressed: () {
+          //         _share(video.thumbnailUrl, video.title);
+          //       },
+          //       icon: Icon(
+          //         Icons.share,
+          //         color: Colors.grey[600],
+          //       )),
+          // )
+        ),
+      ),
     );
   }
 
@@ -151,6 +181,7 @@ class _ChannelTileState extends State<ChannelTile> {
             return false;
           },
           child: ListView.builder(
+              padding: EdgeInsets.all(8),
               itemCount: 1 + _channel!.videos.length,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {

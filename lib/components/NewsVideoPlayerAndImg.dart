@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:video_player/video_player.dart';
@@ -44,7 +45,14 @@ class _NewsVideoPlayerAndImgState extends State<NewsVideoPlayerAndImg> {
               aspectRatio: _controller.value.aspectRatio,
               child: Stack(
                 children: [
-                  VideoPlayer(_controller),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8)),
+                        child: VideoPlayer(_controller)),
+                  ),
                   Center(
                     child: IconButton(
                         onPressed: () {
