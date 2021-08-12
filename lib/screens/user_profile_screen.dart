@@ -19,7 +19,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   late SharedPreferences prefs;
   String profileUrl = "";
-  String name = "";
+  String name = "name";
   int? coins;
   String state = "";
   String uid = "";
@@ -302,7 +302,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       fontSize: 11),
                 ),
                 Text(
-                  '${completedGoals==null?"...":completedGoals}',
+                  '${completedGoals == null ? "..." : completedGoals}',
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
