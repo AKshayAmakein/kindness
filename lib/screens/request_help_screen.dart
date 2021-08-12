@@ -10,13 +10,18 @@ import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
 
 class RequestHelpScreen extends StatefulWidget {
   final String uid;
   final String name;
   final String profileUrl;
+  final int coins;
   RequestHelpScreen(
-      {required this.uid, required this.profileUrl, required this.name});
+      {required this.uid,
+      required this.profileUrl,
+      required this.name,
+      required this.coins});
   @override
   _RequestHelpScreenState createState() => _RequestHelpScreenState();
 }
@@ -45,8 +50,16 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Request Help"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: CustomAppBar(
+          leadingIcon: true,
+          onTapLeading: () {
+            Get.back();
+          },
+          title: 'Help & Support',
+          coins: widget.coins,
+        ),
       ),
       body: (loading)
           ? Spinner()
@@ -55,9 +68,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: Get.height * 0.02,
-                    ),
+                    Text('Request Help'),
                     Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
