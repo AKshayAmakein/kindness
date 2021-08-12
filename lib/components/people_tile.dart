@@ -200,17 +200,22 @@ class _PeopleTitleState extends State<PeopleTitle> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      UserProfileImage(
-                                          ds['photourl'], ds['name']),
-                                      Flexible(
+                                      Expanded(
+                                        child: UserProfileImage(
+                                            ds['photourl'], ds['name']),
+                                      ),
+                                      Expanded(
                                         child: Text(
                                           ds["name"],
                                           style: bodyTextStyle,
                                         ),
                                       ),
-                                      Container(
-                                        child: handleAddFriendAndRemoveButton(
-                                            ds['uid'], ds['name']),
+                                      Expanded(
+                                        child: Container(
+                                          width: double.infinity,
+                                          child: handleAddFriendAndRemoveButton(
+                                              ds['uid'], ds['name']),
+                                        ),
                                       )
                                     ],
                                   )),

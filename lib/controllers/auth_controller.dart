@@ -78,6 +78,14 @@ class AuthController extends GetxController {
     });
   }
 
+  Future searchFriends(String queryString) async {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where("name", isGreaterThanOrEqualTo: queryString)
+        .where('name', isLessThan: queryString + 'z')
+        .get();
+  }
+
   // Firebase user one-time fetch
   Future<User> get getUser async => _auth.currentUser!;
 
