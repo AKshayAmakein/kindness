@@ -1,134 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
-import 'package:kindness/screens/help_someone_screen.dart';
-import 'package:kindness/screens/request_help_screen.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HelpAndSupportScreen extends StatelessWidget {
+class HelpAndSupportScreen extends StatefulWidget {
   final String uid;
   final String name;
   final String profileUrl;
   HelpAndSupportScreen(
       {required this.uid, required this.name, required this.profileUrl});
+
+  @override
+  _HelpAndSupportScreenState createState() => _HelpAndSupportScreenState();
+}
+
+class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
+  late SharedPreferences prefs;
+  int? coins;
+  getCoinsLocally() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      coins = prefs.getInt('coins');
+    });
+    coins = prefs.getInt('coins');
+  }
+
+  @override
+  void initState() {
+    getCoinsLocally();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Help and Support"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: CustomAppBar(
+          leadingIcon: true,
+          onTapLeading: () {
+            Get.back();
+          },
+          title: 'Help & Support',
+          coins: coins,
+        ),
       ),
       drawer: CustomDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container(
-              height: Get.height * 0.28,
-              width: Get.width * 0.60,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Select one',
+              style: headlineTextStyle.copyWith(
+                  color: textSecondary, fontSize: 16),
+            ),
+            SizedBox(
+              height: Get.height * 0.02,
+            ),
+            Container(
+              height: Get.height * 0.15,
               decoration: BoxDecoration(
-                  color: kSecondary,
-                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                        color: kSecondary,
-                        blurRadius: 32,
-                        spreadRadius: -4,
-                        offset: Offset(0.0, 12)),
+                        color: Color.fromRGBO(0, 0, 0, 0.25),
+                        offset: Offset(0, 1),
+                        blurRadius: 11)
                   ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    'Help \n Someone',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    child: Icon(
-                      Icons.favorite_outlined,
-                      color: Colors.red,
-                      size: Get.height * 0.08,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Help Someone',
+                          style: headlineTextStyle.copyWith(
+                              color: Color.fromRGBO(62, 73, 83, 1),
+                              fontSize: 17),
+                        ),
+                        Text('Tap to Explore',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: textSecondary1,
+                                fontWeight: FontWeight.w400)),
+                      ],
                     ),
                   ),
-                  Container(
-                    child: IconButton(
-                        onPressed: () {
-                          Get.to(HelpSomeOneScreen(
-                            uid: uid,
-                          ));
-                        },
-                        icon: Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0xffa5c0f8)),
-                          child: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: Colors.white,
-                            size: Get.height * 0.04,
-                          ),
-                        )),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: Get.height * 0.28,
-              width: Get.width * 0.60,
-              decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                        color: kSecondary,
-                        blurRadius: 32,
-                        spreadRadius: -4,
-                        offset: Offset(0.0, 12)),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Request \n Help',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Container(
+                  Expanded(
                     child: Image.asset(
-                      "assets/images/handshake.png",
-                      color: Colors.grey,
-                      height: Get.height * 0.08,
+                      "assets/images/help.png",
                     ),
-                  ),
-                  Container(
-                    child: IconButton(
-                        onPressed: () {
-                          Get.to(RequestHelpScreen(
-                            uid: uid,
-                            profileUrl: profileUrl,
-                            name: name,
-                          ));
-                        },
-                        icon: Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.orange.withOpacity(0.6)),
-                          child: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: Colors.white,
-                            size: Get.height * 0.04,
-                          ),
-                        )),
                   )
                 ],
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: Get.height * 0.02,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: Text(
+                    'or',
+                    style: headlineTextStyle.copyWith(
+                        color: textSecondary1, fontSize: 14),
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Get.height * 0.02,
+            ),
+            Container(
+              height: Get.height * 0.15,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.25),
+                        offset: Offset(0, 1),
+                        blurRadius: 11)
+                  ]),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Request Help',
+                          style: headlineTextStyle.copyWith(
+                              color: Color.fromRGBO(62, 73, 83, 1),
+                              fontSize: 17),
+                        ),
+                        Text('Tap to Explore',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: textSecondary1,
+                                fontWeight: FontWeight.w400)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Image.asset(
+                      "assets/images/request.png",
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
