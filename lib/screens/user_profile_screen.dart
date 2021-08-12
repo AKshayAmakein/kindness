@@ -25,6 +25,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String uid = "";
   List friends = [];
   int? totalActs;
+  int? totalGoals;
+  int? activeGoals;
+  int? completedGoals;
 
   getCoins() async {
     prefs = await SharedPreferences.getInstance();
@@ -37,6 +40,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       totalActs = prefs.getInt("totalActs")!;
       print("user:$uid");
       getFriendsCounts();
+      getGoalsCount();
+      getActiveGoals();
+      getCompletedGoals();
     });
   }
 
@@ -49,9 +55,51 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     });
   }
 
+  getGoalsCount() {
+    FirebaseFirestore.instance
+        .collection("goals")
+        .where("uid", isEqualTo: uid)
+        .get()
+        .then((value) {
+      setState(() {
+        totalGoals = value.docs.length;
+        print("totalGoals: $totalGoals");
+      });
+    });
+  }
+
+  getActiveGoals() {
+    FirebaseFirestore.instance
+        .collection("goals")
+        .where("uid", isEqualTo: uid)
+        .where("goalStatus", isEqualTo: true)
+        .get()
+        .then((value) {
+      setState(() {
+        activeGoals = value.docs.length;
+        print("activeGoals: $activeGoals");
+      });
+    });
+  }
+
+  getCompletedGoals() {
+    FirebaseFirestore.instance
+        .collection("goals")
+        .where("uid", isEqualTo: uid)
+        .where("goalStatus", isEqualTo: false)
+        .get()
+        .then((value) {
+      setState(() {
+        completedGoals = value.docs.length;
+        print("completedGoals: $completedGoals");
+      });
+    });
+  }
+
   @override
   void initState() {
     getCoins();
+
     super.initState();
   }
 
@@ -170,7 +218,98 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       fontSize: 15),
                 ),
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Points earned this week',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11),
+                ),
+                Text(
+                  '$coins',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Get.height * 0.015,
+            ),
+            Divider(
+              color: Colors.black,
+            ),
+            SizedBox(
+              height: Get.height * 0.015,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Personal Goals',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11),
+                ),
+                Text(
+                  '${totalGoals == null ? "..." : totalGoals}',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Get.height * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Active Goals',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11),
+                ),
+                Text(
+                  '${activeGoals == null ? "..." : activeGoals}',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: Get.height * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Completed Goals',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11),
+                ),
+                Text(
+                  '${completedGoals==null?"...":completedGoals}',
+                  style: GoogleFonts.poppins(
+                      color: textSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
           ],
         ),
       ),

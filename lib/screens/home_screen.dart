@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
@@ -47,13 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
-
+    _prefs = await SharedPreferences.getInstance();
     FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .get()
         .then((value) async {
-      _prefs = await SharedPreferences.getInstance();
       setState(() {
         name = value.get("name");
         state = value.get("state");
@@ -180,7 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0),
                                             child: Text(ds['description'],
-                                                style: descTextStyle),
+                                                style: GoogleFonts.poppins(
+                                                    color: textSecondary1,
+                                                    fontSize: 13,
+                                                    letterSpacing: 1)),
                                           ),
                                           Text(
                                             "Location : ${ds['location']}",
@@ -333,16 +336,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style:
                                                     headlineTextStyle.copyWith(
                                                         color: textSecondary,
-                                                        fontSize: 12),
+                                                        fontSize: 13),
                                               ),
                                               SizedBox(
                                                 height: Get.height * 0.01,
                                               ),
                                               Text(
                                                 ds["desc"],
-                                                style: descTextStyle.copyWith(
-                                                  fontSize: 10,
-                                                ),
+                                                style: GoogleFonts.poppins(
+                                                    color: textSecondary1,
+                                                    fontSize: 12,
+                                                    letterSpacing: 1),
                                               ),
                                             ],
                                           ),
