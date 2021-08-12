@@ -13,12 +13,14 @@ final myTheme = ThemeData(
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
+
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
           kPrimary,
         ), //button color
         foregroundColor: MaterialStateProperty.all<Color>(
-          kLight,
+          kWhite,
         ), //text (and icon)
+
       ),
     ));

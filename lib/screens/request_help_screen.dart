@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -63,67 +65,81 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
       ),
       body: (loading)
           ? Spinner()
-          : Container(
-              padding: EdgeInsets.all(20),
-              child: SingleChildScrollView(
+          : SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Request Help'),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: kDark),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: TextField(
-                        controller: _requirementController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          labelText: "Your Money Requirement",
-                          labelStyle: Theme.of(context).textTheme.headline3,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
+                    Text(
+                      'Request Help',
+                      style: headlineTextStyle.copyWith(
+                          color: textSecondary, fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.028,
+                    ),
+                    TextField(
+                      controller: _requirementController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: textSecondary),
                         ),
+                        focusedBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        labelText: "Your Money Requirement",
+                        hintText: "How much money do you need?",
+                        labelStyle: GoogleFonts.roboto(
+                            color: textSecondary, fontWeight: FontWeight.w500),
+                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
                       ),
                     ),
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: kDark),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: TextField(
-                        controller: _locationController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          labelText: "Location",
-                          labelStyle: Theme.of(context).textTheme.headline3,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
+                    TextField(
+                      controller: _locationController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: textSecondary),
                         ),
+                        focusedBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        labelText: "Location",
+                        hintText: 'Select location',
+                        labelStyle: GoogleFonts.roboto(
+                            color: textSecondary, fontWeight: FontWeight.w500),
+                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
                       ),
                     ),
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: kDark),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: TextField(
-                        controller: _addressController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          labelText: "Address",
-                          labelStyle: Theme.of(context).textTheme.headline3,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
+                    TextField(
+                      controller: _addressController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: textSecondary),
                         ),
+                        focusedBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        labelText: "Address",
+                        hintText: 'Enter your Address',
+                        labelStyle: GoogleFonts.roboto(
+                            color: textSecondary, fontWeight: FontWeight.w500),
+                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
                       ),
                     ),
                     SizedBox(
@@ -138,31 +154,67 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                         controller: _mobileNumberController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          border: InputBorder.none,
+                          enabledBorder: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: textSecondary),
+                          ),
+                          focusedBorder: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(20.0),
+                            borderSide: BorderSide(color: textSecondary),
+                          ),
                           labelText: "Mobile Number",
                           prefixText: "+91",
-                          labelStyle: Theme.of(context).textTheme.headline3,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
+                          hintText: 'Enter Mobile Number',
+                          labelStyle: GoogleFonts.roboto(
+                              color: textSecondary,
+                              fontWeight: FontWeight.w500),
+                          hintStyle:
+                              GoogleFonts.roboto(color: Color(0xffa3a3a3)),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    Text(
-                      'Upload Related Images (optional)',
-                      style: Theme.of(context).textTheme.headline3,
+                    TextField(
+                      controller: _discController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      maxLength: 300,
+                      decoration: InputDecoration(
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        focusedBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        labelText: "More about requirement",
+                        hintText: "Enter details here (Max 300 characters)",
+                        labelStyle: GoogleFonts.roboto(
+                            color: textSecondary, fontWeight: FontWeight.w500),
+                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
+                      ),
                     ),
-                    Divider(),
+                    SizedBox(
+                      height: Get.height * 0.02,
+                    ),
                     Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: kPrimary),
+                        border: Border.all(color: textSecondary),
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            'Upload an Image (optional)',
+                            style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w500,
+                                color: textSecondary),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -304,56 +356,60 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Time when needed',
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                          SizedBox(
-                            width: Get.width * 0.03,
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                _pickDate(context);
-                              },
-                              child: Text('Select'))
-                        ],
-                      ),
+                    Text(
+                      'Select Date by which you need funds ',
+                      style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w500, color: textSecondary),
                     ),
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    reqTime == null
-                        ? Container()
-                        : Text(
-                            '${reqTime!.year}-${reqTime!.month}-${reqTime!.day}',
+                    Stack(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _pickDate(context);
+                          },
+                          child: Container(
+                            height: Get.height * 0.05,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: textSecondary),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'set Date',
+                                      style: GoogleFonts.roboto(
+                                          color: Color(0xffa3a3a3),
+                                          fontSize: 14),
+                                    ),
+                                    Icon(
+                                      Icons.date_range_outlined,
+                                      color: Color(0xffa3a3a3),
+                                      size: 18,
+                                    ),
+                                  ],
+                                ),
+                                reqTime == null
+                                    ? Container()
+                                    : Container(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          '${reqTime!.year}-${reqTime!.month}-${reqTime!.day}',
+                                        ),
+                                      ),
+                              ],
+                            ),
                           ),
-                    SizedBox(
-                      height: Get.height * 0.02,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: kDark),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: TextField(
-                        controller: _discController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          labelText: "More about requirement",
-                          labelStyle: Theme.of(context).textTheme.headline3,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
                         ),
-                      ),
+                      ],
                     ),
                     SizedBox(
-                      height: Get.height * 0.02,
+                      height: Get.height * 0.028,
                     ),
                     ElevatedButton(
                         onPressed: () {
@@ -361,7 +417,10 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: Size(Get.width, Get.height * 0.05)),
-                        child: Text('Submit'))
+                        child: Text(
+                          'Submit',
+                          style: GoogleFonts.poppins(),
+                        ))
                   ],
                 ),
               ),
@@ -406,6 +465,9 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
   }
 
   void _submitRequest() {
+    setState(() {
+      loading = true;
+    });
     if (_requirementController.text == "" ||
         _locationController.text == "" ||
         _addressController.text == "" ||
@@ -415,7 +477,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
           snackPosition: SnackPosition.BOTTOM);
     }
     setState(() {
-      loading = true;
+      loading = false;
     });
     var requirements = int.parse(_requirementController.text);
     FirebaseFirestore.instance
