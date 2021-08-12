@@ -23,11 +23,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String name = "";
   String state = "";
   String profileUrl = "";
-
   double screenWidth = Get.width;
-
   late SharedPreferences preferences;
-
   getUserDataLocally() async {
     preferences = await SharedPreferences.getInstance();
     setState(() {

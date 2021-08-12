@@ -1,9 +1,10 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
@@ -127,6 +128,7 @@ class _PeopleTitleState extends State<PeopleTitle> {
             },
             coins: coins,
           )),
+      drawer: CustomDrawer(),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")

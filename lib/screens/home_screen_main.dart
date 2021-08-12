@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kindness/components/people_tile.dart';
 import 'package:kindness/screens/explore_kindness_screen.dart';
 import 'package:kindness/screens/home_screen.dart';
+import 'package:kindness/screens/user_profile_screen.dart';
 
 class HomeScreenMain extends StatefulWidget {
   @override
@@ -17,9 +18,7 @@ class _HomeScreenMainState extends State<HomeScreenMain> {
     HomeScreen(),
     ExploreKindness(),
     PeopleTitle(),
-    Text(
-      'Profile',
-    ),
+    UserProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
