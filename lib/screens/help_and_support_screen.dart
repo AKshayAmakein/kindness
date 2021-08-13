@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/screens/help_someone_screen.dart';
+import 'package:kindness/screens/request_help_screen.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,45 +65,55 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
             SizedBox(
               height: Get.height * 0.02,
             ),
-            Container(
-              height: Get.height * 0.15,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.25),
-                        offset: Offset(0, 1),
-                        blurRadius: 11)
-                  ]),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, top: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Help Someone',
-                          style: headlineTextStyle.copyWith(
-                              color: Color.fromRGBO(62, 73, 83, 1),
-                              fontSize: 17),
-                        ),
-                        Text('Tap to Explore',
-                            style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: textSecondary1,
-                                fontWeight: FontWeight.w400)),
-                      ],
+            InkWell(
+              onTap: () {
+                Get.to(
+                    HelpSomeOneScreen(
+                      uid: widget.uid,
+                      coins: coins!,
                     ),
-                  ),
-                  Expanded(
-                    child: Image.asset(
-                      "assets/images/help.png",
+                    transition: Transition.rightToLeftWithFade);
+              },
+              child: Container(
+                height: Get.height * 0.15,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.25),
+                          offset: Offset(0, 1),
+                          blurRadius: 11)
+                    ]),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, top: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Help Someone',
+                            style: headlineTextStyle.copyWith(
+                                color: Color.fromRGBO(62, 73, 83, 1),
+                                fontSize: 17),
+                          ),
+                          Text('Tap to Explore',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: textSecondary1,
+                                  fontWeight: FontWeight.w400)),
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/help.png",
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -132,45 +144,57 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
             SizedBox(
               height: Get.height * 0.02,
             ),
-            Container(
-              height: Get.height * 0.15,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.25),
-                        offset: Offset(0, 1),
-                        blurRadius: 11)
-                  ]),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, top: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Request Help',
-                          style: headlineTextStyle.copyWith(
-                              color: Color.fromRGBO(62, 73, 83, 1),
-                              fontSize: 17),
-                        ),
-                        Text('Tap to Explore',
-                            style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: textSecondary1,
-                                fontWeight: FontWeight.w400)),
-                      ],
+            InkWell(
+              onTap: () {
+                Get.to(
+                    RequestHelpScreen(
+                      uid: widget.uid,
+                      profileUrl: widget.profileUrl,
+                      name: widget.name,
+                      coins: coins!,
                     ),
-                  ),
-                  Expanded(
-                    child: Image.asset(
-                      "assets/images/request.png",
+                    transition: Transition.rightToLeftWithFade);
+              },
+              child: Container(
+                height: Get.height * 0.15,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.25),
+                          offset: Offset(0, 1),
+                          blurRadius: 11)
+                    ]),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12, top: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Request Help',
+                            style: headlineTextStyle.copyWith(
+                                color: Color.fromRGBO(62, 73, 83, 1),
+                                fontSize: 17),
+                          ),
+                          Text('Tap to Explore',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: textSecondary1,
+                                  fontWeight: FontWeight.w400)),
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                    Expanded(
+                      child: Image.asset(
+                        "assets/images/request.png",
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
