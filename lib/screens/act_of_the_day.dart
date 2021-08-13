@@ -181,17 +181,20 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                       children: [
                                         Stack(
                                           children: [
-                                            Container(
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12)),
-                                              child: CachedNetworkImage(
-                                                imageUrl: ds["img"],
-                                                fit: BoxFit.cover,
-                                                height: Get.height * 0.40,
-                                                width: Get.width,
+                                            Hero(
+                                              tag: 'actDay',
+                                              child: Container(
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12)),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: ds["img"],
+                                                  fit: BoxFit.cover,
+                                                  height: Get.height * 0.40,
+                                                  width: Get.width,
+                                                ),
                                               ),
                                             ),
                                             Positioned(

@@ -13,6 +13,7 @@ import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
+import 'package:kindness/screens/help_someone_single_info_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -200,7 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Container(
                                             alignment: Alignment.bottomRight,
                                             child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Get.to(HelpSomeOneSingleInfo(
+                                                    name: ds['username'],
+                                                    img: ds['profileUrl'],
+                                                    profileUrls:
+                                                        ds['photoUrls'],
+                                                    desc: ds['description'],
+                                                    coins: coins!));
+                                              },
                                               child: Text('Details',
                                                   style: descTextStyle.copyWith(
                                                       fontSize: 10)),
@@ -308,17 +317,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Column(
                                           children: [
-                                            Container(
-                                              height: Get.height * 0.1,
-                                              width: Get.width * 0.25,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: CachedNetworkImage(
-                                                imageUrl: ds["img"],
-                                                fit: BoxFit.cover,
+                                            Hero(
+                                              tag: 'actDay',
+                                              child: Container(
+                                                height: Get.height * 0.1,
+                                                width: Get.width * 0.25,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: ds["img"],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ],
