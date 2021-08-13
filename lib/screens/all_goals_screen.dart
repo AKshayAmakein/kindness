@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/NewsVideoPlayerAndImg.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
@@ -34,8 +36,7 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kLight,
-      drawer: CustomDrawer(),
+      backgroundColor: Colors.white,
       body: Container(
           child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('goals').snapshots(),
@@ -52,13 +53,26 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                 return Padding(
                   padding: const EdgeInsets.all(20),
                   child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              offset: Offset(0, 2),
+                              blurRadius: 12,
+                              color: Color(0xff000000).withOpacity(0.25))
+                        ]),
                     child: Column(
                       children: [
-                        Header(ds['userName'], ds['title'], ds['goalCategory'],
-                            context),
-                        MediaFile(ds['imgUrl'], ds['videoUrl']),
-                        Footer(ds['userName'], ds['desc'], ds['goalStatus'],
-                            ds['uid'], ds['postId'], timestamp)
+                        Header(ds['uid'], timestamp, context),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: MediaFile(ds['imgUrl'], ds['videoUrl'])),
+                        ),
+                        Footer(ds['title'], ds['goalCategory'], ds['desc'],
+                            ds['goalStatus'], ds['uid'], ds['postId'])
                       ],
                     ),
                   ),
@@ -75,7 +89,7 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
 
   Widget myVideoPlayer(String videoUrl, String imgUrl) {
     return Container(
-        height: Get.height * 0.4,
+        height: Get.height * 0.3,
         width: double.infinity,
         child: NewsVideoPlayerAndImg(
           videoUrl: videoUrl,
@@ -83,111 +97,109 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
         ));
   }
 
-  Widget Header(
-      String name, String title, String category, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: Get.height * 0.1,
-      decoration: BoxDecoration(
-          color: kSecondary,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
+  Widget Header(String uid, timestamp, BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+        stream:
+            FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Spinner();
+          }
+          DocumentSnapshot ds = snapshot.data!;
+          return Container(
+            width: double.infinity,
+            height: Get.height * 0.1,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20))),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: UserImage(name, Get.height * 0.03),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        child: UserProfileImage(ds['photourl'], ds['name']),
+                      ),
+                      Text(ds['name'],
+                          style: headlineSecondaryTextStyle.copyWith(
+                              color: textSecondary,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: TextStyle(
-                            fontFamily: 'NotoSerifJP',
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: kLight)),
-                    Text(category),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    timeago.format(
+                        DateTime.parse(timestamp.toDate().toString()),
+                        allowFromNow: true),
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
-  Widget Footer(String name, String description, bool isComplete, String Uid,
-      String postId, timestamp) {
-    final now = new DateTime.now();
+  Widget Footer(String title, String category, String description,
+      bool isComplete, String Uid, String postId) {
     return Container(
         width: double.infinity,
-        //height: Get.height * 0.1,
+        //height: Get.height * 0.3,
         decoration: BoxDecoration(
-            color: kSecondary,
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20))),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name,
-                      style: TextStyle(
-                          fontFamily: 'NotoSerifJP',
-                          fontSize: Get.height * 0.025,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                  SizedBox(width: Get.width * 0.02),
-                  Expanded(
-                    child: ReadMoreText(description,
-                        trimLines: 2,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: '...Read more',
-                        trimExpandedText: ' Less',
-                        style: TextStyle(
-                          fontFamily: 'NotoSerifJP',
-                          fontSize: Get.height * 0.025,
-                        )),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    child: Text(
-                      timeago.format(
-                          DateTime.parse(timestamp.toDate().toString()),
-                          allowFromNow: true),
-                    ),
-                  )
-                ],
-              ),
-              (UserUid == Uid)
-                  ? FlutterSwitch(
-                      activeText: "Completed",
-                      inactiveText: "In progress",
-                      valueFontSize: 10.0,
-                      width: 110,
-                      value: !isComplete,
-                      borderRadius: 30.0,
-                      showOnOff: true,
-                      onToggle: (val) {
-                        print(!val);
-                        FirebaseFirestore.instance
-                            .collection('goals')
-                            .doc(postId)
-                            .update({'goalStatus': !val});
-                      })
-                  : Progress_notUser(isComplete)
-            ],
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: bodyTextStyle.copyWith(color: textSecondary)),
+                Text(category,
+                    style: bodyTextStyle.copyWith(fontWeight: FontWeight.bold)),
+                ReadMoreText(description,
+                    trimLines: 2,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: '...Read more',
+                    trimExpandedText: ' Less',
+                    style: subtitleTextStyle.copyWith(color: Colors.black)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Status :',
+                        style: subtitleTextStyle.copyWith(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                    (UserUid == Uid)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FlutterSwitch(
+                                activeText: "Completed",
+                                inactiveText: "In progress",
+                                valueFontSize: 10.0,
+                                width: 110,
+                                value: !isComplete,
+                                borderRadius: 30.0,
+                                showOnOff: true,
+                                onToggle: (val) {
+                                  print(!val);
+                                  FirebaseFirestore.instance
+                                      .collection('goals')
+                                      .doc(postId)
+                                      .update({'goalStatus': !val});
+                                }),
+                          )
+                        : Progress_notUser(isComplete)
+                  ],
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -198,11 +210,13 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'In-Progress',
+              style: subtitleTextStyle.copyWith(color: Colors.black),
             ),
           )
         : Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('Completed'),
+            child: Text('Completed',
+                style: subtitleTextStyle.copyWith(color: Colors.black)),
           );
   }
 }
