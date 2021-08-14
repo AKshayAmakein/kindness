@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
@@ -11,9 +12,8 @@ import 'package:kindness/screens/single_act_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wc_flutter_share/wc_flutter_share.dart';
-import 'package:http/http.dart' as http;
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class MyActsScreen extends StatefulWidget {
   @override
@@ -60,20 +60,26 @@ class _MyActsScreenState extends State<MyActsScreen> {
         body: Container(
           child: Column(
             children: [
-              MyScore(
-                coins: coins!,
-                height: Get.height / 10,
-                uid: uid!,
+              Expanded(
+                child: MyScore(
+                  coins: coins!,
+                  height: Get.height / 10,
+                  uid: uid!,
+                ),
               ),
               Expanded(
+                flex: 3,
                 child: Actoftheday(
                   uid: uid!,
                   height: Get.height / 3,
                 ),
               ),
-              Completed(
-                height: Get.height / 3,
-                uid: uid!,
+              Expanded(
+                flex: 2,
+                child: Completed(
+                  height: Get.height / 3,
+                  uid: uid!,
+                ),
               )
             ],
           ),
@@ -144,6 +150,7 @@ class MyScore extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'Acts Completed by you',
@@ -230,55 +237,58 @@ class Completed extends StatelessWidget {
                               title: ds['actTitle'],
                               comment: ds['cmt']));
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    offset: Offset(0, 2),
-                                    blurRadius: 12,
-                                    color: Color(0xff000000).withOpacity(0.25))
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: CachedNetworkImage(
-                                        imageUrl: ds['cmtImg'],
-                                        height: height * 0.08,
-                                      )),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        ds['actTitle'],
-                                        style: bodyTextStyle,
-                                      ),
-                                      Text(
-                                        ds['cmt'],
-                                        style: subtitleTextStyle,
-                                      ),
-                                    ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(0, 2),
+                                      blurRadius: 12,
+                                      color: Color(0xff000000).withOpacity(0.25))
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: CachedNetworkImage(
+                                          imageUrl: ds['cmtImg'],
+                                          height: height * 0.08,
+                                        )),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(timeago.format(
-                                    DateTime.parse(
-                                        ds['time'].toDate().toString()),
-                                  )),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ds['actTitle'],
+                                          style: bodyTextStyle,
+                                        ),
+                                        Text(
+                                          ds['cmt'],
+                                          style: subtitleTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(timeago.format(
+                                      DateTime.parse(
+                                          ds['time'].toDate().toString()),
+                                    )),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

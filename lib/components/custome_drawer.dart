@@ -6,9 +6,9 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
-import 'package:kindness/screens/myConnection_screen.dart';
+import 'package:kindness/screens/kindness_updates_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
-import 'package:kindness/screens/news_screen.dart';
+import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +20,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthController authController = AuthController.to;
   String uid = "";
-  String name = "";
+  String name = "name";
   String state = "";
   String profileUrl = "";
   double screenWidth = Get.width;
@@ -92,7 +92,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           GestureDetector(
                             onTap: () {
                               Get.to(ProfileUpdateScreen(
@@ -111,7 +110,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                         color: Colors.white,
                                         shape: BoxShape.circle),
                                     child:
-                                    Image.asset('assets/images/pencil.png'),
+                                        Image.asset('assets/images/pencil.png'),
                                   ),
                                 )
                               ],

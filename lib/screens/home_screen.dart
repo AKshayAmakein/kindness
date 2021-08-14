@@ -13,7 +13,9 @@ import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
+import 'package:kindness/screens/help_someone_screen.dart';
 import 'package:kindness/screens/help_someone_single_info_screen.dart';
+import 'package:kindness/screens/myall_acts_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: textSecondary, fontSize: 15),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(HelpSomeOneScreen(
+                              uid: uid,
+                              name: name,
+                              coins: coins!,
+                            ));
+                          },
                           child: Text(
                             'See all >',
                             style: subtitleTextStyle.copyWith(fontSize: 10),
@@ -439,7 +447,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 15, color: textSecondary),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(MyAllActsScreen(uid: uid));
+                          },
                           child: Text(
                             'See all >',
                             style: subtitleTextStyle.copyWith(fontSize: 10),
