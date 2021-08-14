@@ -484,31 +484,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   offset: Offset(0, 1),
                                                   blurRadius: 9)
                                             ]),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              ds['actTitle'],
-                                              style: headlineTextStyle.copyWith(
-                                                  color: textSecondary1,
-                                                  fontSize: 12),
-                                            ),
-                                            SizedBox(
-                                              height: 4,
-                                            ),
-                                            Container(
-                                              height: Get.height * 0.1,
-                                              width: Get.width * 0.25,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: CachedNetworkImage(
-                                                imageUrl: ds['cmtImg'],
-                                                fit: BoxFit.cover,
+                                        child: Expanded(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                ds['actTitle'],
+                                                style:
+                                                    headlineTextStyle.copyWith(
+                                                        color: textSecondary1,
+                                                        fontSize: 12),
                                               ),
-                                            )
-                                          ],
+                                              SizedBox(
+                                                height: 4,
+                                              ),
+                                              Container(
+                                                height: Get.height * 0.1,
+                                                width: Get.width * 0.25,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: ds['cmtImg'],
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );

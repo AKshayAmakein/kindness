@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/helpers/validator.dart';
+import 'package:kindness/widgets/custome_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -12,11 +15,41 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool _obscureText = true;
   AuthController _controller = AuthController.to;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  late SharedPreferences prefs;
+
+  int? coins;
+  String? uid;
+
+  getCoins() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      coins = prefs.getInt("coins")!;
+      uid = prefs.getString("uid")!;
+    });
+  }
+
+  @override
+  void initState() {
+    getCoins();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Change password'),
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: CustomAppBar(
+          title: 'Change Password',
+          leadingIcon: true,
+          onTapLeading: () {
+            Get.back();
+          },
+          coins: coins,
+        ),
       ),
       body: Container(
         padding: EdgeInsets.all(16),
@@ -29,6 +62,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               validator: Validator().password,
               decoration: InputDecoration(
                   labelText: "New Password",
+                  labelStyle: bodyTextStyle,
                   prefixIcon: Icon(
                     Icons.lock,
                   ),
@@ -53,6 +87,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               validator: Validator().password,
               decoration: InputDecoration(
                 labelText: "Confirm New Password",
+                labelStyle: bodyTextStyle,
                 prefixIcon: Icon(
                   Icons.lock,
                 ),
@@ -73,7 +108,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   _controller.updatePassword(
                       _controller.passwordController.text.trim());
                 },
-                child: Text("update"))
+                child: Text("Update"))
           ],
         ),
       ),

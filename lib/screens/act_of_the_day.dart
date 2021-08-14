@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
+import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -134,7 +135,7 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                                 (element) => element == uid))
                                             ? Padding(
                                                 padding:
-                                                    const EdgeInsets.all(24.0),
+                                                    const EdgeInsets.all(12.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.green,
@@ -143,17 +144,23 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                                               Radius.circular(
                                                                   12))),
                                                   child: Center(
-                                                    child: Text(
-                                                      'Completed',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        'Completed',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               )
                                             : Padding(
                                                 padding:
-                                                    const EdgeInsets.all(24.0),
+                                                    const EdgeInsets.all(12.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.orange,
@@ -162,10 +169,15 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                                               Radius.circular(
                                                                   12))),
                                                   child: Center(
-                                                    child: Text('Pending',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text('Pending',
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white)),
+                                                    ),
                                                   ),
                                                 ),
                                               ))
@@ -221,9 +233,8 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                         ),
                                         Text(
                                           ds["title"],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3,
+                                          style: bodyTextStyle.copyWith(
+                                              color: textSecondary),
                                         ),
                                         SizedBox(
                                           height: Get.height * 0.02,
@@ -497,9 +508,7 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
       loading = false;
     });
 
-    Get.to(MyActsScreen(
-      uid: uid,
-    ));
+    Get.to(MyActsScreen());
   }
 
   uploadPhoto() {
