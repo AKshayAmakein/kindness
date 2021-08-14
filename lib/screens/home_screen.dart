@@ -98,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
           stream: FirebaseFirestore.instance
               .collection("help_and_support")
               .where("uid", isNotEqualTo: uid)
+              .where('status', isEqualTo: false)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -203,12 +204,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 Get.to(HelpSomeOneSingleInfo(
-                                                    name: ds['username'],
-                                                    img: ds['profileUrl'],
-                                                    profileUrls:
-                                                        ds['photoUrls'],
-                                                    desc: ds['description'],
-                                                    coins: coins!));
+                                                  name: ds['username'],
+                                                  img: ds['profileUrl'],
+                                                  profileUrls: ds['photoUrls'],
+                                                  desc: ds['description'],
+                                                  coins: coins!,
+                                                  req: ds['requirements'],
+                                                  date:
+                                                      "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
+                                                  location: ds['location'],
+                                                  phone: ds['phoneNumber'],
+                                                  address: ds['address'],
+                                                  uid: ds['uid'],
+                                                  cUid: uid,
+                                                  cUname: name,
+                                                ));
                                               },
                                               child: Text('Details',
                                                   style: descTextStyle.copyWith(

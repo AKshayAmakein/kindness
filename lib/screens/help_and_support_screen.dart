@@ -70,7 +70,7 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
                 Get.to(
                     HelpSomeOneScreen(
                       uid: widget.uid,
-                      coins: coins!,
+                      coins: coins!, name: widget.name,
                     ),
                     transition: Transition.rightToLeftWithFade);
               },

@@ -494,7 +494,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
       "phoneNumber": "+91" + _mobileNumberController.text,
       "time_when_needed": reqTime,
       "description": _discController.text,
-      "requirement_fulfilled": 0
+      "requirement_fulfilled": 0, "status": false,
       // "optional_images":
     }).then((value) {
       Get.snackbar("Submitted", "", snackPosition: SnackPosition.BOTTOM);

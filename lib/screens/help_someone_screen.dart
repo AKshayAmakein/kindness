@@ -11,7 +11,9 @@ import 'package:kindness/widgets/custome_app_bar.dart';
 class HelpSomeOneScreen extends StatelessWidget {
   final String uid;
   final int coins;
-  HelpSomeOneScreen({required this.uid, required this.coins});
+  final String name;
+  HelpSomeOneScreen(
+      {required this.uid, required this.coins, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class HelpSomeOneScreen extends StatelessWidget {
           stream: FirebaseFirestore.instance
               .collection("help_and_support")
               .where("uid", isNotEqualTo: uid)
+              .where('status', isEqualTo: false)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -56,6 +59,15 @@ class HelpSomeOneScreen extends StatelessWidget {
                               profileUrls: ds['photoUrls'],
                               desc: ds['description'],
                               coins: coins,
+                              req: ds['requirements'],
+                              date:
+                                  "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
+                              location: ds['location'],
+                              phone: ds['phoneNumber'],
+                              address: ds['address'],
+                              uid: ds['uid'],
+                              cUid: uid,
+                              cUname: '',
                             ),
                             transition: Transition.rightToLeftWithFade);
                       },
@@ -86,12 +98,9 @@ class HelpSomeOneScreen extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                           ),
-                                          child: Hero(
-                                            tag: "helpSome",
-                                            child: CachedNetworkImage(
-                                              imageUrl: ds['profileUrl'],
-                                              height: Get.height * 0.06,
-                                            ),
+                                          child: CachedNetworkImage(
+                                            imageUrl: ds['profileUrl'],
+                                            height: Get.height * 0.06,
                                           )),
                                       SizedBox(width: Get.width * 0.001),
                                       Column(
@@ -115,7 +124,7 @@ class HelpSomeOneScreen extends StatelessWidget {
                                   Column(
                                     children: [
                                       Text(
-                                        'Time when needed',
+                                        'Date when needed',
                                         style: TextStyle(
                                             color: Colors.brown.shade200),
                                       ),
