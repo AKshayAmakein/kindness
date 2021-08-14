@@ -122,7 +122,7 @@ Widget UserImage(String username, double radius) {
   return CircleAvatar(
     radius: radius,
     child: Text(
-      username.toString().toUpperCase(),
+      username.toString().substring(0, 1).toUpperCase(),
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
   );

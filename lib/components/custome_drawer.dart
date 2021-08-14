@@ -90,7 +90,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          UserProfileImage(profileUrl, name),
+                          Stack(
+                            children: [
+                              UserProfileImage(profileUrl, name),
+                              Align(
+                                alignment: AlignmentDirectional.topEnd,
+                                child: Container(
+                                  height: Get.width / 20,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle),
+                                  child:
+                                      Image.asset('assets/images/pencil.png'),
+                                ),
+                              )
+                            ],
+                          ),
                           Container(
                             width: Get.width * 0.5,
                             padding: EdgeInsets.all(6),

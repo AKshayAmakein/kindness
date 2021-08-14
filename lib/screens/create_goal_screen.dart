@@ -12,8 +12,10 @@ import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/all_goals_screen.dart';
+import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CreateGoalScreen extends StatefulWidget {
   @override
@@ -107,10 +109,6 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Create a goal'),
-      ),
-      drawer: CustomDrawer(),
       body: isLoading
           ? Spinner()
           : Container(
@@ -142,26 +140,28 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                       SizedBox(
                                         height: Get.height * 0.02,
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(color: kDark),
+                                      TextFormField(
+                                        controller: _controller.titleController,
+                                        decoration: InputDecoration(
+                                          enabledBorder: new OutlineInputBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: TextFormField(
-                                          controller:
-                                              _controller.titleController,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            labelText: "Name of Your Goal",
-                                            labelStyle: Theme.of(context)
-                                                .textTheme
-                                                .headline3,
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 10.0,
-                                                    horizontal: 20.0),
+                                                new BorderRadius.circular(10.0),
+                                            borderSide: BorderSide(
+                                                color: textSecondary),
                                           ),
+                                          focusedBorder: new OutlineInputBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(20.0),
+                                            borderSide: BorderSide(
+                                                color: textSecondary),
+                                          ),
+                                          labelText: "Title",
+                                          hintText: 'Title of your Goal',
+                                          labelStyle: GoogleFonts.roboto(
+                                              color: textSecondary,
+                                              fontWeight: FontWeight.w500),
+                                          hintStyle: GoogleFonts.roboto(
+                                              color: Color(0xffa3a3a3)),
                                         ),
                                       ),
                                       SizedBox(
@@ -183,30 +183,31 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                       SizedBox(
                                         height: Get.height * 0.02,
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(color: kDark),
+                                      TextFormField(
+                                        controller: _controller.descController,
+                                        maxLength: 300,
+                                        maxLines: 100,
+                                        minLines: 5,
+                                        decoration: InputDecoration(
+                                          enabledBorder: new OutlineInputBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: TextFormField(
-                                          controller:
-                                              _controller.descController,
-                                          maxLength: 300,
-                                          maxLines: 100,
-                                          minLines: 5,
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            labelText:
-                                                "Tell More about Your Goal",
-                                            labelStyle: Theme.of(context)
-                                                .textTheme
-                                                .headline3,
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 10.0,
-                                                    horizontal: 20.0),
+                                                new BorderRadius.circular(10.0),
+                                            borderSide: BorderSide(
+                                                color: textSecondary),
                                           ),
+                                          focusedBorder: new OutlineInputBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(20.0),
+                                            borderSide: BorderSide(
+                                                color: textSecondary),
+                                          ),
+                                          labelText: "Description",
+                                          hintText: 'Describe your Goal',
+                                          labelStyle: GoogleFonts.roboto(
+                                              color: textSecondary,
+                                              fontWeight: FontWeight.w500),
+                                          hintStyle: GoogleFonts.roboto(
+                                              color: Color(0xffa3a3a3)),
                                         ),
                                       ),
                                       SizedBox(
@@ -238,7 +239,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                 },
                                                 icon: Icon(
                                                   Icons.camera_outlined,
-                                                  color: kPrimary,
+                                                  color: textSecondary,
                                                   size: Get.height * 0.04,
                                                 )),
                                           ),
@@ -263,7 +264,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                 },
                                                 icon: Icon(
                                                   Icons.videocam_outlined,
-                                                  color: kPrimary,
+                                                  color: textSecondary,
                                                   size: Get.height * 0.04,
                                                 )),
                                           ),
@@ -366,7 +367,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                                   },
                                                   icon: Icon(
                                                     Icons.date_range_outlined,
-                                                    color: kPrimary,
+                                                    color: textSecondary,
                                                   ),
                                                 ),
                                               ),
@@ -452,10 +453,10 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                               setState(() {
                                                 isLoading = false;
                                               });
-                                              Get.to(AllGoalScreen());
+                                              Get.to(GoalsScreen());
                                             });
                                           },
-                                          child: Text('Create'))
+                                          child: Text('Create Goal'))
                                     ],
                                   ))
                             ],
