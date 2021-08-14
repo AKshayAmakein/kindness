@@ -9,6 +9,7 @@ import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/screens/myConnection_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/news_screen.dart';
+import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -90,21 +91,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Stack(
-                            children: [
-                              UserProfileImage(profileUrl, name),
-                              Align(
-                                alignment: AlignmentDirectional.topEnd,
-                                child: Container(
-                                  height: Get.width / 20,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle),
-                                  child:
-                                      Image.asset('assets/images/pencil.png'),
-                                ),
-                              )
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(ProfileUpdateScreen(
+                                uid: uid,
+                              ));
+                            },
+                            child: Stack(
+                              children: [
+                                UserProfileImage(profileUrl, name),
+                                Positioned(
+                                  right: 1,
+                                  top: 1,
+                                  child: Container(
+                                    height: Get.width / 20,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle),
+                                    child:
+                                        Image.asset('assets/images/pencil.png'),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           Container(
                             width: Get.width * 0.5,
@@ -178,7 +187,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ListTile(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Get.to(MyActsScreen(uid: uid));
+                      Get.to(MyActsScreen());
                     },
                     title: Text('My Acts of Kindness',
                         style: headlineTextStyle.copyWith(
