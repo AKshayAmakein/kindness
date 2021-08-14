@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Points earned this week",
+                            "Points earned",
                             style: headlineTextStyle.copyWith(
                                 color: textSecondary1, fontSize: 12),
                           ),

@@ -6,9 +6,8 @@ import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
-import 'package:kindness/screens/myConnection_screen.dart';
+import 'package:kindness/screens/kindness_updates_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
-import 'package:kindness/screens/news_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +23,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String state = "";
   String profileUrl = "";
   double screenWidth = Get.width;
+  int? coins;
   late SharedPreferences preferences;
   getUserDataLocally() async {
     preferences = await SharedPreferences.getInstance();
@@ -35,6 +35,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       state = preferences.getString("state")!;
       print(state);
       profileUrl = preferences.getString("profileUrl")!;
+      coins = preferences.getInt("coins")!;
     });
   }
 
@@ -188,7 +189,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ListTile(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Get.to(NewsScreen());
+                      Get.to(KindnessUpdatesScreen(
+                        coins: coins!,
+                      ));
                     },
                     title: Text(
                       'Kindness Updates',

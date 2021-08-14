@@ -3,9 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:kindness/components/strings.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class NewsTiles extends StatefulWidget {
   final String category;
@@ -41,48 +46,68 @@ class _NewsTilesState extends State<NewsTiles> {
                         decoration:
                             BoxDecoration(color: Colors.white, boxShadow: [
                           BoxShadow(
-                              color: Color(0xff919eab),
-                              blurRadius: 12,
-                              spreadRadius: -4,
-                              offset: Offset(0.0, 12)),
+                              color: Color(0xff000000).withOpacity(0.25),
+                              blurRadius: 9,
+                              offset: Offset(0, 2)),
                         ]),
                         child: Column(
                           children: [
-                            Container(
-                                height: Get.height / 4,
-                                width: Get.width,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: NewsVideoPlayerAndImg(
-                                  videoUrl: ds["mediaUrl"]["videoUrl"],
-                                  img: ds['mediaUrl']["imgUrl"],
-                                )),
+                            Stack(
+                              children: [
+                                Container(
+                                    height: Get.height / 4,
+                                    width: Get.width,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: NewsVideoPlayerAndImg(
+                                      videoUrl: ds["mediaUrl"]["videoUrl"],
+                                      img: ds['mediaUrl']["imgUrl"],
+                                    )),
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                      onPressed: () {
+                                        _share(ds['mediaUrl']['imgUrl'],
+                                            ds["title"]);
+                                      },
+                                      icon: Icon(
+                                        Icons.share,
+                                        color: Colors.white,
+                                      )),
+                                )
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(
-                                  top: 4, left: 4, right: 4),
+                                  top: 10, left: 10, right: 10),
                               child: Text(
                                 ds["title"],
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18,
+                                    color: textSecondary,
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
-                                  top: 8, left: 4, right: 4),
+                                  top: 10, left: 10, right: 10),
                               child: ReadMoreText(
                                 ds["desc"],
                                 trimLines: 2,
                                 trimMode: TrimMode.Line,
                                 trimCollapsedText: '...Read more',
                                 trimExpandedText: ' Less',
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
+                                  color: textSecondary1,
+                                  fontWeight: FontWeight.w400,
                                   fontSize: 16,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -105,6 +130,23 @@ class _NewsTilesState extends State<NewsTiles> {
                   });
           }),
     );
+  }
+
+  void _share(
+    String img,
+    String title,
+  ) async {
+    http.Response response = await http.get(Uri.parse(img));
+    final bytes = response.bodyBytes;
+    await WcFlutterShare.share(
+        sharePopupTitle: 'share',
+        subject:
+            'For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness',
+        text:
+            ' Act of the day $title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
+        fileName: 'share.png',
+        mimeType: 'image/png',
+        bytesOfFile: bytes);
   }
 }
 
