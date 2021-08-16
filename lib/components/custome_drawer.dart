@@ -132,13 +132,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
-                                  '+91-9988776655',
-                                  style: headlineTextStyle.copyWith(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                  ),
-                                )
                               ],
                             ),
                           ),

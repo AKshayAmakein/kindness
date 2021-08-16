@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/help_someone_screen.dart';
 import 'package:kindness/screens/help_someone_single_info_screen.dart';
 import 'package:kindness/screens/myall_acts_screen.dart';
+import 'package:kindness/screens/single_act_screen.dart';
+import 'package:kindness/widgets/CustomCarouselSliderTiles.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,9 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Events of Kindness',
+                          'Kindness - Within',
                           style: headlineTextStyle.copyWith(
-                              color: textSecondary, fontSize: 15),
+                              color: textSecondary, fontSize: 18),
                         ),
                         TextButton(
                           onPressed: () {
@@ -131,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Text(
                             'See all >',
-                            style: subtitleTextStyle.copyWith(fontSize: 10),
+                            style: subtitleTextStyle.copyWith(fontSize: 14),
                           ),
                         ),
                       ],
@@ -139,6 +142,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("explore_kindness")
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Spinner();
+                          }
+                          return CarouselSlider.builder(
+                            itemCount: snapshot.data!.size,
+                            itemBuilder: (context, index, realIdx) {
+                              DocumentSnapshot ds = snapshot.data!.docs[index];
+
+                              return Container(
+                                child: Center(
+                                    child: CustomCarouselSliderTiles(
+                                  quotesUrl: ds['mediaUrl']['quotes'],
+                                  videoUrl: ds['mediaUrl']['videoUrl'],
+                                  imgUrl: ds['mediaUrl']['imgUrl'],
+                                  index: index,
+                                )),
+                              );
+                            },
+                            options: CarouselOptions(
+                              autoPlay: false,
+                              aspectRatio: 2.0,
+                              enlargeCenterPage: true,
+                            ),
+                          );
+                        }),
                     Container(
                       height: Get.height * 0.34,
                       child: Swiper(
@@ -184,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             "Rs:${ds['requirements']}",
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
-                                                fontSize: 13),
+                                                fontSize: 16),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -192,20 +225,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(ds['description'],
                                                 style: GoogleFonts.poppins(
                                                     color: textSecondary1,
-                                                    fontSize: 13,
+                                                    fontSize: 15,
                                                     letterSpacing: 1)),
                                           ),
                                           Text(
                                             "Location : ${ds['location']}",
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
-                                                fontSize: 12),
+                                                fontSize: 14),
                                           ),
                                           Text(
                                             _date(date),
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
-                                                fontSize: 12),
+                                                fontSize: 14),
                                           ),
                                           Container(
                                             alignment: Alignment.bottomRight,
@@ -250,51 +283,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xff000000).withOpacity(0.23),
-                              offset: Offset(0, 1),
-                              blurRadius: 9,
-                            )
-                          ]),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Points earned",
-                            style: headlineTextStyle.copyWith(
-                                color: textSecondary1, fontSize: 12),
-                          ),
-                          StreamBuilder<DocumentSnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection("users")
-                                  .doc(uid)
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Container();
-                                } else {
-                                  int coins1 = snapshot.data!.get("coins");
-                                  return Text(
-                                    "$coins1",
-                                    style: headlineTextStyle.copyWith(
-                                        color: textSecondary1, fontSize: 15),
-                                  );
-                                }
-                              })
-                        ],
-                      ),
-                    ),
                     SizedBox(height: Get.height * 0.02),
                     Text(
                       'Kindness Act of the Day',
                       style: headlineTextStyle.copyWith(
-                          fontSize: 15, color: textSecondary),
+                          fontSize: 18, color: textSecondary),
                     ),
                     SizedBox(height: Get.height * 0.015),
                     StreamBuilder<QuerySnapshot>(
@@ -354,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ],
                                         ),
                                         SizedBox(
-                                          width: Get.width * 0.01,
+                                          width: Get.width * 0.025,
                                         ),
                                         Expanded(
                                           child: Column(
@@ -366,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style:
                                                     headlineTextStyle.copyWith(
                                                         color: textSecondary,
-                                                        fontSize: 13),
+                                                        fontSize: 16),
                                               ),
                                               SizedBox(
                                                 height: Get.height * 0.01,
@@ -375,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ds["desc"],
                                                 style: GoogleFonts.poppins(
                                                     color: textSecondary1,
-                                                    fontSize: 12,
+                                                    fontSize: 14,
                                                     letterSpacing: 1),
                                               ),
                                             ],
@@ -392,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(
                                             'Status',
                                             style: subtitleTextStyle.copyWith(
-                                                fontSize: 10,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 color: textSecondary1),
                                           ),
@@ -423,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Radius.circular(
                                                                   5))),
                                                   child: Center(
-                                                    child: Text('Pending',
+                                                    child: Text('Try it',
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.white)),
@@ -444,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           'My acts / Achievements',
                           style: headlineTextStyle.copyWith(
-                              fontSize: 15, color: textSecondary),
+                              fontSize: 18, color: textSecondary),
                         ),
                         TextButton(
                           onPressed: () {
@@ -452,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Text(
                             'See all >',
-                            style: subtitleTextStyle.copyWith(fontSize: 10),
+                            style: subtitleTextStyle.copyWith(fontSize: 14),
                           ),
                         ),
                       ],
@@ -469,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Spinner();
                           } else {
                             return Container(
-                              height: Get.height * 0.15,
+                              height: Get.height * 0.22,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: snapshot.data!.size,
@@ -480,47 +473,57 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "totalActs", snapshot.data!.size);
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      child: Container(
-                                        padding: EdgeInsets.all(10.5),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Color(0xff000000)
-                                                      .withOpacity(0.24),
-                                                  offset: Offset(0, 1),
-                                                  blurRadius: 9)
-                                            ]),
-                                        child: Expanded(
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                ds['actTitle'],
-                                                style:
-                                                    headlineTextStyle.copyWith(
-                                                        color: textSecondary1,
-                                                        fontSize: 12),
-                                              ),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Container(
-                                                height: Get.height * 0.1,
-                                                width: Get.width * 0.25,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: ds['cmtImg'],
-                                                  fit: BoxFit.cover,
+                                          horizontal: 4, vertical: 4),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Get.to(SingleActScreen(
+                                              image: ds['cmtImg'],
+                                              time: ds['time'],
+                                              title: ds['actTitle'],
+                                              comment: ds['cmt']));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xff000000)
+                                                          .withOpacity(0.24),
+                                                      offset: Offset(0, 1),
+                                                      blurRadius: 9)
+                                                ]),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  ds['actTitle'],
+                                                  style: headlineTextStyle
+                                                      .copyWith(
+                                                          color: textSecondary1,
+                                                          fontSize: 16),
                                                 ),
-                                              )
-                                            ],
+                                                SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Container(
+                                                  height: Get.height * 0.12,
+                                                  width: Get.width * 0.25,
+                                                  clipBehavior: Clip.antiAlias,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: ds['cmtImg'],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

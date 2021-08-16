@@ -36,7 +36,7 @@ class QuotesTile extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(20),
                       child: Text(
-                        ds['quotes'],
+                        ds['mediaUrl']['quotes'],
                         style: GoogleFonts.poppins(fontSize: 13),
                       ),
                     ),

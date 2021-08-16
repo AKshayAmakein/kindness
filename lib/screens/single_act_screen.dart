@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:wc_flutter_share/wc_flutter_share.dart';
-import 'package:http/http.dart' as http;
 
 class SingleActScreen extends StatefulWidget {
   SingleActScreen(
