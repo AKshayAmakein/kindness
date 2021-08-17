@@ -11,6 +11,7 @@ import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/custome_drawer.dart';
+import 'package:kindness/components/home_video_channel_tile.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
@@ -116,31 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Kindness - Within',
-                          style: headlineTextStyle.copyWith(
-                              color: textSecondary, fontSize: 18),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Get.to(HelpSomeOneScreen(
-                              uid: uid,
-                              name: name,
-                              coins: coins!,
-                            ));
-                          },
-                          child: Text(
-                            'See all >',
-                            style: subtitleTextStyle.copyWith(fontSize: 14),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Kindness - Within',
+                      style: headlineTextStyle.copyWith(
+                          color: textSecondary, fontSize: 18),
                     ),
                     SizedBox(
-                      height: Get.height * 0.015,
+                      height: Get.height * 0.016,
                     ),
                     StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
@@ -154,14 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: snapshot.data!.size,
                             itemBuilder: (context, index, realIdx) {
                               DocumentSnapshot ds = snapshot.data!.docs[index];
-
                               return Container(
                                 child: Center(
                                     child: CustomCarouselSliderTiles(
                                   quotesUrl: ds['mediaUrl']['quotes'],
                                   videoUrl: ds['mediaUrl']['videoUrl'],
                                   imgUrl: ds['mediaUrl']['imgUrl'],
-                                  index: index,
+                                  title: ds['title'],
                                 )),
                               );
                             },
@@ -172,118 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }),
-                    Container(
-                      height: Get.height * 0.34,
-                      child: Swiper(
-                        itemHeight: Get.height,
-                        itemWidth: Get.width,
-                        layout: SwiperLayout.STACK,
-                        itemCount: snapshot.data!.size,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot ds = snapshot.data!.docs[index];
-                          Timestamp timestamp = ds['time_when_needed'];
-                          var date = DateTime.fromMicrosecondsSinceEpoch(
-                              timestamp.microsecondsSinceEpoch);
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/rectangle1.png"),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
-                                      height: Get.height * 0.3,
-                                      width: Get.width * 0.6,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                offset: Offset(0, 2),
-                                                blurRadius: 12,
-                                                color: Color(0xff000000)
-                                                    .withOpacity(0.25))
-                                          ]),
-                                      padding: EdgeInsets.all(14),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Rs:${ds['requirements']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 16),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                            child: Text(ds['description'],
-                                                style: GoogleFonts.poppins(
-                                                    color: textSecondary1,
-                                                    fontSize: 15,
-                                                    letterSpacing: 1)),
-                                          ),
-                                          Text(
-                                            "Location : ${ds['location']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 14),
-                                          ),
-                                          Text(
-                                            _date(date),
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 14),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomRight,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                Get.to(HelpSomeOneSingleInfo(
-                                                  name: ds['username'],
-                                                  img: ds['profileUrl'],
-                                                  profileUrls: ds['photoUrls'],
-                                                  desc: ds['description'],
-                                                  coins: coins!,
-                                                  req: ds['requirements'],
-                                                  date:
-                                                      "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
-                                                  location: ds['location'],
-                                                  phone: ds['phoneNumber'],
-                                                  address: ds['address'],
-                                                  uid: ds['uid'],
-                                                  cUid: uid,
-                                                  cUname: name,
-                                                ));
-                                              },
-                                              child: Text('Details',
-                                                  style: descTextStyle.copyWith(
-                                                      fontSize: 10)),
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Color(0xff68EDFF),
-                                                  minimumSize: Size(
-                                                      Get.width * 0.01,
-                                                      Get.height * 0.03)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Image.asset("assets/images/rectangle2.png"),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                    SizedBox(
+                      height: Get.height * 0.015,
                     ),
-                    SizedBox(height: Get.height * 0.02),
                     Text(
                       'Kindness Act of the Day',
                       style: headlineTextStyle.copyWith(
@@ -431,6 +304,146 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                         }),
+                    SizedBox(
+                      height: Get.height * 0.02,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Events of Kindness',
+                          style: headlineTextStyle.copyWith(
+                              color: textSecondary, fontSize: 18),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.to(HelpSomeOneScreen(
+                              uid: uid,
+                              name: name,
+                              coins: coins!,
+                            ));
+                          },
+                          child: Text(
+                            'See all >',
+                            style: subtitleTextStyle.copyWith(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.015,
+                    ),
+                    Container(
+                      height: Get.height * 0.34,
+                      child: Swiper(
+                        itemHeight: Get.height,
+                        itemWidth: Get.width,
+                        layout: SwiperLayout.STACK,
+                        itemCount: snapshot.data!.size,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data!.docs[index];
+                          Timestamp timestamp = ds['time_when_needed'];
+                          var date = DateTime.fromMicrosecondsSinceEpoch(
+                              timestamp.microsecondsSinceEpoch);
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/images/rectangle1.png"),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(
+                                      height: Get.height * 0.3,
+                                      width: Get.width * 0.6,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: Offset(0, 2),
+                                                blurRadius: 12,
+                                                color: Color(0xff000000)
+                                                    .withOpacity(0.25))
+                                          ]),
+                                      padding: EdgeInsets.all(14),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Rs:${ds['requirements']}",
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 16),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0),
+                                            child: Text(ds['description'],
+                                                style: GoogleFonts.poppins(
+                                                    color: textSecondary1,
+                                                    fontSize: 15,
+                                                    letterSpacing: 1)),
+                                          ),
+                                          Text(
+                                            "Location : ${ds['location']}",
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            _date(date),
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 14),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Get.to(HelpSomeOneSingleInfo(
+                                                  name: ds['username'],
+                                                  img: ds['profileUrl'],
+                                                  profileUrls: ds['photoUrls'],
+                                                  desc: ds['description'],
+                                                  coins: coins!,
+                                                  req: ds['requirements'],
+                                                  date:
+                                                      "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
+                                                  location: ds['location'],
+                                                  phone: ds['phoneNumber'],
+                                                  address: ds['address'],
+                                                  uid: ds['uid'],
+                                                  cUid: uid,
+                                                  cUname: name,
+                                                ));
+                                              },
+                                              child: Text('Details',
+                                                  style: descTextStyle.copyWith(
+                                                      fontSize: 10)),
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Color(0xff68EDFF),
+                                                  minimumSize: Size(
+                                                      Get.width * 0.01,
+                                                      Get.height * 0.03)),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Image.asset("assets/images/rectangle2.png"),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -531,7 +544,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }),
                             );
                           }
-                        })
+                        }),
+                    SizedBox(
+                      height: Get.height * 0.02,
+                    ),
+                    Text(
+                      'Kindness Videos',
+                      style: headlineTextStyle.copyWith(
+                          fontSize: 18, color: textSecondary),
+                    ),
+                    HomeVideoChannelTile()
                   ],
                 ),
               );
