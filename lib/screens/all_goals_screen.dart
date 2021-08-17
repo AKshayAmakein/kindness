@@ -149,57 +149,54 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
       bool isComplete, String Uid, String postId) {
     return Container(
         width: double.infinity,
-        //height: Get.height * 0.3,
+        height: Get.height * 0.3,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: bodyTextStyle.copyWith(color: textSecondary)),
-                Text(category,
-                    style: bodyTextStyle.copyWith(fontWeight: FontWeight.bold)),
-                ReadMoreText(description,
-                    trimLines: 2,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: '...Read more',
-                    trimExpandedText: ' Less',
-                    style: subtitleTextStyle.copyWith(color: Colors.black)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Status :',
-                        style: subtitleTextStyle.copyWith(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
-                    (UserUid == Uid)
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: FlutterSwitch(
-                                activeText: "Completed",
-                                inactiveText: "In progress",
-                                valueFontSize: 10.0,
-                                width: 110,
-                                value: !isComplete,
-                                borderRadius: 30.0,
-                                showOnOff: true,
-                                onToggle: (val) {
-                                  print(!val);
-                                  FirebaseFirestore.instance
-                                      .collection('goals')
-                                      .doc(postId)
-                                      .update({'goalStatus': !val});
-                                }),
-                          )
-                        : Progress_notUser(isComplete)
-                  ],
-                ),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: bodyTextStyle.copyWith(color: textSecondary)),
+              Text(category,
+                  style: bodyTextStyle.copyWith(fontWeight: FontWeight.bold)),
+              ReadMoreText(description,
+                  trimLines: 2,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: '...Read more',
+                  trimExpandedText: ' Less',
+                  style: subtitleTextStyle.copyWith(color: Colors.black)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Status :',
+                      style: subtitleTextStyle.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  (UserUid == Uid)
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterSwitch(
+                              activeText: "Completed",
+                              inactiveText: "In progress",
+                              valueFontSize: 10.0,
+                              width: 110,
+                              value: !isComplete,
+                              borderRadius: 30.0,
+                              showOnOff: true,
+                              onToggle: (val) {
+                                print(!val);
+                                FirebaseFirestore.instance
+                                    .collection('goals')
+                                    .doc(postId)
+                                    .update({'goalStatus': !val});
+                              }),
+                        )
+                      : Progress_notUser(isComplete)
+                ],
+              ),
+            ],
           ),
         ));
   }
