@@ -156,15 +156,22 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
       );
     } else {
       return Align(
-        alignment: Alignment.bottomRight,
-        child: IconButton(
-            onPressed: () {
-              Get.offAll(LoginScreen());
-            },
-            icon: Icon(
-              Icons.arrow_forward_ios_outlined,
-              color: Colors.white,
-            )),
+        alignment: Alignment.topCenter,
+        child: Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+              )),
+          child: IconButton(
+              onPressed: () {
+                Get.offAll(LoginScreen());
+              },
+              icon: Icon(
+                Icons.arrow_forward_ios_outlined,
+                color: Colors.white,
+              )),
+        ),
       );
     }
   }

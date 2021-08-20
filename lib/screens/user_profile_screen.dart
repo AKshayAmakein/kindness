@@ -177,7 +177,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Text(
                         "${friends.length}",
                         style: GoogleFonts.roboto(
-                            color: Color(0xffFC846C), fontSize: 15),
+                            color: Color(0xffFC846C), fontSize: 16),
                       )
                     ],
                   ),
@@ -193,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 'Statistics',
                 style: GoogleFonts.poppins(
                     color: textSecondary,
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -208,7 +208,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 13),
+                      fontSize: 14),
                 ),
                 Text(
                   '$totalActs',
@@ -227,7 +227,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 13),
+                      fontSize: 14),
                 ),
                 Text(
                   '$coins',
@@ -255,7 +255,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 13),
+                      fontSize: 14),
                 ),
                 Text(
                   '${totalGoals == null ? "..." : totalGoals}',
@@ -277,7 +277,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 13),
+                      fontSize: 14),
                 ),
                 Text(
                   '${activeGoals == null ? "..." : activeGoals}',
@@ -299,7 +299,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 11),
+                      fontSize: 14),
                 ),
                 Text(
                   '${completedGoals == null ? "..." : completedGoals}',

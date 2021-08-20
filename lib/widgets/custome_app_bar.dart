@@ -108,8 +108,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromRGBO(179, 199, 242, 1),
-                Color.fromRGBO(206, 117, 195, 1)
+                Color.fromRGBO(179, 199, 242, 1.0),
+                Color.fromRGBO(206, 117, 195, 1.0)
               ]),
         ),
       ),

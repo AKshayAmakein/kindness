@@ -95,14 +95,14 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Help Someone',
+                            'Help\nSomeone',
                             style: headlineTextStyle.copyWith(
                                 color: Color.fromRGBO(62, 73, 83, 1),
-                                fontSize: 17),
+                                fontSize: 20),
                           ),
                           Text('Tap to Explore',
                               style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   color: textSecondary1,
                                   fontWeight: FontWeight.w400)),
                         ],
@@ -132,7 +132,7 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
                   child: Text(
                     'or',
                     style: headlineTextStyle.copyWith(
-                        color: textSecondary1, fontSize: 14),
+                        color: textSecondary1, fontSize: 16),
                   ),
                 ),
                 Expanded(
@@ -176,14 +176,14 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Request Help',
+                            'Request\nHelp',
                             style: headlineTextStyle.copyWith(
                                 color: Color.fromRGBO(62, 73, 83, 1),
-                                fontSize: 17),
+                                fontSize: 19),
                           ),
                           Text('Tap to Explore',
                               style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   color: textSecondary1,
                                   fontWeight: FontWeight.w400)),
                         ],

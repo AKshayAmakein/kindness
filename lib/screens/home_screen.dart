@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: Get.height * 0.015,
                     ),
                     Container(
-                      height: Get.height * 0.34,
+                      height: Get.height * 0.35,
                       child: Swiper(
                         itemHeight: Get.height,
                         itemWidth: Get.width,
@@ -349,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Container(
-                                      height: Get.height * 0.3,
+                                      height: Get.height * 0.31,
                                       width: Get.width * 0.6,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -370,6 +370,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
+                                            ds['title'],
+                                            style: headlineTextStyle.copyWith(
+                                                color: textSecondary1,
+                                                fontSize: 18),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
                                             "Rs:${ds['requirements']}",
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
@@ -378,11 +385,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10.0),
-                                            child: Text(ds['description'],
-                                                style: GoogleFonts.poppins(
-                                                    color: textSecondary1,
-                                                    fontSize: 16,
-                                                    letterSpacing: 1)),
+                                            child: Text(
+                                              ds['description'],
+                                              style: GoogleFonts.poppins(
+                                                  color: textSecondary1,
+                                                  fontSize: 16,
+                                                  letterSpacing: 1),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                           Text(
                                             "Location : ${ds['location']}",
@@ -415,6 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   uid: ds['uid'],
                                                   cUid: uid,
                                                   cUname: name,
+                                                  title: ds['title'],
                                                 ));
                                               },
                                               child: Text('Details',

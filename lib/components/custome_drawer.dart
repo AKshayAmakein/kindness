@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
+import 'package:kindness/screens/contact_us_screen.dart';
 import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/screens/kindness_info_screen.dart';
@@ -240,6 +241,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 ListTile(
+                  onTap: () {
+                    Get.to(ContactUsScreen(
+                      coins: coins!,
+                    ));
+                  },
                   title: Text(
                     'Contact Us',
                     style: headlineTextStyle.copyWith(
@@ -249,13 +255,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Icons.mail_outlined,
                     color: Color(0xff525252),
                   ),
-                ),
-                ListTile(
-                  title: Text('Help Us',
-                      style: headlineTextStyle.copyWith(
-                          fontSize: 14, color: Color(0xffA3A3A3))),
-                  leading: Icon(Icons.help_outline_outlined,
-                      color: Color(0xff525252)),
                 ),
                 InkWell(
                   onTap: () {

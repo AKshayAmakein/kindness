@@ -24,6 +24,7 @@ class HelpSomeOneSingleInfo extends StatefulWidget {
   final String uid;
   final String cUid;
   final String cUname;
+  final String title;
   HelpSomeOneSingleInfo(
       {required this.name,
       required this.img,
@@ -37,7 +38,8 @@ class HelpSomeOneSingleInfo extends StatefulWidget {
       required this.location,
       required this.uid,
       required this.cUid,
-      required this.cUname});
+      required this.cUname,
+      required this.title});
 
   @override
   _HelpSomeOneSingleInfoState createState() => _HelpSomeOneSingleInfoState();
@@ -75,7 +77,7 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
             Text(
               'Help Required',
               style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: textSecondary),
             ),
@@ -233,11 +235,20 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                   ),
                   Text(
                     'By- ${widget.name}',
-                    style: GoogleFonts.poppins(color: textSecondary1),
+                    style: GoogleFonts.poppins(
+                        color: textSecondary1, fontSize: 16),
                   ),
+                  Divider(),
+                  Text(
+                    widget.title,
+                    style: GoogleFonts.poppins(
+                        color: textSecondary1, fontSize: 16),
+                  ),
+                  Divider(),
                   Text(
                     widget.desc,
-                    style: GoogleFonts.poppins(color: textSecondary1),
+                    style: GoogleFonts.poppins(
+                        color: textSecondary1, fontSize: 16),
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
@@ -245,14 +256,14 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                   Text(
                     "Requirement : Rs${widget.req}",
                     style: GoogleFonts.poppins(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.w500,
                         color: textSecondary),
                   ),
                   Text(
                     "Date when needed : ${widget.date}",
                     style: GoogleFonts.poppins(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.w500,
                         color: textSecondary),
                   ),

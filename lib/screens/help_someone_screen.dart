@@ -68,6 +68,7 @@ class HelpSomeOneScreen extends StatelessWidget {
                               uid: ds['uid'],
                               cUid: uid,
                               cUname: name,
+                              title: ds['title'],
                             ),
                             transition: Transition.rightToLeftWithFade);
                       },

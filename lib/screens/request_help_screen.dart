@@ -29,6 +29,8 @@ class RequestHelpScreen extends StatefulWidget {
 }
 
 class _RequestHelpScreenState extends State<RequestHelpScreen> {
+  TextEditingController _titleController = TextEditingController();
+
   TextEditingController _requirementController = TextEditingController();
 
   TextEditingController _locationController = TextEditingController();
@@ -75,6 +77,28 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                       'Request Help',
                       style: headlineTextStyle.copyWith(
                           color: textSecondary, fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.028,
+                    ),
+                    TextField(
+                      controller: _titleController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        focusedBorder: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                          borderSide: BorderSide(color: textSecondary),
+                        ),
+                        labelText: "Title",
+                        hintText: "What do you need help for",
+                        labelStyle: GoogleFonts.roboto(
+                            color: textSecondary, fontWeight: FontWeight.w500),
+                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
+                      ),
                     ),
                     SizedBox(
                       height: Get.height * 0.028,
@@ -489,6 +513,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
       "uid": widget.uid,
       "profileUrl": widget.profileUrl,
       "requirements": requirements,
+      "title": _titleController.text,
       "location": _locationController.text,
       "address": _addressController.text,
       "phoneNumber": "+91" + _mobileNumberController.text,
