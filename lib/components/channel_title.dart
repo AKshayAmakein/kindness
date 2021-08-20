@@ -124,7 +124,7 @@ class _ChannelTileState extends State<ChannelTile> {
                     child: Text(
                       video.title,
                       style: GoogleFonts.workSans(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                          fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   )
                 ],

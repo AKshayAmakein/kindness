@@ -187,7 +187,7 @@ class _PeopleTitleState extends State<PeopleTitle> {
                               padding: const EdgeInsets.all(10.0),
                               child: Container(
                                   width: Get.width / 3,
-                                  // padding: EdgeInsets.all(20),
+                                  padding: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       boxShadow: [
@@ -212,12 +212,10 @@ class _PeopleTitleState extends State<PeopleTitle> {
                                           style: bodyTextStyle,
                                         ),
                                       ),
-                                      Expanded(
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: handleAddFriendAndRemoveButton(
-                                              ds['uid'], ds['name']),
-                                        ),
+                                      Container(
+                                        width: double.infinity,
+                                        child: handleAddFriendAndRemoveButton(
+                                            ds['uid'], ds['name']),
                                       )
                                     ],
                                   )),

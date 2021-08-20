@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:video_player/video_player.dart';
 
@@ -74,6 +75,8 @@ class _NewsVideoPlayerAndImgState extends State<NewsVideoPlayerAndImg> {
       return CachedNetworkImage(
         imageUrl: img,
         fit: BoxFit.cover,
+        height: Get.height * 0.2,
+        width: Get.width,
       );
     }
   }

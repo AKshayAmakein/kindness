@@ -60,7 +60,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       widget.title,
                       style: headlineTextStyle.copyWith(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 22,
                           fontWeight: FontWeight.w600),
                     ),
               Flexible(

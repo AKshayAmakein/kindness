@@ -75,7 +75,7 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
             Text(
               'Help Required',
               style: GoogleFonts.poppins(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: textSecondary),
             ),
@@ -245,14 +245,14 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                   Text(
                     "Requirement : Rs${widget.req}",
                     style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: textSecondary),
                   ),
                   Text(
                     "Date when needed : ${widget.date}",
                     style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: textSecondary),
                   ),

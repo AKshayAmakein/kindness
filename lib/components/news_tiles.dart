@@ -9,6 +9,7 @@ import 'package:kindness/components/strings.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:video_player/video_player.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
@@ -40,6 +41,7 @@ class _NewsTilesState extends State<NewsTiles> {
                   itemCount: snapshot.data!.size,
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data!.docs[index];
+                    Timestamp timestamp = ds['dateTime'];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -117,7 +119,10 @@ class _NewsTilesState extends State<NewsTiles> {
                                     style: TextStyle(color: Colors.black38),
                                   ),
                                   Text(
-                                    ds["dateTime"],
+                                    timeago.format(
+                                        DateTime.parse(
+                                            timestamp.toDate().toString()),
+                                        allowFromNow: true),
                                     style: TextStyle(color: Colors.black38),
                                   )
                                 ],

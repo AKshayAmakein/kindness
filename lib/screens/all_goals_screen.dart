@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/NewsVideoPlayerAndImg.dart';
-import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/screens/single_info_goal_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class AllGoalScreen extends StatefulWidget {
+  final int coins;
+
+  AllGoalScreen({required this.coins});
+
   @override
   _AllGoalScreenState createState() => _AllGoalScreenState();
 }
@@ -29,8 +33,10 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
 
   getUserUid() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    UserUid = prefs.getString("uid")!;
-    print(UserUid);
+    setState(() {
+      UserUid = prefs.getString("uid")!;
+      print(UserUid);
+    });
   }
 
   @override
@@ -52,28 +58,47 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
                 Timestamp timestamp = ds['endDate'];
                 return Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0, 2),
-                              blurRadius: 12,
-                              color: Color(0xff000000).withOpacity(0.25))
-                        ]),
-                    child: Column(
-                      children: [
-                        Header(ds['uid'], timestamp, context),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: MediaFile(ds['imgUrl'], ds['videoUrl'])),
-                        ),
-                        Footer(ds['title'], ds['goalCategory'], ds['desc'],
-                            ds['goalStatus'], ds['uid'], ds['postId'])
-                      ],
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(SingleInfoGoalScreen(
+                        status: ds['goalStatus'],
+                        img: ds['imgUrl'],
+                        coins: widget.coins,
+                        postId: ds['postId'],
+                        timestamp: timestamp,
+                        title: ds['title'],
+                        desc: ds['desc'],
+                        videoUrl: ds['videoUrl'],
+                        uid: ds['uid'],
+                        category: ds['goalCategory'],
+                        cUid: UserUid,
+                        isComplete: ds['goalStatus'],
+                        friends: ds['friends'],
+                      ));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, 2),
+                                blurRadius: 12,
+                                color: Color(0xff000000).withOpacity(0.25))
+                          ]),
+                      child: Column(
+                        children: [
+                          Header(ds['uid'], timestamp, context),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: MediaFile(ds['imgUrl'], ds['videoUrl'])),
+                          ),
+                          Footer(ds['title'], ds['goalCategory'], ds['desc'],
+                              ds['goalStatus'], ds['uid'], ds['postId'])
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -149,7 +174,6 @@ class _AllGoalScreenState extends State<AllGoalScreen> {
       bool isComplete, String Uid, String postId) {
     return Container(
         width: double.infinity,
-        height: Get.height * 0.3,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(20),

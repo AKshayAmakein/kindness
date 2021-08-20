@@ -31,8 +31,8 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                       child: Swiper(
                         itemHeight: Get.height * 0.8,
                         itemWidth: Get.width,
+                        loop: false,
                         //layout: SwiperLayout.STACK,
-
                         pagination: SwiperPagination(
                             builder: DotSwiperPaginationBuilder(
                                 space: 5.0,

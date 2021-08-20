@@ -50,7 +50,7 @@ class _HomeVideoChannelTileState extends State<HomeVideoChannelTile> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
-          height: Get.height * 0.13,
+          height: Get.height * 0.18,
           padding: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -69,7 +69,7 @@ class _HomeVideoChannelTileState extends State<HomeVideoChannelTile> {
               Row(
                 children: [
                   Container(
-                    height: Get.height * 0.083,
+                    height: Get.height * 0.085,
                     width: Get.width * 0.34,
                     child: CachedNetworkImage(
                       imageUrl: video.thumbnailUrl,
@@ -79,7 +79,7 @@ class _HomeVideoChannelTileState extends State<HomeVideoChannelTile> {
                     child: Text(
                       video.title,
                       style: GoogleFonts.workSans(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                          fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   )
                 ],
@@ -111,8 +111,9 @@ class _HomeVideoChannelTileState extends State<HomeVideoChannelTile> {
             return false;
           },
           child: Container(
-            height: Get.height,
             child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.all(8),
                 itemCount: 1 + _channel!.videos.length,
                 itemBuilder: (BuildContext context, int index) {

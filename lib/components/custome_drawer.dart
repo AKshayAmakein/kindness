@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
@@ -223,14 +225,72 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     )),
                 Divider(),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        context: context,
+                        builder: (ctx) {
+                          return Container(
+                              child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("kindness_info")
+                                .doc("BMjHK83A0behfiI5IwIb")
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: Spinner(),
+                                );
+                              } else {
+                                DocumentSnapshot ds = snapshot.data;
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          child: RotatedBox(
+                                            quarterTurns: 3,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                                icon: Icon(Icons
+                                                    .arrow_back_ios_new_outlined)),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.grey.shade300),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.01,
+                                        ),
+                                        Text(
+                                          ds['text'],
+                                          style: GoogleFonts.poppins(
+                                              letterSpacing: 0.33,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ));
+                        });
+                  },
                   title: Text(
-                    'Settings',
+                    'Kindness Info',
                     style: headlineTextStyle.copyWith(
                         fontSize: 14, color: Color(0xffA3A3A3)),
                   ),
                   leading: Icon(
-                    Icons.settings_outlined,
+                    Icons.info_outlined,
                     color: Color(0xff525252),
                   ),
                 ),

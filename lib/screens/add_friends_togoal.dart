@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,49 +10,55 @@ import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddFriendstoGoal extends StatefulWidget {
+  AddFriendstoGoal({required this.postId});
 
-
+  final String postId;
   @override
   _AddFriendstoGoalState createState() => _AddFriendstoGoalState();
 }
 
 class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
-
   late String name;
-  late int coins;
+  int? coins;
   late String photourl;
   String? uid;
+  late String frienduid;
   List friendList = [];
   int? mycoins;
+  late Timer timer;
   late SharedPreferences prefs;
 
   getUserData() async {
     prefs = await SharedPreferences.getInstance();
-    uid = prefs.getString('uid')!;
-    mycoins = prefs.getInt('coins')!;
+    setState(() {
+      uid = prefs.getString('uid')!;
+      mycoins = prefs.getInt('coins')!;
+    });
   }
 
   @override
   void initState() {
     getUserData();
+    timer =
+        Timer.periodic(Duration(seconds: 1), (Timer t) => getUserFriendList());
+    print(widget.postId);
     super.initState();
   }
 
   handleAddFriends(String friendId) async {
-    print('handleAdd');
-    await FirebaseFirestore.instance.collection("users").doc(uid).update({
+    print('handleAdd' + widget.postId);
+    await FirebaseFirestore.instance
+        .collection("goals")
+        .doc(widget.postId)
+        .update({
       "friends": FieldValue.arrayUnion([friendId])
-    }).then((value) {
-      FirebaseFirestore.instance.collection("users").doc(friendId).update({
-        "friends": FieldValue.arrayUnion([uid])
-      });
     });
   }
 
   getUserFriendList() async {
     await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
+        .collection("goals")
+        .doc(widget.postId)
         .get()
         .then((value) {
       setState(() {
@@ -62,12 +70,11 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
 
   handleRemoveFriend(String friendId) async {
     print('handleRemove');
-    await FirebaseFirestore.instance.collection("users").doc(uid).update({
+    await FirebaseFirestore.instance
+        .collection("goals")
+        .doc(widget.postId)
+        .update({
       "friends": FieldValue.arrayRemove([friendId])
-    }).then((value) {
-      FirebaseFirestore.instance.collection("users").doc(friendId).update({
-        "friends": FieldValue.arrayRemove([uid])
-      });
     });
   }
 
@@ -78,10 +85,16 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
         .get()
         .then((value) {
       name = value.get("name");
+      frienduid = value.get("uid");
       coins = value.get('coins');
       photourl = value.get('photourl');
     });
-    return {'name': name, 'coins': coins.toString(), 'photourl': photourl};
+    return {
+      'name': name,
+      'frienduid': frienduid,
+      'coins': coins.toString(),
+      'photourl': photourl
+    };
   }
 
   Widget handleAddFriendAndRemoveButton(String friendId, String friendName) {
@@ -94,7 +107,7 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
             handleRemoveFriend(friendId);
           },
           child: Text(
-            'Unfriend',
+            'Remove',
             style: TextStyle(color: kPrimary),
           ));
     } else {
@@ -106,7 +119,7 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
             handleAddFriends(friendId);
           },
           child: Text(
-            'Connect',
+            'Invite',
             style: TextStyle(color: Colors.white),
           ));
     }
@@ -126,7 +139,7 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
             onTapLeading: () {
               Get.back();
             },
-            coins: coins,
+            coins: mycoins,
           )),
       body: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
@@ -173,7 +186,9 @@ class _AddFriendstoGoalState extends State<AddFriendstoGoal> {
                                 leading: UserProfileImage(
                                     snapshot.data!['photourl']!,
                                     snapshot.data!['name']!),
-                                //trailing: handleAddFriendAndRemoveButton(friendId, friendName),
+                                trailing: handleAddFriendAndRemoveButton(
+                                    snapshot.data!['frienduid']!,
+                                    snapshot.data!['name']!),
                               ),
                             ),
                           );

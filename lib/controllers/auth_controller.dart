@@ -196,72 +196,7 @@ class AuthController extends GetxController {
     return await _auth.signOut();
   }
 
-  createGoal(
-      String uid,
-      String category,
-      bool status,
-      DateTime startDate,
-      DateTime endDate,
-      File file,
-      String name,
-      String state,
-      bool isVideo) async {
-    uploadPhoto() {
-      DateTime time = DateTime.now();
-      String filename = 'files/userMedia/${uid + time.toString()}';
-      try {
-        final ref = FirebaseStorage.instance.ref(filename);
 
-        UploadTask task = ref.putFile(file);
-
-        return task;
-      } catch (e) {
-        print(e);
-      }
-    }
-
-    String imgUrl = "";
-    String videoUrl = "";
-
-    try {
-      UploadTask? photopath = uploadPhoto();
-      final snapshot = await photopath!.whenComplete(() {});
-      var mediaUrl = await snapshot.ref.getDownloadURL();
-      if (isVideo) {
-        videoUrl = mediaUrl;
-      } else {
-        imgUrl = mediaUrl;
-      }
-      String postId = uuid.v4();
-      _db.collection("goals").doc(postId).set({
-        "imgUrl": imgUrl,
-        "videoUrl": videoUrl,
-        "uid": uid,
-        "title": titleController.text,
-        "desc": descController.text,
-        "goalCategory": category,
-        "goalStatus": status,
-        "startDate": startDate,
-        "endDate": endDate,
-        "time": DateTime.now(),
-        "userName": name,
-        "userState": state,
-        "postId": postId
-      }).then((value) {
-        Get.snackbar('Goal created!', "",
-            snackPosition: SnackPosition.BOTTOM,
-            duration: Duration(seconds: 10),
-            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-            colorText: Get.theme.snackBarTheme.actionTextColor);
-      });
-    } catch (e) {
-      Get.snackbar('failed to submit!', "$e",
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 10),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
-    }
-  }
 
   updatePassword(password) async {
     try {

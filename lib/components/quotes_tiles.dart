@@ -22,7 +22,8 @@ class QuotesTile extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: Get.height * 0.094,
+                    height: Get.height * 0.12,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(11),
@@ -37,7 +38,7 @@ class QuotesTile extends StatelessWidget {
                       padding: EdgeInsets.all(20),
                       child: Text(
                         ds['mediaUrl']['quotes'],
-                        style: GoogleFonts.poppins(fontSize: 13),
+                        style: GoogleFonts.poppins(fontSize: 15),
                       ),
                     ),
                   ),

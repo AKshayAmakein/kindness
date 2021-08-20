@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:video_player/video_player.dart';
@@ -60,6 +61,9 @@ class _CustomCarouselSliderTilesState extends State<CustomCarouselSliderTiles> {
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               child: CachedNetworkImage(
                 imageUrl: imgUrl,
+                height: Get.height * 0.2,
+                width: Get.width,
+                fit: BoxFit.cover,
               ),
             ),
             Container(
@@ -69,7 +73,7 @@ class _CustomCarouselSliderTilesState extends State<CustomCarouselSliderTiles> {
                 title,
                 style: GoogleFonts.poppins(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -85,9 +89,10 @@ class _CustomCarouselSliderTilesState extends State<CustomCarouselSliderTiles> {
               aspectRatio: _controller.value.aspectRatio,
               child: Stack(
                 children: [
-                  ColorFiltered( colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.2), BlendMode.darken),
-                  child: VideoPlayer(_controller)),
+                  ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2), BlendMode.darken),
+                      child: VideoPlayer(_controller)),
                   Container(
                     padding: EdgeInsets.all(10),
                     alignment: Alignment.topCenter,

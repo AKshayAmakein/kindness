@@ -74,7 +74,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  AllGoalScreen(),
+                  AllGoalScreen(
+                    coins: coins!,
+                  ),
                   MyGoalsScreen(),
                   CreateGoalScreen()
                 ],

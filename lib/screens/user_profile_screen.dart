@@ -193,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 'Statistics',
                 style: GoogleFonts.poppins(
                     color: textSecondary,
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
             ),
@@ -208,14 +208,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 11),
+                      fontSize: 13),
                 ),
                 Text(
                   '$totalActs',
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                      fontSize: 16),
                 ),
               ],
             ),
@@ -227,14 +227,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 11),
+                      fontSize: 13),
                 ),
                 Text(
                   '$coins',
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                      fontSize: 16),
                 ),
               ],
             ),
@@ -255,14 +255,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 11),
+                      fontSize: 13),
                 ),
                 Text(
                   '${totalGoals == null ? "..." : totalGoals}',
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                      fontSize: 16),
                 ),
               ],
             ),
@@ -277,14 +277,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary1,
                       fontWeight: FontWeight.w500,
-                      fontSize: 11),
+                      fontSize: 13),
                 ),
                 Text(
                   '${activeGoals == null ? "..." : activeGoals}',
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                      fontSize: 16),
                 ),
               ],
             ),
@@ -306,7 +306,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   style: GoogleFonts.poppins(
                       color: textSecondary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                      fontSize: 16),
                 ),
               ],
             ),

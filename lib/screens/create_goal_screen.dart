@@ -3,19 +3,19 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
-import 'package:kindness/screens/all_goals_screen.dart';
-import 'package:kindness/screens/goals_screen.dart';
+import 'package:kindness/screens/add_friends_togoal.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateGoalScreen extends StatefulWidget {
   @override
@@ -41,6 +41,7 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
   String name = "";
   String state = "";
   bool isVideo = false;
+  String? MypostId;
 
   getUserData() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
@@ -438,23 +439,28 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            _controller
-                                                .createGoal(
-                                                    uid,
-                                                    selectedValue,
-                                                    status6,
-                                                    startDate!,
-                                                    endDate!,
-                                                    _pickedImage!,
-                                                    name,
-                                                    state,
-                                                    isVideo)
-                                                .then((value) {
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                              Get.to(GoalsScreen());
+                                            var uuid = Uuid();
+                                            String postId = uuid.v4();
+
+                                            createGoal(
+                                                uid,
+                                                selectedValue,
+                                                status6,
+                                                startDate!,
+                                                endDate!,
+                                                _pickedImage!,
+                                                name,
+                                                state,
+                                                isVideo,
+                                                postId);
+
+                                            setState(() {
+                                              isLoading = false;
                                             });
+
+                                            Get.to(AddFriendstoGoal(
+                                              postId: postId,
+                                            ));
                                           },
                                           child: Text('Create Goal'))
                                     ],
@@ -466,5 +472,75 @@ class _CreateGoalScreenState extends State<CreateGoalScreen> {
               ),
             ),
     );
+  }
+
+  createGoal(
+      String uid,
+      String category,
+      bool status,
+      DateTime startDate,
+      DateTime endDate,
+      File file,
+      String name,
+      String state,
+      bool isVideo,
+      String postId) async {
+    uploadPhoto() {
+      DateTime time = DateTime.now();
+      String filename = 'files/userMedia/${uid + time.toString()}';
+      try {
+        final ref = FirebaseStorage.instance.ref(filename);
+
+        UploadTask task = ref.putFile(file);
+
+        return task;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    String imgUrl = "";
+    String videoUrl = "";
+
+    try {
+      UploadTask? photopath = uploadPhoto();
+      final snapshot = await photopath!.whenComplete(() {});
+      var mediaUrl = await snapshot.ref.getDownloadURL();
+      if (isVideo) {
+        videoUrl = mediaUrl;
+      } else {
+        imgUrl = mediaUrl;
+      }
+
+      FirebaseFirestore.instance.collection("goals").doc(postId).set({
+        "imgUrl": imgUrl,
+        "videoUrl": videoUrl,
+        "uid": uid,
+        "title": _controller.titleController.text,
+        "desc": _controller.descController.text,
+        "goalCategory": category,
+        "goalStatus": status,
+        "startDate": startDate,
+        "endDate": endDate,
+        "time": DateTime.now(),
+        "userName": name,
+        "userState": state,
+        "postId": postId,
+        "friends": [],
+      }).then((value) {
+        Get.snackbar('Goal created!', "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 10),
+            backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+            colorText: Get.theme.snackBarTheme.actionTextColor);
+
+      });
+    } catch (e) {
+      Get.snackbar('failed to submit!', "$e",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }
   }
 }
