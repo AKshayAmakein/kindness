@@ -64,9 +64,19 @@ dependencies:
   url_launcher: ^6.0.9
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+    android: true
+    ios: true
+    remove_alpha_ios: true
+    image_path: "assets/appIcon/kindness-app-logo.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

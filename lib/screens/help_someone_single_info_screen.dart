@@ -5,7 +5,6 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/photo_view.dart';
-import 'package:kindness/constants/app_icon.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -100,8 +99,9 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (widget.profileUrls[0] == "")
-                    Image.asset(
-                      appIcon,
+                    CachedNetworkImage(
+                      imageUrl:
+                          "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
                       height: Get.height * 0.3,
                     )
                   else

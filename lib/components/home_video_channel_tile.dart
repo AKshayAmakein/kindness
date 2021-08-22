@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/video_channel_tile.dart';
@@ -43,9 +44,46 @@ class _HomeVideoChannelTileState extends State<HomeVideoChannelTile> {
   _buildVideo(Video video) {
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
+        showDialog(
             context: context,
-            builder: (ctx) => VideoChannelScreen(id: video.id));
+            barrierDismissible: false,
+            builder: (ctx) {
+              return Dialog(
+                elevation: 8,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: Get.height * 0.6,
+                      width: Get.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: VideoChannelScreen(id: video.id)),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                        top: 0.0,
+                        right: 0.0,
+                        child: IconButton(
+                            onPressed: () {
+                              Get.back();
+                              SystemChrome.setPreferredOrientations(
+                                  [DeviceOrientation.portraitUp]);
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.white,
+                            ))),
+                  ],
+                ),
+              );
+            });
+
+        // showModalBottomSheet(
+        //     context: context,
+        //     builder: (ctx) => VideoChannelScreen(id: video.id));
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

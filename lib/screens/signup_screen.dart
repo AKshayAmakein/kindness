@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/helpers/validator.dart';
 import 'package:kindness/screens/login_screen.dart';
-import 'package:kindness/components/strings.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -21,7 +21,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -40,8 +39,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Image.asset(
-                      appLogo,
+                    CachedNetworkImage(
+                      imageUrl:
+                          "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
                       height: Get.height / 7,
                     ),
                     SizedBox(

@@ -54,9 +54,8 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
                                 SizedBox(
                                   height: Get.height * 0.05,
                                 ),
-                                Image.asset(
-                                  "assets/images/handshake.png",
-                                  color: Colors.grey,
+                                CachedNetworkImage(
+                                  imageUrl: ds["logo"],
                                   height: Get.height * 0.08,
                                   width: Get.width * 0.15,
                                 ),

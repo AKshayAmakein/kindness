@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,10 +69,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.asset(
-                            "assets/images/handshake.png",
+                          CachedNetworkImage(
+                            imageUrl:
+                                "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
                             height: Get.height * 0.05,
-                            width: Get.width * 0.05,
+                            //width: Get.width * 0.01,
                           ),
                           InkWell(
                             onTap: () {

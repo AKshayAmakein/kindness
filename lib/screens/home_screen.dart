@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             options: CarouselOptions(
-                              autoPlay: true,
+                              autoPlay: false,
                               aspectRatio: 2.0,
                               enlargeCenterPage: true,
                             ),
@@ -349,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Container(
-                                      height: Get.height * 0.31,
+                                      height: Get.size.height * 0.32,
                                       width: Get.width * 0.6,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -453,10 +453,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'My acts / Achievements',
-                          style: headlineTextStyle.copyWith(
-                              fontSize: 20, color: textSecondary),
+                        Expanded(
+                          child: Text(
+                            'My acts / Achievements',
+                            style: headlineTextStyle.copyWith(
+                                fontSize: 20, color: textSecondary),
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
