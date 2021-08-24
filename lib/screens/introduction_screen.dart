@@ -121,7 +121,7 @@ class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
         end: Alignment.bottomCenter,
         colors: [
           Color.fromRGBO(255, 255, 255, 0.94),
-          Color.fromRGBO(114, 157, 195, 1)
+          Color.fromRGBO(114, 157, 195, 1.0)
         ],
       ));
     } else if (index == 1) {
