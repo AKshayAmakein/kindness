@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/components/photo_view.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 class NewsVideoPlayerAndImg extends StatefulWidget {
@@ -16,8 +18,18 @@ class NewsVideoPlayerAndImg extends StatefulWidget {
 class _NewsVideoPlayerAndImgState extends State<NewsVideoPlayerAndImg> {
   late VideoPlayerController _controller;
   Future<void>? _initializeVideoPlayerFuture;
+  int? coins;
+  late SharedPreferences prefs;
+  getCoins() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      coins = prefs.getInt("coins")!;
+    });
+  }
+
   @override
   void initState() {
+    getCoins();
     _controller = VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize().then((value) {
       setState(() {});
@@ -72,11 +84,19 @@ class _NewsVideoPlayerAndImgState extends State<NewsVideoPlayerAndImg> {
         },
       );
     } else {
-      return CachedNetworkImage(
-        imageUrl: img,
-        fit: BoxFit.cover,
-        height: Get.height * 0.2,
-        width: Get.width,
+      return InkWell(
+        onTap: () {
+          Get.to(PhotoViewScreen(coins: coins!, img: img));
+        },
+        child: Hero(
+          tag: "helpSome",
+          child: CachedNetworkImage(
+            imageUrl: img,
+            fit: BoxFit.cover,
+            height: Get.height * 0.2,
+            width: Get.width,
+          ),
+        ),
       );
     }
   }

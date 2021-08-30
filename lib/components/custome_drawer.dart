@@ -10,6 +10,7 @@ import 'package:kindness/screens/goals_screen.dart';
 import 'package:kindness/screens/help_and_support_screen.dart';
 import 'package:kindness/screens/kindness_info_screen.dart';
 import 'package:kindness/screens/kindness_updates_screen.dart';
+import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/my_acts_screen.dart';
 import 'package:kindness/screens/profile_update_screen.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
@@ -98,9 +99,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Get.to(ProfileUpdateScreen(
-                                uid: uid,
-                              ));
+                              if (name == "guest") {
+                                Get.defaultDialog(
+                                    title: "Oops!",
+                                    middleText:
+                                        "You can't have access some features, you must be login/signup first",
+                                    textCancel: "Cancel",
+                                    onCancel: () {
+                                      Get.back();
+                                    },
+                                    textConfirm: "Ok",
+                                    onConfirm: () {
+                                      preferences.clear();
+                                      Get.offAll(LoginScreen());
+                                    });
+                              } else {
+                                Get.to(ProfileUpdateScreen(
+                                  uid: uid,
+                                ));
+                              }
                             },
                             child: Stack(
                               children: [
@@ -154,8 +171,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.of(context).pop();
-                    Get.to(ActOfTheDayScreen());
+                    if (name == "guest") {
+                      Get.defaultDialog(
+                          title: "Oops!",
+                          middleText:
+                              "You can't have access some features, you must be login/signup first",
+                          textCancel: "Cancel",
+                          onCancel: () {
+                            Get.back();
+                          },
+                          textConfirm: "Ok",
+                          onConfirm: () {
+                            preferences.clear();
+                            Get.offAll(LoginScreen());
+                          });
+                    } else {
+                      Navigator.of(context).pop();
+                      Get.to(ActOfTheDayScreen());
+                    }
                   },
                   title: Text(
                     'Kindness Act of the Day',
@@ -170,8 +203,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 ListTile(
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Get.to(GoalsScreen());
+                      if (name == "guest") {
+                        Get.defaultDialog(
+                            title: "Oops!",
+                            middleText:
+                                "You can't have access some features, you must be login/signup first",
+                            textCancel: "Cancel",
+                            onCancel: () {
+                              Get.back();
+                            },
+                            textConfirm: "Ok",
+                            onConfirm: () {
+                              preferences.clear();
+                              Get.offAll(LoginScreen());
+                            });
+                      } else {
+                        Navigator.of(context).pop();
+                        Get.to(GoalsScreen());
+                      }
                     },
                     title: Text(
                       'Goals',
@@ -184,8 +233,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     )),
                 ListTile(
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Get.to(MyActsScreen());
+                      if (name == "guest") {
+                        Get.defaultDialog(
+                            title: "Oops!",
+                            middleText:
+                                "You can't have access some features, you must be login/signup first",
+                            textCancel: "Cancel",
+                            onCancel: () {
+                              Get.back();
+                            },
+                            textConfirm: "Ok",
+                            onConfirm: () {
+                              preferences.clear();
+                              Get.offAll(LoginScreen());
+                            });
+                      } else {
+                        Navigator.of(context).pop();
+                        Get.to(MyActsScreen());
+                      }
                     },
                     title: Text('My Acts of Kindness',
                         style: headlineTextStyle.copyWith(
@@ -208,12 +273,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Icon(Icons.article_outlined, color: Color(0xff525252))),
                 ListTile(
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Get.to(HelpAndSupportScreen(
-                        uid: uid,
-                        profileUrl: profileUrl,
-                        name: name,
-                      ));
+                      if (name == "guest") {
+                        Get.defaultDialog(
+                            title: "Oops!",
+                            middleText:
+                                "You can't have access some features, you must be login/signup first",
+                            textCancel: "Cancel",
+                            onCancel: () {
+                              Get.back();
+                            },
+                            textConfirm: "Ok",
+                            onConfirm: () {
+                              preferences.clear();
+                              Get.offAll(LoginScreen());
+                            });
+                      } else {
+                        Navigator.of(context).pop();
+                        Get.to(HelpAndSupportScreen(
+                          uid: uid,
+                          profileUrl: profileUrl,
+                          name: name,
+                        ));
+                      }
                     },
                     title: Text(
                       'Help and Support',
@@ -244,9 +325,26 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 ListTile(
                   onTap: () {
-                    Get.to(ContactUsScreen(
-                      coins: coins!,
-                    ));
+                    if (name == "guest") {
+                      Get.defaultDialog(
+                          title: "Oops!",
+                          middleText:
+                              "You can't have access some features, you must be login/signup first",
+                          textCancel: "Cancel",
+                          onCancel: () {
+                            Get.back();
+                          },
+                          textConfirm: "Ok",
+                          onConfirm: () {
+                            preferences.clear();
+                            Get.offAll(LoginScreen());
+                          });
+                    } else {
+                      Navigator.of(context).pop();
+                      Get.to(ContactUsScreen(
+                        coins: coins!,
+                      ));
+                    }
                   },
                   title: Text(
                     'Contact Us',

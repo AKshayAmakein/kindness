@@ -97,83 +97,76 @@ class MyScore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: height,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: Offset(0, 2),
-                          blurRadius: 12,
-                          color: Color(0xff000000).withOpacity(0.25))
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Image.asset("assets/images/hCoin.png"),
-                      SizedBox(
-                        width: Get.width * 0.015,
-                      ),
-                      Text(
-                        "$coins",
-                        style: GoogleFonts.roboto(
-                            color: Color(0xffFC846C), fontSize: 15),
-                      ),
-                    ],
-                  ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: height,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 2),
+                        blurRadius: 12,
+                        color: Color(0xff000000).withOpacity(0.25))
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/hCoin.png"),
+                    SizedBox(
+                      width: Get.width * 0.015,
+                    ),
+                    Text(
+                      "$coins",
+                      style: GoogleFonts.roboto(
+                          color: Color(0xffFC846C), fontSize: 15),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: height,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: Offset(0, 2),
-                          blurRadius: 12,
-                          color: Color(0xff000000).withOpacity(0.25))
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Acts Completed by you',
-                        style: bodyTextStyle.copyWith(fontSize: 14),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('act_completed')
-                              .where('uid', isEqualTo: uid)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return Spinner();
-                            }
-                            return Text(
-                              "${snapshot.data!.docs.length}",
-                              style: GoogleFonts.roboto(
-                                  color: Color(0xffFC846C), fontSize: 15),
-                            );
-                          })
-                    ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: height,
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 2),
+                        blurRadius: 12,
+                        color: Color(0xff000000).withOpacity(0.25))
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Acts Completed by you',
+                    style: bodyTextStyle.copyWith(fontSize: 14),
                   ),
-                ),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('act_completed')
+                          .where('uid', isEqualTo: uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Spinner();
+                        }
+                        return Text(
+                          "${snapshot.data!.docs.length}",
+                          style: GoogleFonts.roboto(
+                              color: Color(0xffFC846C), fontSize: 15),
+                        );
+                      })
+                ],
               ),
             ),
           )
@@ -192,112 +185,117 @@ class Completed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Completed',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: textSecondary,
-                      fontWeight: FontWeight.bold)),
-              TextButton(
-                  onPressed: () {
-                    Get.to(MyAllActsScreen(uid: uid));
-                  },
-                  child: Text(
-                    'Sea all >',
-                    style: subtitleTextStyle,
-                  ))
-            ],
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("act_completed")
-                .where('uid', isEqualTo: uid)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return new Text("fetch error");
-              } else if (!snapshot.hasData) {
-                return Spinner();
-              } else {
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.size,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot ds = snapshot.data!.docs[index];
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Completed',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: textSecondary,
+                        fontWeight: FontWeight.bold)),
+                TextButton(
+                    onPressed: () {
+                      Get.to(MyAllActsScreen(uid: uid));
+                    },
+                    child: Text(
+                      'Sea all >',
+                      style: subtitleTextStyle,
+                    ))
+              ],
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("act_completed")
+                  .where('uid', isEqualTo: uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.data!.docs.length == 0) {
+                  return Center(child: new Text("No data fond!"));
+                } else if (!snapshot.hasData) {
+                  return Spinner();
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.size,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data!.docs[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(SingleActScreen(
-                              image: ds['cmtImg'],
-                              time: ds['time'],
-                              title: ds['actTitle'],
-                              comment: ds['cmt']));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 2),
-                                      blurRadius: 12,
-                                      color: Color(0xff000000).withOpacity(0.25))
-                                ]),
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(SingleActScreen(
+                                  image: ds['cmtImg'],
+                                  time: ds['time'],
+                                  title: ds['actTitle'],
+                                  comment: ds['cmt']));
+                            },
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: CachedNetworkImage(
-                                          imageUrl: ds['cmtImg'],
-                                          height: height * 0.08,
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: Offset(0, 2),
+                                          blurRadius: 12,
+                                          color: Color(0xff000000)
+                                              .withOpacity(0.25))
+                                    ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: CachedNetworkImage(
+                                              imageUrl: ds['cmtImg'],
+                                              height: height * 0.08,
+                                            )),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              ds['actTitle'],
+                                              style: bodyTextStyle,
+                                            ),
+                                            Text(
+                                              ds['cmt'],
+                                              style: subtitleTextStyle,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(timeago.format(
+                                          DateTime.parse(
+                                              ds['time'].toDate().toString()),
                                         )),
+                                      ),
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          ds['actTitle'],
-                                          style: bodyTextStyle,
-                                        ),
-                                        Text(
-                                          ds['cmt'],
-                                          style: subtitleTextStyle,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(timeago.format(
-                                      DateTime.parse(
-                                          ds['time'].toDate().toString()),
-                                    )),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    });
-              }
-            },
-          ),
-        ],
+                          );
+                        }),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

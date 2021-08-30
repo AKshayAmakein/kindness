@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kindness/components/photo_view.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:video_player/video_player.dart';
 
@@ -121,28 +122,16 @@ class _CustomCarouselSliderTilesState extends State<CustomCarouselSliderTiles> {
                                 child: Stack(
                                   children: [
                                     Container(
+                                      width: MediaQuery.of(context).size.width,
                                       height: Get.height * 0.4,
-                                      width: Get.width,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                              child: AspectRatio(
-                                                  aspectRatio: _controller
-                                                      .value.aspectRatio,
-                                                  child: ColorFiltered(
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.2),
-                                                              BlendMode.darken),
-                                                      child: VideoPlayer(
-                                                          _controller)))),
-                                        ],
-                                      ),
+                                      child: AspectRatio(
+                                          aspectRatio:
+                                              _controller.value.aspectRatio,
+                                          child: ColorFiltered(
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.black.withOpacity(0.2),
+                                                  BlendMode.darken),
+                                              child: VideoPlayer(_controller))),
                                     ),
                                     Positioned(
                                         top: 0.0,

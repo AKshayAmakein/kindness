@@ -9,6 +9,7 @@ import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/screens/friends_tile.dart';
+import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/search_people.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
@@ -26,11 +27,13 @@ class _PeopleTitleState extends State<PeopleTitle> {
   late Timer timer;
   String? uid;
   int? coins;
+  String? name;
   late SharedPreferences prefs;
 
   getUserData() async {
     prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid')!;
+    name = prefs.getString("name")!;
     coins = prefs.getInt('coins')!;
   }
 
@@ -91,7 +94,23 @@ class _PeopleTitleState extends State<PeopleTitle> {
             primary: kLight,
           ),
           onPressed: () {
-            handleRemoveFriend(friendId);
+            if (name == "guest") {
+              Get.defaultDialog(
+                  title: "Oops!",
+                  middleText:
+                      "You can't have access some features, you must be login/signup first",
+                  textCancel: "Cancel",
+                  onCancel: () {
+                    Get.back();
+                  },
+                  textConfirm: "Ok",
+                  onConfirm: () {
+                    prefs.clear();
+                    Get.offAll(LoginScreen());
+                  });
+            } else {
+              handleRemoveFriend(friendId);
+            }
           },
           child: Text(
             'Unfriend',
@@ -103,7 +122,23 @@ class _PeopleTitleState extends State<PeopleTitle> {
             primary: kPrimary,
           ),
           onPressed: () {
-            handleAddFriends(friendId);
+            if (name == "guest") {
+              Get.defaultDialog(
+                  title: "Oops!",
+                  middleText:
+                      "You can't have access some features, you must be login/signup first",
+                  textCancel: "Cancel",
+                  onCancel: () {
+                    Get.back();
+                  },
+                  textConfirm: "Ok",
+                  onConfirm: () {
+                    prefs.clear();
+                    Get.offAll(LoginScreen());
+                  });
+            } else {
+              handleAddFriends(friendId);
+            }
           },
           child: Text(
             'Connect',
@@ -132,8 +167,10 @@ class _PeopleTitleState extends State<PeopleTitle> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .where('uid', isNotEqualTo: uid)
-              .snapshots(),
+              .where(
+                'uid',
+                isNotEqualTo: uid,
+              ).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return new Text("fetch error");
@@ -149,7 +186,23 @@ class _PeopleTitleState extends State<PeopleTitle> {
                       padding: const EdgeInsets.all(5),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(SearchPeople());
+                          if (name == "guest") {
+                            Get.defaultDialog(
+                                title: "Oops!",
+                                middleText:
+                                    "You can't have access some features, you must be login/signup first",
+                                textCancel: "Cancel",
+                                onCancel: () {
+                                  Get.back();
+                                },
+                                textConfirm: "Ok",
+                                onConfirm: () {
+                                  prefs.clear();
+                                  Get.offAll(LoginScreen());
+                                });
+                          } else {
+                            Get.to(SearchPeople());
+                          }
                         },
                         child: Container(
                             height: Get.height / 12,
@@ -181,8 +234,7 @@ class _PeopleTitleState extends State<PeopleTitle> {
                           scrollDirection: Axis.horizontal,
                           itemCount: snapshot.data!.size,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot ds = snapshot.data!.docs[
-                                index]; // sharedPreferences.setString("userId",ds['uid']);
+                            DocumentSnapshot ds = snapshot.data!.docs[index];
                             return Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Container(

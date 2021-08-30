@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/components/loading.dart';
@@ -29,7 +26,9 @@ class AuthController extends GetxController {
   Rxn<User> firebaseUser = Rxn<User>();
 
   final RxBool admin = false.obs;
+  var authState = ''.obs;
   var uuid = Uuid();
+  String verificationID = '';
   @override
   void onInit() {
     super.onInit();
@@ -59,8 +58,23 @@ class AuthController extends GetxController {
       print('Send to signin');
       Get.offAll(IntroductionOnScreen());
     } else {
-      checkIfUser();
+      getLoggedInUser();
     }
+  }
+
+  getLoggedInUser() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        Get.offAll(HomeScreenMain());
+      } else {
+        Get.offAll(ProfileSetup());
+      }
+    });
   }
 
   checkIfUser() {
@@ -143,6 +157,28 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> loginGuest() async {
+    try {
+      await _auth.signInAnonymously().then((guest) {
+        print("guest id:${guest.user!.uid}");
+        Get.defaultDialog(title: "", middleText: "Please Wait...");
+        _db.collection("users").doc(guest.user!.uid).set({
+          'photourl': "",
+          'name': "guest",
+          'gender': "",
+          'dob': "",
+          'state': "",
+          'uid': guest.user!.uid,
+          'coins': 0,
+          'friends': [],
+        }).then((value) =>
+            {Get.offAll(HomeScreenMain(), transition: Transition.size)});
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //password reset email
   Future<void> sendPasswordResetEmail(BuildContext context) async {
     showLoadingIndicator();
@@ -183,6 +219,51 @@ class AuthController extends GetxController {
     });
   }
 
+  verifyPhone(String phone) async {
+    try {
+      await _auth.verifyPhoneNumber(
+          timeout: Duration(seconds: 40),
+          phoneNumber: phone,
+          verificationCompleted: (AuthCredential authCredential) {},
+          verificationFailed: (authException) {
+            Get.snackbar("error", authException.message.toString());
+          },
+          codeSent: (String id, [int? forceResent]) {
+            this.verificationID = id;
+            authState.value = "Login Success";
+            Get.snackbar("code send", "");
+          },
+          codeAutoRetrievalTimeout: (id) {
+            this.verificationID = id;
+          });
+    } catch (e) {
+      print("error$e");
+      Get.snackbar("Phone Number info!", "Something went wrong");
+    }
+  }
+
+  verifyOTP(
+    String otp,
+  ) async {
+    try {
+      var credential = await _auth.signInWithCredential(
+          PhoneAuthProvider.credential(
+              verificationId: this.verificationID, smsCode: otp));
+      if (credential.user != null) {
+        Get.snackbar("otp info", "Verified",
+            snackPosition: SnackPosition.BOTTOM);
+        Get.offAll(ProfileSetup());
+      } else {
+        Get.offAll(IntroductionOnScreen());
+      }
+    } catch (e) {
+      print("error$e");
+
+      Get.snackbar("otp info", "otp code is not correct!",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
   // Sign out
   Future<void> signOut() async {
     nameController.clear();
@@ -195,8 +276,6 @@ class AuthController extends GetxController {
     prefs.clear();
     return await _auth.signOut();
   }
-
-
 
   updatePassword(password) async {
     try {

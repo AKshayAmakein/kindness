@@ -17,6 +17,7 @@ import 'package:kindness/constants/colors.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/help_someone_screen.dart';
 import 'package:kindness/screens/help_someone_single_info_screen.dart';
+import 'package:kindness/screens/login_screen.dart';
 import 'package:kindness/screens/myall_acts_screen.dart';
 import 'package:kindness/screens/single_act_screen.dart';
 import 'package:kindness/widgets/CustomCarouselSliderTiles.dart';
@@ -178,7 +179,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 List.from(ds["actCompletedBy"]);
                             return InkWell(
                               onTap: () {
-                                Get.to(ActOfTheDayScreen());
+                                if (name == "guest") {
+                                  Get.defaultDialog(
+                                      title: "Oops!",
+                                      middleText:
+                                          "You can't have access some features, you must be login/signup first",
+                                      textCancel: "Cancel",
+                                      onCancel: () {
+                                        Get.back();
+                                      },
+                                      textConfirm: "Ok",
+                                      onConfirm: () {
+                                        _prefs.clear();
+                                        Get.offAll(LoginScreen());
+                                      });
+                                } else {
+                                  Get.to(ActOfTheDayScreen());
+                                }
                               },
                               child: Container(
                                 padding: EdgeInsets.all(10.0),
@@ -312,11 +329,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Get.to(HelpSomeOneScreen(
-                              uid: uid,
-                              name: name,
-                              coins: coins!,
-                            ));
+                            if (name == "guest") {
+                              Get.defaultDialog(
+                                  title: "Oops!",
+                                  middleText:
+                                      "You can't have access some features, you must be login/signup first",
+                                  textCancel: "Cancel",
+                                  onCancel: () {
+                                    Get.back();
+                                  },
+                                  textConfirm: "Ok",
+                                  onConfirm: () {
+                                    _prefs.clear();
+                                    Get.offAll(LoginScreen());
+                                  });
+                            } else {
+                              Get.to(HelpSomeOneScreen(
+                                uid: uid,
+                                name: name,
+                                coins: coins!,
+                              ));
+                            }
                           },
                           child: Text(
                             'See all >',
@@ -410,23 +443,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                             alignment: Alignment.bottomRight,
                                             child: ElevatedButton(
                                               onPressed: () {
-                                                Get.to(HelpSomeOneSingleInfo(
-                                                  name: ds['username'],
-                                                  img: ds['profileUrl'],
-                                                  profileUrls: ds['photoUrls'],
-                                                  desc: ds['description'],
-                                                  coins: coins!,
-                                                  req: ds['requirements'],
-                                                  date:
-                                                      "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
-                                                  location: ds['location'],
-                                                  phone: ds['phoneNumber'],
-                                                  address: ds['address'],
-                                                  uid: ds['uid'],
-                                                  cUid: uid,
-                                                  cUname: name,
-                                                  title: ds['title'],
-                                                ));
+                                                if (name == "guest") {
+                                                  Get.defaultDialog(
+                                                      title: "Oops!",
+                                                      middleText:
+                                                          "You can't have access some features, you must be login/signup first",
+                                                      textCancel: "Cancel",
+                                                      onCancel: () {
+                                                        Get.back();
+                                                      },
+                                                      textConfirm: "Ok",
+                                                      onConfirm: () {
+                                                        _prefs.clear();
+                                                        Get.offAll(
+                                                            LoginScreen());
+                                                      });
+                                                } else {
+                                                  Get.to(HelpSomeOneSingleInfo(
+                                                    name: ds['username'],
+                                                    img: ds['profileUrl'],
+                                                    profileUrls:
+                                                        ds['photoUrls'],
+                                                    desc: ds['description'],
+                                                    coins: coins!,
+                                                    req: ds['requirements'],
+                                                    date:
+                                                        "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
+                                                    location: ds['location'],
+                                                    phone: ds['phoneNumber'],
+                                                    address: ds['address'],
+                                                    uid: ds['uid'],
+                                                    cUid: uid,
+                                                    cUname: name,
+                                                    title: ds['title'],
+                                                  ));
+                                                }
                                               },
                                               child: Text('Details',
                                                   style: descTextStyle.copyWith(
@@ -450,27 +501,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'My acts / Achievements',
-                            style: headlineTextStyle.copyWith(
-                                fontSize: 20, color: textSecondary),
+                    name == "guest"
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'My acts / Achievements',
+                                  style: headlineTextStyle.copyWith(
+                                      fontSize: 20, color: textSecondary),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.to(MyAllActsScreen(uid: uid));
+                                },
+                                child: Text(
+                                  'See all >',
+                                  style:
+                                      subtitleTextStyle.copyWith(fontSize: 16),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Get.to(MyAllActsScreen(uid: uid));
-                          },
-                          child: Text(
-                            'See all >',
-                            style: subtitleTextStyle.copyWith(fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
                     StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection("act_completed")
@@ -482,75 +536,88 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else if (!snapshot.hasData) {
                             return Spinner();
                           } else {
-                            return Container(
-                              height: Get.height * 0.22,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data!.size,
-                                  itemBuilder: (context, index) {
-                                    DocumentSnapshot ds =
-                                        snapshot.data!.docs[index];
-                                    _prefs.setInt(
-                                        "totalActs", snapshot.data!.size);
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4, vertical: 4),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Get.to(SingleActScreen(
-                                              image: ds['cmtImg'],
-                                              time: ds['time'],
-                                              title: ds['actTitle'],
-                                              comment: ds['cmt']));
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color(0xff000000)
-                                                          .withOpacity(0.24),
-                                                      offset: Offset(0, 1),
-                                                      blurRadius: 9)
-                                                ]),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  ds['actTitle'],
-                                                  style: headlineTextStyle
-                                                      .copyWith(
-                                                          color: textSecondary1,
-                                                          fontSize: 18),
-                                                ),
-                                                SizedBox(
-                                                  height: 4,
-                                                ),
-                                                Container(
-                                                  height: Get.height * 0.12,
-                                                  width: Get.width * 0.25,
-                                                  clipBehavior: Clip.antiAlias,
+                            return name == "guest"
+                                ? Container()
+                                : Container(
+                                    height: Get.height * 0.22,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: snapshot.data!.size,
+                                        itemBuilder: (context, index) {
+                                          DocumentSnapshot ds =
+                                              snapshot.data!.docs[index];
+                                          _prefs.setInt(
+                                              "totalActs", snapshot.data!.size);
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4, vertical: 4),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Get.to(SingleActScreen(
+                                                    image: ds['cmtImg'],
+                                                    time: ds['time'],
+                                                    title: ds['actTitle'],
+                                                    comment: ds['cmt']));
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
                                                   decoration: BoxDecoration(
+                                                      color: Colors.white,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              10)),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: ds['cmtImg'],
-                                                    fit: BoxFit.cover,
+                                                              10),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Color(
+                                                                    0xff000000)
+                                                                .withOpacity(
+                                                                    0.24),
+                                                            offset:
+                                                                Offset(0, 1),
+                                                            blurRadius: 9)
+                                                      ]),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        ds['actTitle'],
+                                                        style: headlineTextStyle
+                                                            .copyWith(
+                                                                color:
+                                                                    textSecondary1,
+                                                                fontSize: 18),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 4,
+                                                      ),
+                                                      Container(
+                                                        height:
+                                                            Get.height * 0.12,
+                                                        width: Get.width * 0.25,
+                                                        clipBehavior:
+                                                            Clip.antiAlias,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              ds['cmtImg'],
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                )
-                                              ],
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            );
+                                          );
+                                        }),
+                                  );
                           }
                         }),
                     SizedBox(

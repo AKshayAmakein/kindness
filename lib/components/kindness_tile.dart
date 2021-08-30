@@ -98,7 +98,7 @@ class _KindnessTileState extends State<KindnessTile> {
         subject:
             'For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness',
         text:
-            ' Act of the day $title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
+            '$title\n For more detail download $appName https://play.google.com/store/apps/details?id=com.amakeinco.kindness ',
         fileName: 'share.png',
         mimeType: 'image/png',
         bytesOfFile: bytes);

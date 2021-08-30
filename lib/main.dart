@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kindness/constants/themes.dart';
 import 'package:kindness/controllers/auth_controller.dart';
-import 'package:kindness/screens/home_screen_main.dart';
+import 'package:kindness/screens/introduction_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Kindness',
       debugShowCheckedModeBanner: false,
       theme: myTheme,
-      home: HomeScreenMain(),
+      home: IntroductionOnScreen(),
     );
   }
 }

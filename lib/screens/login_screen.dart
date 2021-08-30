@@ -1,18 +1,34 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:kindness/components/strings.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:kindness/constants/colors.dart';
 import 'package:kindness/controllers/auth_controller.dart';
 import 'package:kindness/helpers/validator.dart';
 import 'package:kindness/screens/forgot_password_screen.dart';
 import 'package:kindness/screens/signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final AuthController authController = AuthController.to;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController _phoneController = TextEditingController();
+    TextEditingController _otpController = TextEditingController();
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -34,10 +50,9 @@ class LoginScreen extends StatelessWidget {
                   children: <Widget>[
                     CachedNetworkImage(
                       imageUrl:
-                      "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
+                          "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
                       height: Get.height / 7,
                     ),
-
                     SizedBox(
                       height: Get.height / 12,
                     ),
@@ -139,6 +154,92 @@ class LoginScreen extends StatelessWidget {
                                     .signInWithEmailAndPassword(context);
                               }
                             }),
+                        Text(
+                          'Or',
+                          style: GoogleFonts.abhayaLibre(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              minimumSize: Size(Get.width, Get.height / 20),
+                            ),
+                            child: Text(
+                              'Login with Otp',
+                              style: TextStyle(
+                                  color: Colors.blue[700],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () async {
+                              Get.defaultDialog(
+                                title: "Login",
+                                textCancel: "Cancel",
+                                textConfirm: "Next",
+                                confirmTextColor: Colors.white,
+                                onConfirm: () {
+                                  // authController.verifyPhone("+91${_phoneController.text}");
+                                  if (_phoneController.text.length
+                                      .isEqual(10)) {
+                                    Get.defaultDialog(
+                                        title: "Otp",
+                                        textCancel: "Back",
+                                        textConfirm: "Verify",
+                                        onConfirm: () {
+                                          if (_otpController.text.length
+                                              .isEqual(6)) {
+                                            return authController.verifyOTP(
+                                              _otpController.text,
+                                            );
+                                          } else {
+                                            return Get.snackbar(
+                                                "otp", "must be 6 character");
+                                          }
+                                        },
+                                        titleStyle: GoogleFonts.poppins(
+                                            color: textSecondary,
+                                            fontWeight: FontWeight.w500),
+                                        content: TextField(
+                                          controller: _otpController,
+                                          decoration: InputDecoration(
+                                            hintText: "123456",
+                                          ),
+                                        ));
+                                    return authController.verifyPhone(
+                                        "+91${_phoneController.text}");
+                                  } else {
+                                    return Get.snackbar(
+                                        "Phone Number", "must be 10 character");
+                                  }
+                                },
+                                content: Container(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: TextField(
+                                    controller: _phoneController,
+                                    decoration: InputDecoration(
+                                      hintText: "1234567890",
+                                      prefix: Text('+91'),
+                                    ),
+                                  ),
+                                ),
+                                titleStyle: GoogleFonts.poppins(
+                                    color: textSecondary,
+                                    fontWeight: FontWeight.w500),
+                              );
+                            }),
+                        Text(
+                          'Or',
+                          style: GoogleFonts.abhayaLibre(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              authController.loginGuest();
+                            },
+                            child: Text('Guest User?'))
                       ],
                     ),
                   ],

@@ -15,6 +15,11 @@ class IntroductionOnScreen extends StatefulWidget {
 
 class _IntroductionOnScreenState extends State<IntroductionOnScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(

@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:kindness/components/photo_view.dart';
 import 'package:kindness/components/strings.dart';
 import 'package:kindness/components/text_styles.dart';
 import 'package:kindness/constants/colors.dart';
@@ -201,11 +202,19 @@ class _ActOfTheDayScreenState extends State<ActOfTheDayScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             12)),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: ds["img"],
-                                                  fit: BoxFit.cover,
-                                                  height: Get.height * 0.40,
-                                                  width: Get.width,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Get.to(PhotoViewScreen(
+                                                      img: ds["img"],
+                                                      coins: coins!,
+                                                    ));
+                                                  },
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: ds["img"],
+                                                    fit: BoxFit.cover,
+                                                    height: Get.height * 0.40,
+                                                    width: Get.width,
+                                                  ),
                                                 ),
                                               ),
                                             ),
