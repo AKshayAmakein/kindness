@@ -13,7 +13,7 @@ class HelpSomeOneSingleInfo extends StatefulWidget {
   final String name;
   final String desc;
   final String img;
-  final int req;
+  final String req;
   final String date;
   final List profileUrls;
   final int coins;
@@ -23,22 +23,21 @@ class HelpSomeOneSingleInfo extends StatefulWidget {
   final String uid;
   final String cUid;
   final String cUname;
-  final String title;
-  HelpSomeOneSingleInfo(
-      {required this.name,
-      required this.img,
-      required this.profileUrls,
-      required this.desc,
-      required this.coins,
-      required this.req,
-      required this.date,
-      required this.address,
-      required this.phone,
-      required this.location,
-      required this.uid,
-      required this.cUid,
-      required this.cUname,
-      required this.title});
+  HelpSomeOneSingleInfo({
+    required this.name,
+    required this.img,
+    required this.profileUrls,
+    required this.desc,
+    required this.coins,
+    required this.req,
+    required this.date,
+    required this.address,
+    required this.phone,
+    required this.location,
+    required this.uid,
+    required this.cUid,
+    required this.cUname,
+  });
 
   @override
   _HelpSomeOneSingleInfoState createState() => _HelpSomeOneSingleInfoState();
@@ -118,9 +117,9 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                           tag: "helpSome",
                           child: CachedNetworkImage(
                             imageUrl: widget.profileUrls[0],
-                            height: Get.height * 0.3,
+                            height: Get.height * 0.35,
                             width: double.infinity,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
@@ -240,7 +239,7 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                   ),
                   Divider(),
                   Text(
-                    widget.title,
+                    widget.req,
                     style: GoogleFonts.poppins(
                         color: textSecondary1, fontSize: 16),
                   ),
@@ -252,13 +251,6 @@ class _HelpSomeOneSingleInfoState extends State<HelpSomeOneSingleInfo> {
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
-                  ),
-                  Text(
-                    "Requirement : Rs${widget.req}",
-                    style: GoogleFonts.poppins(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                        color: textSecondary),
                   ),
                   Text(
                     "Date when needed : ${widget.date}",

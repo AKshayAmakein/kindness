@@ -403,17 +403,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            ds['title'],
+                                            ds['requirements'],
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
                                                 fontSize: 18),
                                             overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            "Rs:${ds['requirements']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 18),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -475,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     uid: ds['uid'],
                                                     cUid: uid,
                                                     cUname: name,
-                                                    title: ds['title'],
+
                                                   ));
                                                 }
                                               },
