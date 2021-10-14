@@ -39,16 +39,40 @@ class KindnessInfoScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        'Mission and vision',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Divider(),
+                    Text(
+                      ds['vission'],
+                      style: GoogleFonts.poppins(
+                          fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                    Divider(),
+                    SizedBox(
+                      height: 22,
+                    ),
+                    Text(
+                      "Info",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Divider(),
                     CachedNetworkImage(imageUrl: ds['img']),
                     Divider(),
                     Text(
                       ds['text'],
                       style: GoogleFonts.poppins(
-                          letterSpacing: 0.33,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                          fontSize: 20, fontWeight: FontWeight.w500),
                     ),
+                    Divider(),
                   ],
                 ),
               ),
