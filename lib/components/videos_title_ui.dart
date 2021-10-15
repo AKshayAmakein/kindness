@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kindness/controllers/video_player_state_controller.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -14,6 +15,7 @@ class VideosTileUi extends StatefulWidget {
 class _VideosTileUiState extends State<VideosTileUi> {
   late YoutubePlayerController _controller;
   String? videoId;
+  final videoCtrl = Get.put(VideoPlayerStateController());
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,12 @@ class _VideosTileUiState extends State<VideosTileUi> {
         autoPlay: false,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,29 +77,40 @@ class _VideosTileUiState extends State<VideosTileUi> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          Positioned(
-                              top: 0,
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: IconButton(
-                                  onPressed: () {
-                                    Get.bottomSheet(AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child: YoutubePlayer(
-                                        controller: _controller,
-                                        showVideoProgressIndicator: true,
-                                        onReady: () {
-                                          print('Player is ready.');
-                                        },
-                                      ),
-                                    ));
-                                  },
-                                  icon: Icon(
-                                    Icons.play_arrow,
-                                    size: 40,
-                                    color: Colors.white,
-                                  )))
+                          AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: YoutubePlayer(
+                              controller: _controller,
+                              showVideoProgressIndicator: true,
+                              onReady: () {
+                                print('Player is ready.');
+                              },
+                            ),
+                          ),
+                          // Positioned(
+                          //     top: 0,
+                          //     bottom: 0,
+                          //     left: 0,
+                          //     right: 0,
+                          //     child: IconButton(
+                          //         onPressed: () {
+                          //           Get.dialog(YoutubePlayer(
+                          //             controller: _controller,
+                          //             showVideoProgressIndicator: true,
+                          //             onReady: () {
+                          //               print('Player is ready.');
+                          //             },
+                          //           ));
+                          //           // Get.bottomSheet(AspectRatio(
+                          //           //   aspectRatio: 16 / 9,
+                          //           //   child: BottomSheetUi(),
+                          //           // ));
+                          //         },
+                          //         icon: Icon(
+                          //           Icons.play_arrow,
+                          //           size: 40,
+                          //           color: Colors.white,
+                          //         )))
                         ],
                       )),
                 );
