@@ -85,55 +85,46 @@ class HelpSomeOneScreen extends StatelessWidget {
                                     spreadRadius: -4,
                                     offset: Offset(1, 12)),
                               ]),
-                          child: Column(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Container(
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: CachedNetworkImage(
+                                    imageUrl: ds['profileUrl'],
+                                    height: Get.height * 0.06,
+                                  )),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      ds['username'].toString().toUpperCase(),
+                                      style: GoogleFonts.workSans(fontSize: 15),
+                                    ),
+                                    Text(
+                                      "Rs:${ds['requirements']}",
+                                      style: TextStyle(
+                                        color: Colors.brown.shade200,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: CachedNetworkImage(
-                                            imageUrl: ds['profileUrl'],
-                                            height: Get.height * 0.06,
-                                          )),
-                                      SizedBox(width: Get.width * 0.001),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            ds['username']
-                                                .toString()
-                                                .toUpperCase(),
-                                            style: GoogleFonts.workSans(
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                            "Rs:${ds['requirements']}",
-                                            style: TextStyle(
-                                                color: Colors.brown.shade200),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  Text(
+                                    'Date when needed',
+                                    style:
+                                        TextStyle(color: Colors.brown.shade200),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Date when needed',
-                                        style: TextStyle(
-                                            color: Colors.brown.shade200),
-                                      ),
-                                      Text(
-                                        "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
-                                        style: TextStyle(color: kPrimary),
-                                      )
-                                    ],
-                                  ),
+                                  Text(
+                                    "${timestamp.toDate().year}-${timestamp.toDate().month}-${timestamp.toDate().day}",
+                                    style: TextStyle(color: kPrimary),
+                                  )
                                 ],
                               ),
                             ],
