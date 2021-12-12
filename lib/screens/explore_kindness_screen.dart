@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kindness/components/channel_title.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/kindness_tile.dart';
 import 'package:kindness/components/quotes_tiles.dart';
 import 'package:kindness/components/text_styles.dart';
+import 'package:kindness/components/videos_title_ui.dart';
 import 'package:kindness/constants/colors.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,7 +71,7 @@ class _ExploreKindnessState extends State<ExploreKindness> {
             Expanded(
               child: TabBarView(
                 children: [
-                  ChannelTile(),
+                  VideosTileUi(),
                   QuotesTile(),
                   KindnessTile(),
                 ],

@@ -13,7 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kindness/components/custome_drawer.dart';
 import 'package:kindness/components/home_video_channel_tile.dart';
 import 'package:kindness/components/text_styles.dart';
+import 'package:kindness/components/videos_title_ui.dart';
 import 'package:kindness/constants/colors.dart';
+import 'package:kindness/controllers/video_player_state_controller.dart';
 import 'package:kindness/screens/act_of_the_day.dart';
 import 'package:kindness/screens/help_someone_screen.dart';
 import 'package:kindness/screens/help_someone_single_info_screen.dart';
@@ -24,6 +26,7 @@ import 'package:kindness/widgets/CustomCarouselSliderTiles.dart';
 import 'package:kindness/widgets/custom_widgets.dart';
 import 'package:kindness/widgets/custome_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -403,17 +406,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            ds['title'],
+                                            ds['requirements'],
                                             style: headlineTextStyle.copyWith(
                                                 color: textSecondary1,
                                                 fontSize: 18),
                                             overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            "Rs:${ds['requirements']}",
-                                            style: headlineTextStyle.copyWith(
-                                                color: textSecondary1,
-                                                fontSize: 18),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -475,7 +472,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     uid: ds['uid'],
                                                     cUid: uid,
                                                     cUname: name,
-                                                    title: ds['title'],
                                                   ));
                                                 }
                                               },
@@ -628,13 +624,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: headlineTextStyle.copyWith(
                           fontSize: 20, color: textSecondary),
                     ),
-                    HomeVideoChannelTile()
+                    // HomeVideoChannelTile()
+                    VideosTileUi()
                   ],
                 ),
               );
             }
           },
         ),
+      ),
+    );
+  }
+
+  late YoutubePlayerController _controller;
+  String videoId = '';
+  initializePlayer(String urls) {
+    videoId = YoutubePlayer.convertUrlToId(urls)!;
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId,
+      flags: YoutubePlayerFlags(
+        mute: false,
+        autoPlay: false,
       ),
     );
   }

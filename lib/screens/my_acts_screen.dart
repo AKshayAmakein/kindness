@@ -217,80 +217,78 @@ class Completed extends StatelessWidget {
                 } else if (!snapshot.hasData) {
                   return Spinner();
                 } else {
-                  return Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.size,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot ds = snapshot.data!.docs[index];
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.size,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data!.docs[index];
 
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(SingleActScreen(
-                                  image: ds['cmtImg'],
-                                  time: ds['time'],
-                                  title: ds['actTitle'],
-                                  comment: ds['cmt']));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          offset: Offset(0, 2),
-                                          blurRadius: 12,
-                                          color: Color(0xff000000)
-                                              .withOpacity(0.25))
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
-                                            child: CachedNetworkImage(
-                                              imageUrl: ds['cmtImg'],
-                                              height: height * 0.08,
-                                            )),
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(SingleActScreen(
+                                image: ds['cmtImg'],
+                                time: ds['time'],
+                                title: ds['actTitle'],
+                                comment: ds['cmt']));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: Offset(0, 2),
+                                        blurRadius: 12,
+                                        color:
+                                            Color(0xff000000).withOpacity(0.25))
+                                  ]),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: CachedNetworkImage(
+                                            imageUrl: ds['cmtImg'],
+                                            height: height * 0.08,
+                                          )),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            ds['actTitle'],
+                                            style: bodyTextStyle,
+                                          ),
+                                          Text(
+                                            ds['cmt'],
+                                            style: subtitleTextStyle,
+                                          ),
+                                        ],
                                       ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              ds['actTitle'],
-                                              style: bodyTextStyle,
-                                            ),
-                                            Text(
-                                              ds['cmt'],
-                                              style: subtitleTextStyle,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(timeago.format(
-                                          DateTime.parse(
-                                              ds['time'].toDate().toString()),
-                                        )),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(timeago.format(
+                                        DateTime.parse(
+                                            ds['time'].toDate().toString()),
+                                      )),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          );
-                        }),
-                  );
+                          ),
+                        );
+                      });
                 }
               },
             ),

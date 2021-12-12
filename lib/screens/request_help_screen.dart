@@ -31,8 +31,6 @@ class RequestHelpScreen extends StatefulWidget {
 class _RequestHelpScreenState extends State<RequestHelpScreen> {
   TextEditingController _titleController = TextEditingController();
 
-  TextEditingController _requirementController = TextEditingController();
-
   TextEditingController _locationController = TextEditingController();
 
   TextEditingController _mobileNumberController = TextEditingController();
@@ -95,28 +93,6 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
                         ),
                         labelText: "Title",
                         hintText: "What do you need help for",
-                        labelStyle: GoogleFonts.roboto(
-                            color: textSecondary, fontWeight: FontWeight.w500),
-                        hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: Get.height * 0.028,
-                    ),
-                    TextField(
-                      controller: _requirementController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        enabledBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: textSecondary),
-                        ),
-                        focusedBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: textSecondary),
-                        ),
-                        labelText: "Your Money Requirement",
-                        hintText: "How much money do you need?",
                         labelStyle: GoogleFonts.roboto(
                             color: textSecondary, fontWeight: FontWeight.w500),
                         hintStyle: GoogleFonts.roboto(color: Color(0xffa3a3a3)),
@@ -492,7 +468,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
     setState(() {
       loading = true;
     });
-    if (_requirementController.text == "" ||
+    if (_titleController.text == "" ||
         _locationController.text == "" ||
         _addressController.text == "" ||
         _mobileNumberController.text == "" ||
@@ -503,7 +479,7 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
     setState(() {
       loading = false;
     });
-    var requirements = int.parse(_requirementController.text);
+
     FirebaseFirestore.instance
         .collection("help_and_support")
         .doc(widget.uid)
@@ -512,14 +488,13 @@ class _RequestHelpScreenState extends State<RequestHelpScreen> {
       "username": widget.name,
       "uid": widget.uid,
       "profileUrl": widget.profileUrl,
-      "requirements": requirements,
-      "title": _titleController.text,
+      "requirements": _titleController.text,
       "location": _locationController.text,
       "address": _addressController.text,
       "phoneNumber": "+91" + _mobileNumberController.text,
       "time_when_needed": reqTime,
       "description": _discController.text,
-      "requirement_fulfilled": 0, "status": false,
+   "status": false,
       // "optional_images":
     }).then((value) {
       Get.snackbar("Submitted", "", snackPosition: SnackPosition.BOTTOM);

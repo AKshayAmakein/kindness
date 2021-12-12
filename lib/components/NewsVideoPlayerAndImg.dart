@@ -10,7 +10,11 @@ import 'package:video_player/video_player.dart';
 class NewsVideoPlayerAndImg extends StatefulWidget {
   final String videoUrl;
   final String img;
-  NewsVideoPlayerAndImg({required this.videoUrl, required this.img});
+
+  NewsVideoPlayerAndImg({
+    required this.videoUrl,
+    required this.img,
+  });
   @override
   _NewsVideoPlayerAndImgState createState() => _NewsVideoPlayerAndImgState();
 }

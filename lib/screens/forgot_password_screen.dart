@@ -45,7 +45,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     children: [
                       CachedNetworkImage(
                         imageUrl:
-                            "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app-logo.png?alt=media&token=8def5367-a6cc-425f-8555-028493c6836f",
+                            "https://firebasestorage.googleapis.com/v0/b/kindness-40bbd.appspot.com/o/files%2FappIcon%2Fkindness-app.png?alt=media&token=97186a8f-1bf3-4986-88f7-2f214ed0c6d2",
                         height: Get.height / 7,
                       ),
                       SizedBox(
