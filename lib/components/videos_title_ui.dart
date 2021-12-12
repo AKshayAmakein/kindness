@@ -13,31 +13,6 @@ class VideosTileUi extends StatefulWidget {
 }
 
 class _VideosTileUiState extends State<VideosTileUi> {
-  late YoutubePlayerController _controller;
-  String? videoId;
-  final videoCtrl = Get.put(VideoPlayerStateController());
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  initializePlayer(String urls) {
-    videoId = YoutubePlayer.convertUrlToId(urls);
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId!,
-      flags: YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -49,10 +24,14 @@ class _VideosTileUiState extends State<VideosTileUi> {
             return Spinner();
           }
           return ListView.builder(
+              shrinkWrap: true,
               itemCount: snapshot.data!.size,
               itemBuilder: (ctx, index) {
                 DocumentSnapshot ds = snapshot.data!.docs[index];
-                initializePlayer(ds['youtubeUrl']);
+
+                String videoId =
+                    YoutubePlayer.convertUrlToId(ds['youtubeUrl'])!;
+
                 String tumbnail = "http://img.youtube.com/vi/$videoId/0.jpg";
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -77,44 +56,56 @@ class _VideosTileUiState extends State<VideosTileUi> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: YoutubePlayer(
-                              controller: _controller,
-                              showVideoProgressIndicator: true,
-                              onReady: () {
-                                print('Player is ready.');
-                              },
-                            ),
-                          ),
-                          // Positioned(
-                          //     top: 0,
-                          //     bottom: 0,
-                          //     left: 0,
-                          //     right: 0,
-                          //     child: IconButton(
-                          //         onPressed: () {
-                          //           Get.dialog(YoutubePlayer(
-                          //             controller: _controller,
-                          //             showVideoProgressIndicator: true,
-                          //             onReady: () {
-                          //               print('Player is ready.');
-                          //             },
-                          //           ));
-                          //           // Get.bottomSheet(AspectRatio(
-                          //           //   aspectRatio: 16 / 9,
-                          //           //   child: BottomSheetUi(),
-                          //           // ));
-                          //         },
-                          //         icon: Icon(
-                          //           Icons.play_arrow,
-                          //           size: 40,
-                          //           color: Colors.white,
-                          //         )))
+                          VideoPlayer(
+                            videoId: videoId,
+                          )
                         ],
                       )),
                 );
               });
         });
+  }
+}
+
+class VideoPlayer extends StatefulWidget {
+  VideoPlayer({Key? key, required this.videoId}) : super(key: key);
+  final String videoId;
+  @override
+  _VideoPlayerState createState() => _VideoPlayerState();
+}
+
+class _VideoPlayerState extends State<VideoPlayer> {
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: YoutubePlayerFlags(
+        mute: false,
+        autoPlay: false,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: YoutubePlayer(
+        controller: _controller,
+        showVideoProgressIndicator: true,
+        onReady: () {
+          print('Player is ready.');
+        },
+      ),
+    );
   }
 }
